@@ -41,9 +41,6 @@
       <Filter>ThirdParty\imgui</Filter>
     </ClCompile>
     <ClCompile Include="EntryPoint.cpp" />
-    <ClCompile Include="Example.cpp">
-      <Filter>Game\Examples</Filter>
-    </ClCompile>
     <ClCompile Include="DotClicker.cpp">
       <Filter>Game\Examples</Filter>
     </ClCompile>
@@ -59,6 +56,22 @@
     <ClCompile Include="TextStream.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsEngine.cpp">
+      <Filter>Game\Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionFunctions.cpp">
+      <Filter>Game\Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsObject.cpp">
+      <Filter>Game\Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="Circle.cpp">
+      <Filter>Game\Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionInfo.cpp">
+      <Filter>Game\Examples</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLFWCallbacks.h">
@@ -118,9 +131,6 @@
     <ClInclude Include="..\imgui\imstb_truetype.h">
       <Filter>ThirdParty\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Example.h">
-      <Filter>Game\Examples</Filter>
-    </ClInclude>
     <ClInclude Include="DotClicker.h">
       <Filter>Game\Examples</Filter>
     </ClInclude>
@@ -142,6 +152,22 @@
     <ClInclude Include="Key.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsEngine.h">
+      <Filter>Game\Examples</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionFunctions.h">
+      <Filter>Game\Examples</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsObject.h">
+      <Filter>Game\Examples</Filter>
+    </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>Game\Examples</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionInfo.h">
+      <Filter>Game\Examples</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -161,6 +187,9 @@
     </Filter>
     <Filter Include="Game\Examples">
       <UniqueIdentifier>{777b1260-7118-49ab-b296-237fdabebca0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\PhysicsEngine">
+      <UniqueIdentifier>{6e2c100b-98ef-4669-b73d-62b5b6b3b7ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,20 +1,21 @@
 #pragma once
+#include <vector>
 
 #include "Application.h"
-#include "Maths.h"
+#include "Circle.h"
 
-class Example : public Application
+class PhysicsEngine : public Application
 {
 private:
 	//Any data that should persist for the duration of your program,
 	//declare it here.
 
+	std::vector<Circle*> mCircles;
 
 public:
-	Example();
+	PhysicsEngine();
+
 	void Initialise() override;
-
 	void Update(float delta) override;
-
 	void OnLeftClick() override;
 };
