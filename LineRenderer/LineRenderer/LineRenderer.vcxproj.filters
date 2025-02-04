@@ -56,22 +56,27 @@
     <ClCompile Include="TextStream.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsEngine.cpp">
-      <Filter>Game\Examples</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionFunctions.cpp">
-      <Filter>Game\Examples</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsObject.cpp">
-      <Filter>Game\Examples</Filter>
-    </ClCompile>
-    <ClCompile Include="Circle.cpp">
-      <Filter>Game\Examples</Filter>
+      <Filter>Game\PhysicsEngine</Filter>
     </ClCompile>
     <ClCompile Include="CollisionInfo.cpp">
-      <Filter>Game\Examples</Filter>
+      <Filter>Game\PhysicsEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Circle.cpp">
+      <Filter>Game\PhysicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsEngine.cpp">
+      <Filter>Game\PhysicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsObject.cpp">
+      <Filter>Game\PhysicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Game\PhysicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Game\PhysicsEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLFWCallbacks.h">
@@ -152,22 +157,27 @@
     <ClInclude Include="Key.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsEngine.h">
-      <Filter>Game\Examples</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionFunctions.h">
-      <Filter>Game\Examples</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsObject.h">
-      <Filter>Game\Examples</Filter>
+    <ClInclude Include="CollisionInfo.h">
+      <Filter>Game\PhysicsEngine</Filter>
     </ClInclude>
     <ClInclude Include="Circle.h">
-      <Filter>Game\Examples</Filter>
+      <Filter>Game\PhysicsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionInfo.h">
-      <Filter>Game\Examples</Filter>
+    <ClInclude Include="CollisionFunctions.h">
+      <Filter>Game\PhysicsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="Plane.h" />
+    <ClInclude Include="PhysicsObject.h">
+      <Filter>Game\PhysicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsEngine.h">
+      <Filter>Game\PhysicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Game\PhysicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Game\PhysicsEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

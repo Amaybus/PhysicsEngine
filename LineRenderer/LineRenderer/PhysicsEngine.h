@@ -3,14 +3,15 @@
 
 #include "Application.h"
 #include "Circle.h"
+#include "Plane.h"
+#include "Box.h"
 
 class PhysicsEngine : public Application
 {
 private:
-	//Any data that should persist for the duration of your program,
-	//declare it here.
-
 	std::vector<Circle*> mCircles;
+	Plane* mPlanes[1];
+	std::vector<Box*> mBoxes;
 
 public:
 	PhysicsEngine();
