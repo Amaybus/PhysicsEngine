@@ -12,6 +12,7 @@ public:
 	float overlapAmount;
 	bool bIsOverlapping;
 	Vec2 collisionNormal;
+	Vec2 closestPoint;
 
 	void Resolve();
 };

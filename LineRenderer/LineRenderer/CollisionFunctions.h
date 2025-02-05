@@ -11,10 +11,10 @@ CollisionInfo CircleToCircleCollision(Circle* circleA, Circle* circleB);
 
 CollisionInfo PlaneToCircleCollision(Plane* planeA, Circle* circleB);
 
-CollisionInfo CircleToBox(Circle* circleA, Box* boxA);
+CollisionInfo CircleToBoxCollision(Circle* circleA, Box* boxB);
 
-CollisionInfo PlaneToBox(Plane* planeA, Box* boxB);
+CollisionInfo PlaneToBoxCollision(Plane* planeA, Box* boxB);
 
-CollisionInfo BoxToBox(Box* boxA, Box* boxB);
+CollisionInfo BoxToBoxCollision(Box* boxA, Box* boxB);
 
 

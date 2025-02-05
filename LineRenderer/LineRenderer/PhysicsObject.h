@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vec2.h"
+#include "Colour.h"
 
 class LineRenderer;
 
@@ -12,6 +13,7 @@ protected:
 	Vec2 mVel{ 0,0 };
 	Vec2 mAcc{ 0,0 };
 	const float mMass = 0;
+	Colour mColour;
 
 public:
 	PhysicsObject();
@@ -30,5 +32,6 @@ public:
 	void SetPos(Vec2 pos) { mPos = pos; }
 	void SetVelocity(Vec2 vel) { mVel = vel; }
 	void SetAcc(Vec2 acc) { mAcc = acc; }
+	void SetColour(Colour colour) { mColour = colour; }
 };
 

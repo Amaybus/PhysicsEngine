@@ -7,11 +7,14 @@ class Box : public PhysicsObject
 	float mWidth;
 	float mHeight;
 
-	Vec2 mMax;
-	Vec2 mMin;
-
-
 public:
+	Vec2 mYMax;
+	Vec2 mYMin;
+	
+	Vec2 mXMax;
+	Vec2 mXMin;
+
+
 	Box(Vec2 pos, float w, float h, float mass);
 
 	void Update(float delta) override;
@@ -20,7 +23,5 @@ public:
 
 	const float GetWidth() { return mWidth; }
 	const float GetHeight() { return mHeight; }
-	Vec2 GetMax() { return mMax; }
-	Vec2 GetMin() { return mMin; }
 };
 
