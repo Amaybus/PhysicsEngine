@@ -14,7 +14,7 @@ void PhysicsEngine::Initialise()
 {
 
 	// Draw Circle on mouse pos
-	//mCircles.push_back(new Circle(cursorPos, 1, 0.5f));
+	mCircles.push_back(new Circle(cursorPos, 1, 0.5f));
 
 	// Create a circle to add to test against
 	mCircles.push_back(new Circle(Vec2{ 1,10 }, 10, 1));
@@ -26,7 +26,7 @@ void PhysicsEngine::Initialise()
 	//mBoxes.push_back(new Box(Vec2(2.25, 3.5), 1.5, 1, 1));
 
 
-	mPlanes[0] = new Plane(Vec2(0.7,1.1), 1.6, 5);
+	mPlanes[0] = new Plane(Vec2(0.5,1), 2, 5);
 }
 
 void PhysicsEngine::Update(float delta)
@@ -85,7 +85,7 @@ void PhysicsEngine::Update(float delta)
 
 
 	CollisionInfo info1 = PlaneToBoxCollision(mPlanes[0], mBoxes[0], lines);
-	lines->DrawText(std::to_string(info1.overlapAmount), Vec2{ cursorPos.x, cursorPos.y + 1 }, 0.5);
+	//lines->DrawText(std::to_string(info1.overlapAmount), Vec2{ cursorPos.x, cursorPos.y + 1 }, 0.5);
 	lines->DrawCircle(info1.closestPoint, 0.1, Colour::YELLOW);
 	if (info1.bIsOverlapping)
 	{

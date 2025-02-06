@@ -84,7 +84,6 @@ CollisionInfo PlaneToBoxCollision(Plane* planeA, Box* boxB, LineRenderer* lines)
 	if (distanceIndex == 2) { closestPoint = boxB->mYMin; }
 	if (distanceIndex == 3) { closestPoint = boxB->mYMax; }
 
-
 	float distanceToCentre = Dot(boxB->GetPos(), planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
 	float distanceToEdge = Dot(closestPoint, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
 	float sizeFromEdgeToCentre = distanceToCentre - distanceToEdge;
@@ -93,6 +92,8 @@ CollisionInfo PlaneToBoxCollision(Plane* planeA, Box* boxB, LineRenderer* lines)
 	std::cout << "to edge: "<< distanceToEdge << std::endl;
 	//std::cout << "distance between: "<< dist << std::endl;
 
+	lines->DrawLineSegment(boxB->GetPos(), planeA->GetNormal() * sizeFromEdgeToCentre + boxB->GetPos(), Colour::BLUE);
+	//lines->DrawLineSegment(closestPoint, planeA->GetNormal(), Colour::CYAN);
 
 	CollisionInfo info;
 	info.objA = planeA;
