@@ -10,9 +10,9 @@ void CollisionInfo::Resolve()
 		// Only apply impulse to the circle
 		// the reletive vel is the circles vel
 		// collision normal is the planes normal
-
-		// This shit is fakes rn
-		objB->SetPos(Vec2(objA->GetPos().x, objA->GetPos().y+2));
+		float totalInverseMass = objB->GetInverseMass();
+		objB->GetPos() += collisionNormal * overlapAmount * objB->GetInverseMass() / totalInverseMass;
+		
 		return;
 	}
 

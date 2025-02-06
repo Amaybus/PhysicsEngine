@@ -77,88 +77,23 @@ CollisionInfo PlaneToBoxCollision(Plane* planeA, Box* boxB, LineRenderer* lines)
 			distanceIndex = i;
 		}
 	}
-	
+
 	Vec2 closestPoint;
 	if (distanceIndex == 0) { closestPoint = boxB->mXMax; }
 	if (distanceIndex == 1) { closestPoint = boxB->mXMin; }
 	if (distanceIndex == 2) { closestPoint = boxB->mYMin; }
 	if (distanceIndex == 3) { closestPoint = boxB->mYMax; }
 
-	float distanceToCentre = Dot(boxB->GetPos(), planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	float distanceToEdge = Dot(closestPoint, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	float sizeFromEdgeToCentre = distanceToCentre - distanceToEdge;
-
-	std::cout << "to centre: " << distanceToCentre << std::endl;
-	std::cout << "to edge: "<< distanceToEdge << std::endl;
-	//std::cout << "distance between: "<< dist << std::endl;
-
-	lines->DrawLineSegment(boxB->GetPos(), planeA->GetNormal() * sizeFromEdgeToCentre + boxB->GetPos(), Colour::BLUE);
-	//lines->DrawLineSegment(closestPoint, planeA->GetNormal(), Colour::CYAN);
+	float distance = Dot(planeA->GetNormal(), closestPoint) - planeA->GetDistanceFromOrgin();
 
 	CollisionInfo info;
 	info.objA = planeA;
 	info.objB = boxB;
-	info.overlapAmount = distanceToCentre - sizeFromEdgeToCentre;
+	info.overlapAmount = -distance;
 	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
 	info.collisionNormal = planeA->GetNormal();
+	info.closestPoint = closestPoint;
 	return info;
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-
-	//float edgeDistance = Dot(closestPoint, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	//float centreDistance = Dot(boxB->GetPos(), planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	//float centreToEdge = centreDistance - edgeDistance;
-	//float overlap = centreDistance - centreToEdge;
-
-	//lines->DrawLineSegment(closestPoint, planeA->GetNormal() * planeA->GetDistanceFromOrgin());
-
-	//float var = Dot(closestPoint, (planeA->GetNormal() * planeA->GetDistanceFromOrgin()));
-
-	//CollisionInfo info;
-	//info.objA = planeA;
-	//info.objB = boxB;
-	//info.overlapAmount = -(var);
-	//info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
-	//info.collisionNormal = planeA->GetNormal();
-	//return info;
-
-
-
-	// DOES NOT WORK FOR ANGLED PLANES
-
-	//float pointDistance[4];
-	//pointDistance[0] = Dot(boxB->mXMax, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	//pointDistance[1] = Dot(boxB->mXMin, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	//pointDistance[2] = Dot(boxB->mYMin, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	//pointDistance[3] = Dot(boxB->mYMax, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	//
-	//lines->DrawCircle(planeA->GetCentre(), 0.2, Colour::GREEN);
-	//
-	//int distanceIndex = 0;
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	if (pointDistance[i] < pointDistance[distanceIndex])
-	//	{
-	//		distanceIndex = i;
-	//	}
-	//}
-	//
-	//Vec2 closestPoint;
-	//if (distanceIndex == 0) { closestPoint = boxB->mXMax; }
-	//if (distanceIndex == 1) { closestPoint = boxB->mXMin; }
-	//if (distanceIndex == 2) { closestPoint = boxB->mYMin; }
-	//if (distanceIndex == 3) { closestPoint = boxB->mYMax; }
-	//
-	//float distance = Dot(closestPoint, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	//
-	//lines->DrawCircle(closestPoint, 0.2, Colour::BLUE);
-	//CollisionInfo info;
-	//info.objA = planeA;
-	//info.objB = boxB;
-	//info.overlapAmount = -(distance);
-	//info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
-	//info.collisionNormal = planeA->GetNormal();
-	//return info;
 }
 
 CollisionInfo BoxToBoxCollision(Box* boxA, Box* boxB)
