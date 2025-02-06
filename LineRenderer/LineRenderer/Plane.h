@@ -18,6 +18,7 @@ public:
 	void Draw(LineRenderer* lines);
 
 	Vec2 GetNormal() const { return mNormal; }
+	Vec2 GetCentre() const { return mCentre; }
 	float GetDistanceFromOrgin() const { return mDistanceToOrigin; }
 };
 
