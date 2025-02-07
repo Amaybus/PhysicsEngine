@@ -138,6 +138,8 @@ CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB)
 	if (distanceIndex == 3) { closestPoint = boxB->mYMax; }
 
 	float distance = Dot(planeA->GetNormal(), closestPoint) - planeA->GetDistanceFromOrgin();
+	//float distanceToCentre = Dot(boxB->GetPos(), planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+	//float distance = distanceToCentre - pointDistance[distanceIndex];
 
 	CollisionInfo info;
 	info.objA = planeA;

@@ -17,8 +17,8 @@ PhysicsEngine::PhysicsEngine()
 void PhysicsEngine::Initialise()
 {
 	// Draw Circle on mouse pos
-	//mCircles.push_back(new Circle(Vec2{ -4,5 }, 1, 1));
-	//mCircles[0]->SetVelocity(Vec2(1, 0));
+	//mPhysicsObjects.push_back(new Circle(Vec2{ -4,5 }, 1, 1));
+	//mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));
 
 	// Create a circle to add to test against
 	//mCircles.push_back(new Circle(Vec2{ 4,5 }, 0.3,1));
@@ -30,8 +30,8 @@ void PhysicsEngine::Initialise()
 	mPhysicsObjects.push_back(new Box(Vec2(3, 5), 2.1, 1.2, 1));
 	mPhysicsObjects[0]->SetVelocity(Vec2(-1, 0));
 
-	mPhysicsObjects.push_back(new Box(Vec2(-4, 5), 1.5, 1, 1));
-	mPhysicsObjects[1]->SetVelocity(Vec2(1, 0));
+	// mPhysicsObjects.push_back(new Box(Vec2(-4, 5), 1.5, 1, 1));
+	// mPhysicsObjects[1]->SetVelocity(Vec2(1, 0));
 
 
 	//mPlanes.push_back(new Plane(Vec2(1, 0), -5, 5));
