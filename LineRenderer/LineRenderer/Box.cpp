@@ -10,10 +10,6 @@ Box::Box(Vec2 pos, float w, float h, float mass) : PhysicsObject(pos, mass), mWi
 	mYMax = Vec2((pos.x - 0.5 * w), (pos.y + 0.5 * h));
 }
 
-void Box::Update(float delta)
-{
-}
-
 void Box::Draw(LineRenderer* lines)
 {
 	mXMax = Vec2((mPos.x + 0.5 * mWidth), (mPos.y + 0.5 * mHeight));

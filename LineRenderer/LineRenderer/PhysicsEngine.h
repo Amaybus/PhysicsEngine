@@ -9,9 +9,8 @@
 
 class PhysicsEngine : public Application
 {
-private:
 	std::vector<Circle*> mCircles;
-	Plane* mPlanes[1];
+	std::vector<Plane*> mPlanes;
 	std::vector<Box*> mBoxes;
 	std::vector<Polygon*> mPolygons;
 

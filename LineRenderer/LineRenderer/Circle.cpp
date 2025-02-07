@@ -5,10 +5,6 @@ Circle::Circle(Vec2 pos, float mass, float radius) : PhysicsObject(pos, mass), m
 {
 }
 
-void Circle::Update(float delta)
-{
-}
-
 void Circle::Draw(LineRenderer* lines)
 {
 	lines->DrawCircle(mPos, mRadius, mColour);

@@ -11,10 +11,6 @@ Plane::~Plane()
 {
 }
 
-void Plane::Update(float delta)
-{
-}
-
 void Plane::Draw(LineRenderer* lines)
 {
 	Vec2 parallel = Vec2(mNormal.y, -mNormal.x);

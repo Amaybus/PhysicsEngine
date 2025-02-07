@@ -14,7 +14,6 @@ public:
 	Plane(Vec2 unitNormal, float distanceToOrigin, float length);
 	~Plane();
 
-	void Update(float delta);
 	void Draw(LineRenderer* lines);
 
 	Vec2 GetNormal() const { return mNormal; }

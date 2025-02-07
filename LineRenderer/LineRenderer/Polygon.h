@@ -14,7 +14,6 @@ public:
 
 	int GetVertexCount() const { return mVertCount; }
 
-	void Update(float delta) override;
 	void Draw(LineRenderer* lines) override;
 };
 

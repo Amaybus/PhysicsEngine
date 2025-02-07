@@ -10,11 +10,6 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 	}
 }
 
-
-void Polygon::Update(float delta)
-{
-}
-
 void Polygon::Draw(LineRenderer* lines)
 {
 	for (Vec2 vert : mVertices)

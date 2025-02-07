@@ -14,7 +14,6 @@ public:
 
 	float GetRadius() const { return mRadius; }
 
-	void Update(float delta) override;
 	void Draw(LineRenderer* lines) override;
 };
 
