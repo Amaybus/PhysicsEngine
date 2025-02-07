@@ -6,6 +6,16 @@
 class LineRenderer;
 
 
+enum class ObjectType
+{
+	Circle,
+	Plane,
+	Box,
+	Polygon,
+
+	Count
+};
+
 class PhysicsObject
 {
 protected:
@@ -34,6 +44,7 @@ public:
 	Vec2& GetAcceleration() { return mAcc; }
 	float GetMass() const { return mMass; }
 	float GetInverseMass() const { return 1.0f / mMass; }
+	virtual int GetType() const = 0;
 
 	void SetPos(Vec2 pos) { mPos = pos; }
 	void SetVelocity(Vec2 vel) { mVel = vel; }

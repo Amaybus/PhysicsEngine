@@ -9,10 +9,7 @@
 
 class PhysicsEngine : public Application
 {
-	std::vector<Circle*> mCircles;
-	std::vector<Plane*> mPlanes;
-	std::vector<Box*> mBoxes;
-	std::vector<Polygon*> mPolygons;
+	std::vector<PhysicsObject*> mPhysicsObjects;
 
 public:
 	PhysicsEngine();

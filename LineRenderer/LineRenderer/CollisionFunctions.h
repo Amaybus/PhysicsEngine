@@ -1,21 +1,27 @@
 #pragma once
 
 #include "PhysicsObject.h"
-#include "Circle.h"
-#include "Plane.h"
-#include "Box.h"
 #include "CollisionInfo.h"
-#include "LineRenderer.h"
 
+CollisionInfo CheckCollision(PhysicsObject* objA, PhysicsObject* objB);
 
-CollisionInfo CircleToCircleCollision(Circle* circleA, Circle* circleB);
+CollisionInfo CircleToCircleCollision(PhysicsObject* circleA, PhysicsObject* circleB);
+CollisionInfo CircleToPlaneCollision(PhysicsObject* circleA, PhysicsObject* planeB);
+CollisionInfo CircleToBoxCollision(PhysicsObject* circleA, PhysicsObject* boxB);
+CollisionInfo CircleToPolygonCollision(PhysicsObject* circleA, PhysicsObject* polygonB);
 
-CollisionInfo PlaneToCircleCollision(Plane* planeA, Circle* circleB);
+CollisionInfo PlaneToCircleCollision(PhysicsObject* planeA, PhysicsObject* circleB);
+CollisionInfo PlaneToBoxCollision(PhysicsObject* planeA, PhysicsObject* boxB);
+CollisionInfo PlaneToPolygonCollision(PhysicsObject* planeA, PhysicsObject* polygonB);
 
-CollisionInfo CircleToBoxCollision(Circle* circleA, Box* boxB);
+CollisionInfo BoxToCircleCollision(PhysicsObject* boxA, PhysicsObject* circleB);
+CollisionInfo BoxToPlaneCollision(PhysicsObject* boxA, PhysicsObject* planeB);
+CollisionInfo BoxToBoxCollision(PhysicsObject* boxA, PhysicsObject* boxB);
+CollisionInfo BoxToPolygonCollision(PhysicsObject* boxA, PhysicsObject* polygonB);
 
-CollisionInfo PlaneToBoxCollision(Plane* planeA, Box* boxB, LineRenderer* lines);
-
-CollisionInfo BoxToBoxCollision(Box* boxA, Box* boxB);
+CollisionInfo PolygonToCircleCollision(PhysicsObject* polygonA, PhysicsObject* CircleB);
+CollisionInfo PolygonToPlaneCollision(PhysicsObject* polygonA, PhysicsObject* planeB);
+CollisionInfo PolygonToBoxCollision(PhysicsObject* polygonA, PhysicsObject* boxB);
+CollisionInfo PolygonToPolygonCollision(PhysicsObject* polygonA, PhysicsObject* polygonB);
 
 

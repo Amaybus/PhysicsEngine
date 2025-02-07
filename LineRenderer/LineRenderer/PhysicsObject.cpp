@@ -1,6 +1,7 @@
 #include "PhysicsObject.h"
 
-#include "dirent.h"
+#include "imgui.h"
+
 
 PhysicsObject::PhysicsObject()
 {
@@ -28,6 +29,6 @@ void PhysicsObject::ApplyForce(Vec2 force)
 // Instantaneous application
 void PhysicsObject::ApplyImpulse(Vec2 impulse)
 {
-	mVel += impulse * this->GetInverseMass();
+	mVel += impulse * GetInverseMass();
 }
 

@@ -19,8 +19,8 @@ public:
 
 	void Draw(LineRenderer* lines) override;
 
-
-	const float GetWidth() { return mWidth; }
-	const float GetHeight() { return mHeight; }
+	float GetWidth() const  { return mWidth; }
+	float GetHeight() const { return mHeight; }
+	int GetType() const override { return 2; }
 };
 

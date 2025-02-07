@@ -10,9 +10,10 @@ class Circle : public PhysicsObject
 	const float mRadius;
 
 public:
-	Circle(Vec2 pos, float mass, float radius);
+	Circle(Vec2 pos, float radius, float mass);
 
 	float GetRadius() const { return mRadius; }
+	int GetType() const override { return 0; }
 
 	void Draw(LineRenderer* lines) override;
 };

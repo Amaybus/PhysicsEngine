@@ -1,4 +1,5 @@
 #include "CollisionInfo.h"
+#include <iostream>
 
 void CollisionInfo::Resolve()
 {
@@ -8,12 +9,13 @@ void CollisionInfo::Resolve()
 	if (objA->GetMass() <= 0)
 	{
 		float totalInverseMass = objB->GetInverseMass();
+		std::cout << closestPoint.x << std::endl;
+		objB->GetPos() += collisionNormal * overlapAmount; 
 
 		float impulseMag = Dot(-2 * objB->GetVelocity(), collisionNormal) / totalInverseMass;
 		Vec2 force = collisionNormal * impulseMag;
 
 		objB->ApplyImpulse(force);
-
 		return;
 	}
 
