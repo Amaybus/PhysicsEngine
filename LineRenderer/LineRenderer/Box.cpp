@@ -10,14 +10,19 @@ Box::Box(Vec2 pos, float w, float h, float mass) : PhysicsObject(pos, mass), mWi
 	mYMax = Vec2((pos.x - 0.5 * w), (pos.y + 0.5 * h));
 }
 
-void Box::Draw(LineRenderer* lines)
+void Box::Update(float delta)
 {
+	PhysicsObject::Update(delta);
+
 	mXMax = Vec2((mPos.x + 0.5 * mWidth), (mPos.y + 0.5 * mHeight));
 	mXMin = Vec2((mPos.x - 0.5 * mWidth), (mPos.y - 0.5 * mHeight));
 
 	mYMin = Vec2((mPos.x + 0.5 * mWidth), (mPos.y - 0.5 * mHeight));
 	mYMax = Vec2((mPos.x - 0.5 * mWidth), (mPos.y + 0.5 * mHeight));
+}
 
+void Box::Draw(LineRenderer* lines)
+{
 	lines->DrawLineSegment(mYMax, mXMax, mColour);
 	lines->DrawLineSegment(mXMax, mYMin, mColour);
 	lines->DrawLineSegment(mYMin, mXMin, mColour);

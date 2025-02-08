@@ -17,6 +17,7 @@ public:
 
 	Box(Vec2 pos, float w, float h, float mass);
 
+	void Update(float delta) override;
 	void Draw(LineRenderer* lines) override;
 
 	float GetWidth() const  { return mWidth; }

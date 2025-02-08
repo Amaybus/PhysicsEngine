@@ -9,13 +9,15 @@ void CollisionInfo::Resolve()
 	if (objA->GetMass() <= 0)
 	{
 		float totalInverseMass = objB->GetInverseMass();
-		std::cout << closestPoint.x << std::endl;
-		objB->GetPos() += collisionNormal * overlapAmount; 
+		//Depen Step
+		objB->GetPos() += collisionNormal * overlapAmount;
 
-		float impulseMag = Dot(-2 * objB->GetVelocity(), collisionNormal) / totalInverseMass;
+		//Apply Force
+		float impulseMag = Dot(-(1 + 0.5) * objB->GetVelocity(), collisionNormal) / totalInverseMass;
 		Vec2 force = collisionNormal * impulseMag;
 
 		objB->ApplyImpulse(force);
+		//objB->SetVelocity(Vec2());
 		return;
 	}
 
@@ -29,7 +31,7 @@ void CollisionInfo::Resolve()
 	Vec2 relVe = objB->GetVelocity() - objA->GetVelocity();
 	float impulseMag = Dot(-2 * relVe, collisionNormal) / totalInverseMass;
 	Vec2 force = collisionNormal * impulseMag;
-
+	
 	objA->ApplyImpulse(-force);
 	objB->ApplyImpulse(force);
 }

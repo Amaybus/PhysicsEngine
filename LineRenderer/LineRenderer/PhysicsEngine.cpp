@@ -10,16 +10,16 @@
 
 PhysicsEngine::PhysicsEngine()
 {
-	//appInfo.fixedFramerate = 5;
+	appInfo.fixedFramerate = 5;
 	appInfo.appName = "Physics Engine";
 }
 
 void PhysicsEngine::Initialise()
 {
-	// Draw Circle on mouse pos
-	//mPhysicsObjects.push_back(new Circle(Vec2{ -4,5 }, 1, 1));
-	//mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));
 
+	// Draw Circle on mouse pos
+	//mPhysicsObjects.push_back(new Circle(Vec2{ -4,0 }, 0.5f, 1));
+	//mPhysicsObjects[0]->SetVelocity(Vec2(1.3f, 0));
 	// Create a circle to add to test against
 	//mCircles.push_back(new Circle(Vec2{ 4,5 }, 0.3,1));
 	//mCircles[1]->SetVelocity(Vec2(-1, 0));
@@ -27,27 +27,37 @@ void PhysicsEngine::Initialise()
 	//mCircles.push_back(new Circle(Vec2{ 1.6,1 }, 0.3, 1));
 
 	// Draw boxes
-	mPhysicsObjects.push_back(new Box(Vec2(3, 5), 2.1, 1.2, 1));
-	mPhysicsObjects[0]->SetVelocity(Vec2(-1, 0));
+	mPhysicsObjects.push_back(new Box(Vec2(-0.4f, 3), 2.1f, 1.2f, 2.1f * 1.2f));
+	mPhysicsObjects[0]->SetVelocity(Vec2(0.3f, -1));
+	//mPhysicsObjects[0]->ApplyForce(Vec2(-50, 0));
 
-	// mPhysicsObjects.push_back(new Box(Vec2(-4, 5), 1.5, 1, 1));
-	// mPhysicsObjects[1]->SetVelocity(Vec2(1, 0));
+	//mPhysicsObjects.push_back(new Box(Vec2(-0.4f, 0), 7.4f, 0.3f, 70));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(0.5f, 2));
+	
+	//mPhysicsObjects.push_back(new Circle(Vec2(-0.4f, 0), 0.4f, 3.14159f * (0.4f * 0.4f)));
+	//mPhysicsObjects[2]->SetVelocity(Vec2(-0.1f, 4));
 
+	//mPhysicsObjects.push_back(new Box(Vec2(-0.4f, 0), 1.5, 1, 1));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(0, 0.9f));
 
 	//mPlanes.push_back(new Plane(Vec2(1, 0), -5, 5));
-	mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -5, 5));
+	//mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -5.4, 5));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -5, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -5, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -5, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -5, 50));
 
 	// Draw polygon
-	mPhysicsObjects.push_back(new Polygon(Vec2(1, 1), 4, 1));
+	//mPhysicsObjects.push_back(new Polygon(Vec2(1, 1), 4, 1));
 	//mPolygons.push_back(new Polygon(Vec2(1, 7), 3, 1));
 
 }
 
 void PhysicsEngine::Update(float delta)
 {
+
 	for (PhysicsObject* obj : mPhysicsObjects)
 	{
-		obj->Draw(lines);
 		obj->Update(delta);
 	}
 
@@ -61,9 +71,9 @@ void PhysicsEngine::Update(float delta)
 				if (info.bIsOverlapping)
 				{
 					info.Resolve();
-					info.objA->SetColour(Colour::RED);
+					info.objB->SetColour(Colour::RED);
 				}
-				else info.objA->SetColour(Colour::GREEN);
+				else info.objB->SetColour(Colour::GREEN);
 			}
 		}
 	}
@@ -87,30 +97,13 @@ void PhysicsEngine::Update(float delta)
 		}
 	}
 
-	////mBoxes[0]->SetPos(cursorPos);
-	//for (Circle* circ : mCircles)
-	//{
-	//	circ->Draw(lines);
-	//	circ->Update(delta);
-	//}
-
-	//for (Box* b : mBoxes)
-	//{
-	//	b->Draw(lines);
-	//	b->Update(delta);
-	//}
-
-	//for (Plane* p : mPlanes)
-	//{
-	//	p->Draw(lines);
-	//	p->Update(delta);
-	//}
-
-	//for (Polygon* p : mPolygons)
-	//{
-	//	p->Draw(lines);
-	//	p->Update(delta);
-	//}
+	lines->DrawLineWithArrow(mPhysicsObjects[0]->GetPos(), mPhysicsObjects[0]->GetPos() + mPhysicsObjects[0]->GetVelocity());
+	lines->DrawLineWithArrow(mPhysicsObjects[1]->GetPos(), mPhysicsObjects[1]->GetPos() + mPhysicsObjects[1]->GetVelocity());
+	lines->DrawLineWithArrow(mPhysicsObjects[2]->GetPos(), mPhysicsObjects[2]->GetPos() + mPhysicsObjects[2]->GetVelocity());
+	for (PhysicsObject* obj : mPhysicsObjects)
+	{
+		obj->Draw(lines);
+	}
 
 	//if (mBoxes.size() > 0)
 	//{

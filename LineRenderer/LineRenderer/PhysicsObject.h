@@ -29,13 +29,13 @@ protected:
 	Colour mColour;
 
 	Vec2 mForceAccumulator;
-	Vec2 mGravity = Vec2(0, -1.1f);
+	Vec2 mGravity = Vec2(0, -9.81f);
 
 public:
 	PhysicsObject();
 	PhysicsObject(Vec2 pos, float mass);
 
-	void Update(float delta);
+	virtual void Update(float delta);
 	virtual void Draw(LineRenderer* lines) = 0;
 
 
