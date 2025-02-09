@@ -1,5 +1,7 @@
 #include "PhysicsObject.h"
 
+#include "PhysicsEngine.h"
+
 
 PhysicsObject::PhysicsObject()
 {
@@ -12,14 +14,14 @@ PhysicsObject::PhysicsObject(Vec2 pos, float mass) : mPos(pos), mMass(mass)
 void PhysicsObject::Update(float delta)
 {
 	mAcc = mGravity + mForceAccumulator * GetInverseMass();
-	mPos += mVel * delta;
 	mVel += mAcc * delta;
+	mPos += mVel * delta;
 
 	mForceAccumulator = Vec2();
 }
 
 // Applied over a duration
-void PhysicsObject::ApplyForce(Vec2 force)
+void PhysicsObject::ApplyForce(Vec2 force)  
 {
 	mForceAccumulator += force;
 }

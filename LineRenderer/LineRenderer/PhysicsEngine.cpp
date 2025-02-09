@@ -6,6 +6,11 @@
 #include "CollisionInfo.h"
 #include "imgui.h"
 #include "LineRenderer.h"
+#include "Circle.h"
+#include "Box.h"
+#include "Plane.h"
+#include "Polygon.h"
+
 
 
 PhysicsEngine::PhysicsEngine()
@@ -19,7 +24,7 @@ void PhysicsEngine::Initialise()
 
 	// Draw Circle on mouse pos
 	mPhysicsObjects.push_back(new Circle(Vec2{ -4,0 }, 0.5f, 1));
-	mPhysicsObjects[0]->SetVelocity(Vec2(1.3f, 0));
+	//mPhysicsObjects[0]->SetVelocity(Vec2(1.3f, 0));
 	// Create a circle to add to test against
 	//mCircles.push_back(new Circle(Vec2{ 4,5 }, 0.3,1));
 	//mCircles[1]->SetVelocity(Vec2(-1, 0));
@@ -28,7 +33,7 @@ void PhysicsEngine::Initialise()
 
 	// Draw boxes
 	mPhysicsObjects.push_back(new Box(Vec2(-0.4f, 3), 2.1f, 1.2f, 2.1f * 1.2f));
-	mPhysicsObjects[1]->SetVelocity(Vec2(0.3f, -1));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(0.3f, -1));
 	//mPhysicsObjects[0]->ApplyForce(Vec2(-50, 0));
 
 	//mPhysicsObjects.push_back(new Box(Vec2(-0.4f, 0), 7.4f, 0.3f, 70));
@@ -56,7 +61,7 @@ void PhysicsEngine::Initialise()
 
 void PhysicsEngine::Update(float delta)
 {
-	
+	mPhysicsObjects[1]->SetPos(cursorPos);
 	for (PhysicsObject* obj : mPhysicsObjects)
 	{
 		obj->Update(delta);
