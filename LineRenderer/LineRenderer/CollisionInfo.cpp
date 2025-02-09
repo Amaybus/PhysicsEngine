@@ -13,7 +13,7 @@ void CollisionInfo::Resolve()
 		objB->GetPos() += collisionNormal * overlapAmount;
 
 		//Apply Force
-		float impulseMag = Dot(-(1 + 0.5) * objB->GetVelocity(), collisionNormal) / totalInverseMass;
+		float impulseMag = Dot(-2 * objB->GetVelocity(), collisionNormal) / totalInverseMass;
 		Vec2 force = collisionNormal * impulseMag;
 
 		objB->ApplyImpulse(force);

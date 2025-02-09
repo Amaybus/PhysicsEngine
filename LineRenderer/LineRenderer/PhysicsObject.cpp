@@ -1,7 +1,5 @@
 #include "PhysicsObject.h"
 
-#include<iostream>
-
 
 PhysicsObject::PhysicsObject()
 {
@@ -13,7 +11,7 @@ PhysicsObject::PhysicsObject(Vec2 pos, float mass) : mPos(pos), mMass(mass)
 
 void PhysicsObject::Update(float delta)
 {
-	mAcc = (mGravity + mForceAccumulator * GetInverseMass());
+	mAcc = mGravity + mForceAccumulator * GetInverseMass();
 	mPos += mVel * delta;
 	mVel += mAcc * delta;
 

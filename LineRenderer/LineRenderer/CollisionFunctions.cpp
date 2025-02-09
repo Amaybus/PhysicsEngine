@@ -5,14 +5,10 @@
 #include "Polygon.h"
 #include "Circle.h"
 
-#include <functional>
-#include <ioStream>
 
 
-
-CollisionInfo CheckCollision(PhysicsObject* objA, PhysicsObject* objB)
+void CollisionFuncInit()
 {
-	std::function<CollisionInfo(PhysicsObject*, PhysicsObject*)> collisionFunctions[(int)ObjectType::Count][(int)ObjectType::Count];
 	collisionFunctions[(int)ObjectType::Circle][(int)ObjectType::Circle] = CircleToCircleCollision;
 	collisionFunctions[(int)ObjectType::Circle][(int)ObjectType::Plane] = CircleToPlaneCollision;
 	collisionFunctions[(int)ObjectType::Circle][(int)ObjectType::Box] = CircleToBoxCollision;
@@ -29,7 +25,10 @@ CollisionInfo CheckCollision(PhysicsObject* objA, PhysicsObject* objB)
 	collisionFunctions[(int)ObjectType::Polygon][(int)ObjectType::Plane] = PolygonToPlaneCollision;
 	collisionFunctions[(int)ObjectType::Polygon][(int)ObjectType::Box] = PolygonToBoxCollision;
 	collisionFunctions[(int)ObjectType::Polygon][(int)ObjectType::Polygon] = PolygonToPolygonCollision;
+}
 
+CollisionInfo CheckCollision(PhysicsObject* objA, PhysicsObject* objB)
+{
 	int objTypeA = (int)objA->GetType();
 	int objTypeB = (int)objB->GetType();
 

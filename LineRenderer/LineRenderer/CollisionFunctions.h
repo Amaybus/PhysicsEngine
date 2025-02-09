@@ -3,6 +3,12 @@
 #include "PhysicsObject.h"
 #include "CollisionInfo.h"
 
+#include <functional>
+
+
+inline std::function<CollisionInfo(PhysicsObject*, PhysicsObject*)> collisionFunctions[(int)ObjectType::Count][(int)ObjectType::Count];
+void CollisionFuncInit();
+
 CollisionInfo CheckCollision(PhysicsObject* objA, PhysicsObject* objB);
 
 CollisionInfo CircleToCircleCollision(PhysicsObject* circleA, PhysicsObject* circleB);
