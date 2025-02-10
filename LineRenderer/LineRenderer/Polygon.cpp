@@ -37,7 +37,7 @@ void Polygon::Update(float delta)
 
 void Polygon::Draw(LineRenderer* lines)
 {
-	lines->DrawCircle(mPos, 0.5);
+	lines->DrawCircle(mPos, 0.5, mColour);
 
 	for (Vec2 vert : mVertices)
 	{
@@ -46,7 +46,7 @@ void Polygon::Draw(LineRenderer* lines)
 
 	for(int i = 0; i < mVertCount; i++)
 	{
-		lines->AddPointToLine(mVertices[i]);
+		lines->AddPointToLine(mVertices[i], mColour);
 	}
 	lines->FinishLineLoop();
 

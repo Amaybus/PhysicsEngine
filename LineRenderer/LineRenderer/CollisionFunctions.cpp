@@ -231,22 +231,109 @@ CollisionInfo BoxToPolygonCollision(PhysicsObject* bA, PhysicsObject* polyB)
 // ~~~~~~~ POLYGON COLLISION  ~~~~~~~ //
 CollisionInfo PolygonToCircleCollision(PhysicsObject* polygonA, PhysicsObject* CircleB)
 {
-	return CircleToPolygonCollision(CircleB,polygonA);
+	return CircleToPolygonCollision(CircleB, polygonA);
 }
 CollisionInfo PolygonToPlaneCollision(PhysicsObject* polygonA, PhysicsObject* planeB)
 {
-	return PlaneToPolygonCollision(planeB,polygonA);
+	return PlaneToPolygonCollision(planeB, polygonA);
 }
 CollisionInfo PolygonToBoxCollision(PhysicsObject* polygonA, PhysicsObject* boxB)
 {
-	return BoxToPolygonCollision(boxB,polygonA);
+	return BoxToPolygonCollision(boxB, polygonA);
 }
 CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* polyB)
 {
 	Polygon* polygonA = (Polygon*)polyA;
 	Polygon* polygonB = (Polygon*)polyB;
 
-	return CollisionInfo();
+	CollisionInfo info;
+	info.objA = polyA;
+	info.objB = polyB;
+	info.overlapAmount = 0;
+	info.contactPoint = Vec2();
+
+
+	std::vector<Vec2> collectiveNormals;
+	for (Vec2& nA : polygonA->mNormals)
+	{
+		collectiveNormals.push_back(nA);
+	}
+
+	for (Vec2& nB : polygonB->mNormals)
+	{
+		collectiveNormals.push_back(nB);
+	}
+
+	std::vector<float> distanceResults;
+	std::vector < float> polyAResults;
+	std::vector < float> polyBResults;
+	Vec2 aMax = Vec2(), aMin = Vec2(), bMax = Vec2(), bMin = Vec2();
+	float smallest = FLT_MAX, largest = 0;
+
+	float overlaps[4];
+	int smallestOverlapIndex = 0;
+
+	for (Vec2& cN : collectiveNormals)
+	{
+		for (int i = 0; i < polygonA->mVertices.size(); i++)
+		{
+			float result = Dot(polygonA->mVertices[i], cN);
+			polyAResults.push_back(result);
+			if (result < smallest)
+			{
+				smallest = result;
+				aMin = polygonA->mVertices[i];
+			}
+			if (result > largest)
+			{
+				largest = result;
+				aMax = polygonA->mVertices[i];
+			}
+		}
+		smallest = FLT_MAX;
+		largest = 0;
+
+		for (int i = 0; i < polygonB->mVertices.size(); i++)
+		{
+			float result = Dot(polygonB->mVertices[i], cN);
+			polyAResults.push_back(result);
+			if (result < smallest)
+			{
+				smallest = result;
+				bMin = polygonB->mVertices[i];
+			}
+			if (result > largest)
+			{
+				largest = result;
+				bMax = polygonB->mVertices[i];
+			}
+		}
+
+		overlaps[0] = aMax.x - bMin.x;
+		overlaps[1] = bMax.x - aMin.x;
+		overlaps[2] = aMax.y - bMin.y;
+		overlaps[3] = bMax.y - aMin.y;
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (overlaps[i] < overlaps[smallestOverlapIndex])
+			{
+				smallestOverlapIndex = i;
+			}
+		}
+
+		if (overlaps[smallestOverlapIndex] < info.overlapAmount)
+		{
+			info.overlapAmount = overlaps[smallestOverlapIndex];
+			if (smallestOverlapIndex == 0) { info.contactPoint = bMin; }
+			if (smallestOverlapIndex == 1) { info.contactPoint = bMax; }
+			if (smallestOverlapIndex == 2) { info.contactPoint = bMin; }
+			if (smallestOverlapIndex == 3) { info.contactPoint = bMax; }
+		}
+	}
+
+	info.bIsOverlapping = info.overlapAmount < 0 ? true : false;
+	return info;
 }
 
 
