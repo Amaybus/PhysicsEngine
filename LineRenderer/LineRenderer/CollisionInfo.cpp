@@ -16,7 +16,7 @@ void CollisionInfo::Resolve()
 		float impulseMag = Dot(-2 * objB->GetVelocity(), collisionNormal) / totalInverseMass;
 		Vec2 force = collisionNormal * impulseMag;
 
-		objB->ApplyImpulse(force);
+		objB->ApplyImpulse(force, contactPoint);
 		//objB->SetVelocity(Vec2());
 		return;
 	}
@@ -30,8 +30,14 @@ void CollisionInfo::Resolve()
 	// Apply Force
 	Vec2 relVe = objB->GetVelocity() - objA->GetVelocity();
 	float impulseMag = Dot(-2 * relVe, collisionNormal) / totalInverseMass;
+	if (impulseMag < 0) return;
 	Vec2 force = collisionNormal * impulseMag;
+
+	Vec2 perp = Vec2(collisionNormal.y, -collisionNormal.x);
+	float r1 = Dot(contactPoint - objA->GetPos(), -perp);
+
+	std::cout << r1 << '\n';
 	
-	objA->ApplyImpulse(-force);
-	objB->ApplyImpulse(force);
+	objA->ApplyImpulse(-force,contactPoint);
+	objB->ApplyImpulse(force, contactPoint);
 }

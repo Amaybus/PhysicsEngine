@@ -20,6 +20,21 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 	}
 }
 
+void Polygon::Update(float delta)
+{
+	PhysicsObject::Update(delta);
+
+	Vec2 next;
+	for (int i = 0; i < mVertices.size(); i++)
+	{
+		if (i == mVertices.size() - 1) { next = mVertices[0]; }
+		else { next = mVertices[i + 1]; }
+
+		mNormals[i] = (Vec2(-(next - mVertices[i]).y, (next - mVertices[i]).x).Normalise());
+		mEdgeCentre[i] = (Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
+	}
+}
+
 void Polygon::Draw(LineRenderer* lines)
 {
 	lines->DrawCircle(mPos, 0.5);

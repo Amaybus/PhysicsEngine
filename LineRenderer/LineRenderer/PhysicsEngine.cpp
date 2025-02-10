@@ -24,9 +24,9 @@ void PhysicsEngine::Initialise()
 
 	// Draw Circle on mouse pos
 	mPhysicsObjects.push_back(new Circle(Vec2{ -4,0 }, 0.5f, 1));
-	//mPhysicsObjects[0]->SetVelocity(Vec2(1.3f, 0));
+	mPhysicsObjects[0]->SetVelocity(Vec2(1.3f, 0));
 	// Create a circle to add to test against
-	//mCircles.push_back(new Circle(Vec2{ 4,5 }, 0.3,1));
+	mPhysicsObjects.push_back(new Circle(Vec2{ 4,5 }, 0.3,1));
 	//mCircles[1]->SetVelocity(Vec2(-1, 0));
 	//mCircles.push_back(new Circle(Vec2{ 1.3,1 }, 0.3, 1));
 	//mCircles.push_back(new Circle(Vec2{ 1.6,1 }, 0.3, 1));
@@ -54,14 +54,14 @@ void PhysicsEngine::Initialise()
 
 	// Draw polygon
 	//mPhysicsObjects.push_back(new Polygon(Vec2(1, 1), 4, 1));
-	//mPolygons.push_back(new Polygon(Vec2(1, 7), 3, 1));
+	//mPhysicsObjects.push_back(new Polygon(Vec2(1, 7), 3, 1));
 	CollisionFuncInit();
 
 }
 
 void PhysicsEngine::Update(float delta)
 {
-	mPhysicsObjects[1]->SetPos(cursorPos);
+	mPhysicsObjects[0]->SetPos(cursorPos);
 	for (PhysicsObject* obj : mPhysicsObjects)
 	{
 		obj->Update(delta);
@@ -78,6 +78,7 @@ void PhysicsEngine::Update(float delta)
 				{
 					info.Resolve();
 					info.objB->SetColour(Colour::RED);
+					lines->DrawCross(info.contactPoint, 0.2, Colour::BLUE);
 				}
 				else info.objB->SetColour(Colour::GREEN);
 			}
@@ -110,72 +111,6 @@ void PhysicsEngine::Update(float delta)
 	{
 		obj->Draw(lines);
 	}
-
-	//if (mBoxes.size() > 0)
-	//{
-	//	for (int i = 0; i < mBoxes.size() - 1; i++)
-	//	{
-	//		for (int j = i + 1; j < mBoxes.size(); j++)
-	//		{
-	//			CollisionInfo info = BoxToBoxCollision(mBoxes[j], mBoxes[i]);
-
-	//			if (info.bIsOverlapping) { mBoxes[j]->SetColour(Colour::RED); info.Resolve(); }
-	//			else mBoxes[j]->SetColour(Colour::GREEN);
-	//		}
-	//	}
-	//}
-
-	//if (mCircles.size() > 0)
-	//{
-	//	CollisionInfo info = CircleToBoxCollision(mCircles[0], mBoxes[0]);
-	//	if (info.bIsOverlapping)
-	//	{
-	//		mCircles[0]->SetColour(Colour::RED);
-	//		info.Resolve();
-
-	//	}
-	//	else mCircles[0]->SetColour(Colour::GREEN);
-	//}
-
-
-	//for (int i = 0; i < mCircles.size(); i++)
-	//{
-	//	for (int j = 0; j < mPlanes.size(); j++)
-	//	{
-	//		CollisionInfo info2 = PlaneToCircleCollision(mPlanes[j], mCircles[i]);
-	//		std::cout << info2.closestPoint.x << std::endl;
-
-	//		if (info2.bIsOverlapping)
-	//		{
-	//			mCircles[i]->SetColour(Colour::RED);
-	//			info2.Resolve();
-	//			std::cout << info2.closestPoint.x << std::endl;
-	//			std::cout << info2.overlapAmount << std::endl;
-	//		}
-	//		else mCircles[i]->SetColour(Colour::GREEN);
-	//	}
-	//}
-
-
-	//for (int i = 0; i < mBoxes.size(); i++)
-	//{
-	//	for (int j = 0; j < mPlanes.size(); j++)
-	//	{
-	//		CollisionInfo info3 = PlaneToBoxCollision(mPlanes[j], mBoxes[i]);
-	//		std::cout << info3.closestPoint.x << std::endl;
-	//		std::cout << info3.overlapAmount << std::endl;
-
-	//		if (info3.bIsOverlapping)
-	//		{
-	//			mBoxes[i]->SetColour(Colour::RED);
-	//			info3.Resolve();
-	//			std::cout << info3.overlapAmount << std::endl;
-
-	//		}
-	//		else mBoxes[i]->SetColour(Colour::GREEN);
-	//		//std::cout << info3.closestPoint.x << std::endl;
-	//	}
-	//}
 }
 
 

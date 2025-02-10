@@ -5,6 +5,8 @@
 #include "Polygon.h"
 #include "Circle.h"
 
+#include <iostream>
+
 
 
 void CollisionFuncInit()
@@ -53,6 +55,7 @@ CollisionInfo CircleToCircleCollision(PhysicsObject* circA, PhysicsObject* circB
 	info.collisionNormal = displacementVec / distance;
 	info.objA = circleA;
 	info.objB = circleB;
+	info.contactPoint = (circleB->GetPos() + circleA->GetPos()) / 2;
 
 	return info;
 }
@@ -82,7 +85,7 @@ CollisionInfo CircleToBoxCollision(PhysicsObject* circA, PhysicsObject* bB)
 	info.overlapAmount = -(distance - circleRadius);
 	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
 	info.collisionNormal = -(circleCentre - closestPoint).Normalise();
-	info.closestPoint = closestPoint;
+	info.contactPoint = closestPoint;
 
 	return info;
 }
@@ -108,13 +111,17 @@ CollisionInfo PlaneToCircleCollision(PhysicsObject* plA, PhysicsObject* circB)
 	info.overlapAmount = -overlap;
 	info.bIsOverlapping = info.overlapAmount > 0;
 	info.collisionNormal = planeA->GetNormal();
-	info.closestPoint = Vec2(circleB->GetPos().x + circleB->GetRadius(), circleB->GetPos().y);
+	info.contactPoint = circB->GetPos() + -planeA->GetNormal() * circleB->GetRadius();
 
 	return info;
 }
 CollisionInfo PlaneToPlaneCollision(PhysicsObject* planeA, PhysicsObject* planeB)
 {
-	return CollisionInfo();
+	CollisionInfo info;
+	info.bIsOverlapping = false;
+	info.objA = planeA;
+	info.objB = planeB;
+	return info;
 }
 CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB)
 {
@@ -143,8 +150,6 @@ CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB)
 	if (distanceIndex == 3) { closestPoint = boxB->mYMax; }
 
 	float distance = Dot(closestPoint, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	//float distanceToCentre = Dot(boxB->GetPos(), planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	//float distance = distanceToCentre - pointDistance[distanceIndex];
 
 	CollisionInfo info;
 	info.objA = planeA;
@@ -152,7 +157,9 @@ CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB)
 	info.overlapAmount = -distance;
 	info.bIsOverlapping = info.overlapAmount >= 0;
 	info.collisionNormal = planeA->GetNormal();
-	info.closestPoint = closestPoint;
+
+	// #### Might need more work, check back when rotation is added ####
+	info.contactPoint = closestPoint;
 	return info;
 }
 CollisionInfo PlaneToPolygonCollision(PhysicsObject* plA, PhysicsObject* polyB)
@@ -241,3 +248,5 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 
 	return CollisionInfo();
 }
+
+

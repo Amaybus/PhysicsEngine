@@ -31,6 +31,22 @@ protected:
 	Vec2 mForceAccumulator;
 	Vec2 mGravity = Vec2(0, -9.81f);
 
+	// Rotation
+	// How the object is rotated in radians
+	float mOrientation;
+	// When an object rotates from one orientation to antoher. degrees per second
+	float mAngularVelocity;
+	// Resistance against angular acc around the pivot
+	float mMomentOfInertia;
+
+
+	// a = torque / inertia
+	Vec2 mAngularAcceleration;
+	float mAngularMomentum;
+	// Point where the object is perfectly balanced. polygons
+	Vec2 mCentreOfMass;
+
+
 public:
 	PhysicsObject();
 	PhysicsObject(Vec2 pos, float mass);
@@ -44,6 +60,7 @@ public:
 	Vec2& GetAcceleration() { return mAcc; }
 	float GetMass() const { return mMass; }
 	float GetInverseMass() const { return 1.0f / mMass; }
+	float GetMomentOfInertia() const { return mMomentOfInertia; }
 	virtual int GetType() const = 0;
 
 	void SetPos(Vec2 pos) { mPos = pos; }
@@ -52,6 +69,6 @@ public:
 	void SetColour(Colour colour) { mColour = colour; }
 
 	void ApplyForce(Vec2 force);
-	void ApplyImpulse(Vec2 impulse);
+	void ApplyImpulse(Vec2 impulse, Vec2 contactPoint);
 };
 

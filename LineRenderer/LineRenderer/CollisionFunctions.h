@@ -32,3 +32,4 @@ CollisionInfo PolygonToBoxCollision(PhysicsObject* polygonA, PhysicsObject* boxB
 CollisionInfo PolygonToPolygonCollision(PhysicsObject* polygonA, PhysicsObject* polygonB);
 
 
+
