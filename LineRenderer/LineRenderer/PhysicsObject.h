@@ -63,7 +63,7 @@ public:
 	float GetMomentOfInertia() const { return mMomentOfInertia; }
 	virtual int GetType() const = 0;
 
-	void SetPos(Vec2 pos) { mPos = pos; }
+	virtual void SetPos(Vec2 pos) { mPos = pos; }
 	void SetVelocity(Vec2 vel) { mVel = vel; }
 	void SetAcc(Vec2 acc) { mAcc = acc; }
 	void SetColour(Colour colour) { mColour = colour; }

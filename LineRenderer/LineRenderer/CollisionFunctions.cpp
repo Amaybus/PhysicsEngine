@@ -70,12 +70,8 @@ CollisionInfo CircleToBoxCollision(PhysicsObject* circA, PhysicsObject* bB)
 
 	Vec2 circleCentre = circleA->GetPos();
 	float circleRadius = circleA->GetRadius();
-	float xMax = boxB->mXMax.x;
-	float xMin = boxB->mXMin.x;
-	float yMin = boxB->mYMin.y;
-	float yMax = boxB->mYMax.y;
 
-	Vec2 closestPoint = Vec2(Clamp(circleCentre.x, xMin, xMax), Clamp(circleCentre.y, yMin, yMax));
+	Vec2 closestPoint = Vec2(Clamp(circleCentre.x, boxB->GetXMin(), boxB->GetXMax()), Clamp(circleCentre.y, boxB->GetYMin(), boxB->GetYMax()));
 	float distance = (circleCentre - closestPoint).GetMagnitude();
 
 	CollisionInfo info;
@@ -129,10 +125,16 @@ CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB)
 	Box* boxB = (Box*)bB;
 
 	float pointDistance[4];
-	pointDistance[0] = Dot(boxB->mXMax, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	pointDistance[1] = Dot(boxB->mXMin, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	pointDistance[2] = Dot(boxB->mYMin, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	pointDistance[3] = Dot(boxB->mYMax, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+
+	Vec2 topLeft = Vec2(boxB->GetXMax(), boxB->GetYMax());
+	Vec2 topRight = Vec2(boxB->GetXMin(), boxB->GetYMax());
+	Vec2 bottomLeft = Vec2(boxB->GetXMin(), boxB->GetYMin());
+	Vec2 bottonRight = Vec2(boxB->GetXMin(), boxB->GetYMax());
+
+	pointDistance[0] = Dot(topLeft, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+	pointDistance[1] = Dot(topRight, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+	pointDistance[2] = Dot(bottomLeft, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+	pointDistance[3] = Dot(bottonRight, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
 
 	int distanceIndex = 0;
 	for (int i = 0; i < 4; i++)
@@ -144,10 +146,10 @@ CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB)
 	}
 
 	Vec2 closestPoint;
-	if (distanceIndex == 0) { closestPoint = boxB->mXMax; }
-	if (distanceIndex == 1) { closestPoint = boxB->mXMin; }
-	if (distanceIndex == 2) { closestPoint = boxB->mYMin; }
-	if (distanceIndex == 3) { closestPoint = boxB->mYMax; }
+	if (distanceIndex == 0) { closestPoint = topLeft; }
+	if (distanceIndex == 1) { closestPoint = topRight; }
+	if (distanceIndex == 2) { closestPoint = bottomLeft; }
+	if (distanceIndex == 3) { closestPoint = bottonRight; }
 
 	float distance = Dot(closestPoint, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
 
@@ -188,16 +190,16 @@ CollisionInfo BoxToBoxCollision(PhysicsObject* bA, PhysicsObject* bB)
 	float overlapDepths[4];
 	Vec2 overlapNormals[4];
 
-	overlapDepths[0] = boxB->mXMax.x - boxA->mXMin.x;
+	overlapDepths[0] = boxB->GetXMax() - boxA->GetXMin();
 	overlapNormals[0] = Vec2(-1, 0);
 
-	overlapDepths[1] = boxA->mXMax.x - boxB->mXMin.x;
+	overlapDepths[1] = boxA->GetXMax() - boxB->GetXMin();
 	overlapNormals[1] = Vec2(1, 0);
 
-	overlapDepths[2] = boxB->mYMax.y - boxA->mYMin.y;
+	overlapDepths[2] = boxB->GetYMax() - boxA->GetYMin();
 	overlapNormals[2] = Vec2(0, -1);
 
-	overlapDepths[3] = boxA->mYMax.y - boxB->mYMin.y;
+	overlapDepths[3] = boxA->GetYMax() - boxB->GetYMin();
 	overlapNormals[3] = Vec2(0, 1);
 
 	int overlapIndex = 0;
@@ -209,11 +211,24 @@ CollisionInfo BoxToBoxCollision(PhysicsObject* bA, PhysicsObject* bB)
 		}
 	}
 
+	// ###### CONTACT POINT NOT CORRECT #####
+	//Vec2 topLeft = Vec2(boxA->GetXMax(), boxA->GetYMax());
+	//Vec2 topRight = Vec2(boxA->GetXMin(), boxA->GetYMax());
+	//Vec2 bottomLeft = Vec2(boxA->GetXMin(), boxA->GetYMin());
+	//Vec2 bottonRight = Vec2(boxA->GetXMin(), boxA->GetYMax());
+
+	//Vec2 contactPoint;
+	//if (overlapIndex == 0) { contactPoint = bottomLeft; }
+	//if (overlapIndex == 1) { contactPoint = topRight; }
+	//if (overlapIndex == 2) { contactPoint = bottonRight; }
+	//if (overlapIndex == 3) { contactPoint = topLeft; }
+
 	CollisionInfo info;
 
 	info.collisionNormal = overlapNormals[overlapIndex];
 	info.overlapAmount = overlapDepths[overlapIndex];
 	info.bIsOverlapping = info.overlapAmount > 0;
+	//	info.contactPoint = contactPoint;
 	info.objA = boxA;
 	info.objB = boxB;
 
@@ -256,83 +271,138 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 	std::vector<Vec2> collectiveNormals;
 	for (Vec2& nA : polygonA->mNormals)
 	{
-		collectiveNormals.push_back(nA);
+		collectiveNormals.push_back(-nA);
 	}
 
 	for (Vec2& nB : polygonB->mNormals)
 	{
-		collectiveNormals.push_back(nB);
+		collectiveNormals.push_back(-nB);
 	}
 
-	std::vector<float> distanceResults;
-	std::vector < float> polyAResults;
-	std::vector < float> polyBResults;
-	Vec2 aMax = Vec2(), aMin = Vec2(), bMax = Vec2(), bMin = Vec2();
-	float smallest = FLT_MAX, largest = 0;
+	std::vector <float> distanceResults;
+	std::vector <float> polyAResults;
+	std::vector <float> polyBResults;
 
-	float overlaps[4];
-	int smallestOverlapIndex = 0;
+	float aMax = -FLT_MAX;
+	float aMin = FLT_MAX;
+	float bMax = -FLT_MAX;
+	float bMin = FLT_MAX;
 
 	for (Vec2& cN : collectiveNormals)
 	{
 		for (int i = 0; i < polygonA->mVertices.size(); i++)
 		{
-			float result = Dot(polygonA->mVertices[i], cN);
-			polyAResults.push_back(result);
-			if (result < smallest)
+			float result = Dot(polygonA->mVertices[i] + polygonA->GetPos(), cN);
+
+			if (result > aMax)
 			{
-				smallest = result;
-				aMin = polygonA->mVertices[i];
+				aMax = result;
 			}
-			if (result > largest)
+			if (result < aMin)
 			{
-				largest = result;
-				aMax = polygonA->mVertices[i];
+				aMin = result;
 			}
 		}
-		smallest = FLT_MAX;
-		largest = 0;
 
 		for (int i = 0; i < polygonB->mVertices.size(); i++)
 		{
-			float result = Dot(polygonB->mVertices[i], cN);
-			polyAResults.push_back(result);
-			if (result < smallest)
-			{
-				smallest = result;
-				bMin = polygonB->mVertices[i];
-			}
-			if (result > largest)
-			{
-				largest = result;
-				bMax = polygonB->mVertices[i];
-			}
-		}
+			float result = Dot(polygonB->mVertices[i] + polygonB->GetPos(), cN);
 
-		overlaps[0] = aMax.x - bMin.x;
-		overlaps[1] = bMax.x - aMin.x;
-		overlaps[2] = aMax.y - bMin.y;
-		overlaps[3] = bMax.y - aMin.y;
-
-		for (int i = 0; i < 4; i++)
-		{
-			if (overlaps[i] < overlaps[smallestOverlapIndex])
+			if (result > bMax)
 			{
-				smallestOverlapIndex = i;
+				bMax = result;
 			}
-		}
-
-		if (overlaps[smallestOverlapIndex] < info.overlapAmount)
-		{
-			info.overlapAmount = overlaps[smallestOverlapIndex];
-			if (smallestOverlapIndex == 0) { info.contactPoint = bMin; }
-			if (smallestOverlapIndex == 1) { info.contactPoint = bMax; }
-			if (smallestOverlapIndex == 2) { info.contactPoint = bMin; }
-			if (smallestOverlapIndex == 3) { info.contactPoint = bMax; }
+			if (result < bMin)
+			{
+				bMin = result;
+			}
 		}
 	}
 
-	info.bIsOverlapping = info.overlapAmount < 0 ? true : false;
+	int smallestOverlapIndex = 0;
+	float overlaps[4];
+	overlaps[0] = aMax - bMin;
+	overlaps[1] = bMax - aMin;
+	overlaps[2] = aMax - bMin;
+	overlaps[3] = bMax - aMin;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (overlaps[i] < overlaps[smallestOverlapIndex])
+		{
+			smallestOverlapIndex = i;
+		}
+	}
+
+	info.overlapAmount = overlaps[smallestOverlapIndex];
+	info.nomrals = collectiveNormals;
+	////float aMax, aMin, bMin, bMax;
+	//Vec2 aMax = Vec2(), aMin = Vec2(), bMax = Vec2(), bMin = Vec2();
+	//float smallest = FLT_MAX, largest = 0;
+
+	//float overlaps[4];
+	//int smallestOverlapIndex = 0;
+
+	//for (Vec2& cN : collectiveNormals)
+	//{
+	//	for (int i = 0; i < polygonA->mVertices.size(); i++)
+	//	{
+	//		float result = Dot(polygonA->mVertices[i] + polygonA->GetPos(), cN);
+	//		polyAResults.push_back(result);
+	//		if (result < smallest)
+	//		{
+	//			smallest = result;
+	//			aMin = polygonA->mVertices[i] + polygonA->GetPos();
+	//		}
+	//		if (result > largest)
+	//		{
+	//			largest = result;
+	//			aMax = polygonA->mVertices[i] + polygonA->GetPos();
+	//		}
+	//	}
+	//	smallest = FLT_MAX;
+	//	largest = 0;
+
+	//	for (int i = 0; i < polygonB->mVertices.size(); i++)
+	//	{
+	//		float result = Dot(polygonB->mVertices[i] + polygonB->GetPos(), cN);
+	//		polyAResults.push_back(result);
+	//		if (result < smallest)
+	//		{
+	//			smallest = result;
+	//			bMin = polygonB->mVertices[i] + polygonB->GetPos();
+	//		}
+	//		if (result > largest)
+	//		{
+	//			largest = result;
+	//			bMax = polygonB->mVertices[i] + polygonB->GetPos();
+	//		}
+	//	}
+
+	//	overlaps[0] = aMax.x - bMin.x;
+	//	overlaps[1] = bMax.x - aMin.x;
+	//	overlaps[2] = aMax.y - bMin.y;
+	//	overlaps[3] = bMax.y - aMin.y;
+
+	//	for (int i = 0; i < 4; i++)
+	//	{
+	//		if (overlaps[i] < overlaps[smallestOverlapIndex])
+	//		{
+	//			smallestOverlapIndex = i;
+	//		}
+	//	}
+
+	//	if (overlaps[smallestOverlapIndex] < info.overlapAmount)
+	//	{
+	//		info.overlapAmount = overlaps[smallestOverlapIndex];
+	//		if (smallestOverlapIndex == 0) { info.contactPoint = bMin; }
+	//		if (smallestOverlapIndex == 1) { info.contactPoint = bMax; }
+	//		if (smallestOverlapIndex == 2) { info.contactPoint = bMin; }
+	//		if (smallestOverlapIndex == 3) { info.contactPoint = bMax; }
+	//	}
+	//}
+
+	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
 	return info;
 }
 

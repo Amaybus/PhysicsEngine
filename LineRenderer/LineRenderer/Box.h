@@ -8,12 +8,10 @@ class Box : public PhysicsObject
 	float mHeight;
 
 public:
-	Vec2 mYMax;
-	Vec2 mYMin;
-	
-	Vec2 mXMax;
-	Vec2 mXMin;
-
+	float GetXMin() const { return mPos.x - 0.5 * mWidth; }
+	float GetXMax() const { return mPos.x + 0.5 * mWidth; }
+	float GetYMin() const { return mPos.y - 0.5 * mHeight; }
+	float GetYMax() const { return mPos.y + 0.5 * mHeight; }
 
 	Box(Vec2 pos, float w, float h, float mass);
 

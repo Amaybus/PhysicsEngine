@@ -36,8 +36,6 @@ void CollisionInfo::Resolve()
 	Vec2 perp = Vec2(collisionNormal.y, -collisionNormal.x);
 	float r1 = Dot(contactPoint - objA->GetPos(), -perp);
 
-	std::cout << r1 << '\n';
-	
 	objA->ApplyImpulse(-force,contactPoint);
 	objB->ApplyImpulse(force, contactPoint);
 }

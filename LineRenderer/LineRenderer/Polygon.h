@@ -17,7 +17,7 @@ public:
 	int GetVertexCount() const { return mVertCount; }
 	int GetType() const override { return 3; }
 
-	void Update(float delta) override;
+	//void Update(float delta) override;
 	void Draw(LineRenderer* lines) override;
 };
 

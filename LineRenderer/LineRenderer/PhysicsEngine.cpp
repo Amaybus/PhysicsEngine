@@ -21,6 +21,7 @@ PhysicsEngine::PhysicsEngine()
 
 void PhysicsEngine::Initialise()
 {
+	CollisionFuncInit();
 
 	// Draw Circle on mouse pos
 	//mPhysicsObjects.push_back(new Circle(Vec2{ -4,0 }, 0.5f, 1));
@@ -32,7 +33,8 @@ void PhysicsEngine::Initialise()
 	//mCircles.push_back(new Circle(Vec2{ 1.6,1 }, 0.3, 1));
 
 	// Draw boxes
-	//mPhysicsObjects.push_back(new Box(Vec2(-0.4f, 3), 2.1f, 1.2f, 2.1f * 1.2f));
+	//mPhysicsObjects.push_back(new Box(Vec2(-5, -5), 2.1f, 1.2f, 2.1f * 1.2f));
+	//mPhysicsObjects.push_back(new Box(Vec2(1, 1), 2.1f, 1.2f, 2.1f * 1.2f));
 	//mPhysicsObjects[1]->SetVelocity(Vec2(0.3f, -1));
 	//mPhysicsObjects[0]->ApplyForce(Vec2(-50, 0));
 
@@ -52,10 +54,9 @@ void PhysicsEngine::Initialise()
 	mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -5, 50));
 	mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -5, 50));
 
-	// Draw polygon
-	mPhysicsObjects.push_back(new Polygon(Vec2(1, 1), 4, 1));
-	mPhysicsObjects.push_back(new Polygon(Vec2(1, 7), 3, 1));
-	CollisionFuncInit();
+	// Create polygon
+	mPhysicsObjects.push_back(new Polygon(Vec2(1, -1), 4, 1));
+	mPhysicsObjects.push_back(new Polygon(Vec2(1, 5), 3, 1));
 
 }
 
@@ -72,6 +73,7 @@ void PhysicsEngine::Update(float delta)
 		for (int j = i + 1; j < mPhysicsObjects.size(); j++)
 		{
 			CollisionInfo info = CheckCollision(mPhysicsObjects[i], mPhysicsObjects[j]);
+
 			if (info.objA != nullptr && info.objB != nullptr)
 			{
 				if (info.bIsOverlapping)
