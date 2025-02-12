@@ -6,6 +6,7 @@
 #include <functional>
 
 
+
 inline std::function<CollisionInfo(PhysicsObject*, PhysicsObject*)> collisionFunctions[(int)ObjectType::Count][(int)ObjectType::Count];
 void CollisionFuncInit();
 

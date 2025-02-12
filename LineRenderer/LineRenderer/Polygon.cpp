@@ -23,39 +23,7 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 		mEdgeCentre.push_back(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
 	}
 }
-/*
-void Polygon::Update(float delta)
-{
-	PhysicsObject::Update(delta);
-	return;
-	std::vector<Vec2> original;
-	for (Vec2& vO : mVertices)
-	{
-		original.push_back(mPos - vO);
-	}
 
-
-	std::vector<Vec2> change;
-	for (Vec2& vC : mVertices)
-	{
-		change.push_back(mPos - vC);
-	}
-
-	for (int i = 0; i < mVertices.size(); i++)
-	{
-		mVertices[i] = mPos - original[i];
-	}
-
-	Vec2 next;
-	for (int i = 0; i < mVertices.size(); i++)
-	{
-		if (i == mVertices.size() - 1) { next = mVertices[0]; }
-		else { next = mVertices[i + 1]; }
-
-		mNormals[i] = (Vec2(-(next - mVertices[i]).y, (next - mVertices[i]).x).Normalise());
-		mEdgeCentre[i] = (Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
-	}
-}*/
 
 void Polygon::Draw(LineRenderer* lines)
 {

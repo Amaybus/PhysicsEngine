@@ -14,4 +14,8 @@ public:
 	void Initialise() override;
 	void Update(float delta) override;
 	void OnLeftClick() override;
+
+	// DELETE AFTER DEBUGGING
+	float projectionAngle = 0.0f;
+	int normalIndex = 0;
 };

@@ -4,8 +4,10 @@
 #include "Plane.h"
 #include "Polygon.h"
 #include "Circle.h"
+#include "imgui.h"
 
 #include <iostream>
+
 
 
 
@@ -264,144 +266,102 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 	CollisionInfo info;
 	info.objA = polyA;
 	info.objB = polyB;
-	info.overlapAmount = 0;
+	info.overlapAmount = FLT_MAX;
 	info.contactPoint = Vec2();
 
 
 	std::vector<Vec2> collectiveNormals;
+
 	for (Vec2& nA : polygonA->mNormals)
 	{
-		collectiveNormals.push_back(-nA);
+		collectiveNormals.push_back(nA);
 	}
 
 	for (Vec2& nB : polygonB->mNormals)
 	{
-		collectiveNormals.push_back(-nB);
+		collectiveNormals.push_back(nB);
 	}
 
-	std::vector <float> distanceResults;
-	std::vector <float> polyAResults;
-	std::vector <float> polyBResults;
+	// ##### DEBUG ####
+	std::vector<std::vector<float>> collectiveAProjections;
+	std::vector<std::vector<float>> collectiveBProjections;
 
-	float aMax = -FLT_MAX;
-	float aMin = FLT_MAX;
-	float bMax = -FLT_MAX;
-	float bMin = FLT_MAX;
+	std::vector<float> polyAProjections;
+	std::vector<float> polyBProjections;
 
-	for (Vec2& cN : collectiveNormals)
+
+	for (int i = 0; i < collectiveNormals.size(); i++)
 	{
-		for (int i = 0; i < polygonA->mVertices.size(); i++)
+		for (Vec2 v : polygonA->mVertices)
 		{
-			float result = Dot(polygonA->mVertices[i] + polygonA->GetPos(), cN);
+			polyAProjections.push_back(Dot(v + polygonA->GetPos(), collectiveNormals[i]));
+		}
 
-			if (result > aMax)
+		for (Vec2 v : polygonB->mVertices)
+		{
+			polyBProjections.push_back(Dot(v + polygonB->GetPos(), collectiveNormals[i]));
+		}
+
+		float aMax = -FLT_MAX;
+		float aMin = FLT_MAX;
+		float bMax = -FLT_MAX;
+		float bMin = FLT_MAX;
+
+
+		for (float f : polyAProjections)
+		{
+			if (f < aMin) { aMin = f; }
+			if (f > aMax) { aMax = f; }
+		}
+		std::vector<float> temp;
+		temp.push_back(aMin);
+		temp.push_back(aMax);
+		collectiveAProjections.push_back(temp);
+
+		temp.clear();
+
+		polyAProjections.clear();
+
+
+		for (float f : polyBProjections)
+		{
+			if (f < bMin) { bMin = f; }
+			if (f > bMax) { bMax = f; }
+		}
+
+		temp.push_back(bMin);
+		temp.push_back(bMax);
+		collectiveBProjections.push_back(temp);
+		temp.clear();
+
+		polyBProjections.clear();
+
+
+		int smallestOverlapIndex = 0;
+		float overlaps[2];
+		overlaps[0] = aMax - bMin;
+		overlaps[1] = bMax - aMin;
+
+		for (int i = 0; i < 2; i++)
+		{
+			if (overlaps[i] < overlaps[smallestOverlapIndex])
 			{
-				aMax = result;
-			}
-			if (result < aMin)
-			{
-				aMin = result;
+				smallestOverlapIndex = i;
 			}
 		}
 
-		for (int i = 0; i < polygonB->mVertices.size(); i++)
+		if (overlaps[smallestOverlapIndex] < info.overlapAmount)
 		{
-			float result = Dot(polygonB->mVertices[i] + polygonB->GetPos(), cN);
-
-			if (result > bMax)
-			{
-				bMax = result;
-			}
-			if (result < bMin)
-			{
-				bMin = result;
-			}
+			info.overlapAmount = overlaps[smallestOverlapIndex];
 		}
+
+		if (info.overlapAmount < 0) { info.bIsOverlapping = false; }
 	}
 
-	int smallestOverlapIndex = 0;
-	float overlaps[4];
-	overlaps[0] = aMax - bMin;
-	overlaps[1] = bMax - aMin;
-	overlaps[2] = aMax - bMin;
-	overlaps[3] = bMax - aMin;
+	info.avalues = collectiveAProjections;
+	info.bvalues = collectiveBProjections;
 
-	for (int i = 0; i < 4; i++)
-	{
-		if (overlaps[i] < overlaps[smallestOverlapIndex])
-		{
-			smallestOverlapIndex = i;
-		}
-	}
-
-	info.overlapAmount = overlaps[smallestOverlapIndex];
 	info.nomrals = collectiveNormals;
-	////float aMax, aMin, bMin, bMax;
-	//Vec2 aMax = Vec2(), aMin = Vec2(), bMax = Vec2(), bMin = Vec2();
-	//float smallest = FLT_MAX, largest = 0;
-
-	//float overlaps[4];
-	//int smallestOverlapIndex = 0;
-
-	//for (Vec2& cN : collectiveNormals)
-	//{
-	//	for (int i = 0; i < polygonA->mVertices.size(); i++)
-	//	{
-	//		float result = Dot(polygonA->mVertices[i] + polygonA->GetPos(), cN);
-	//		polyAResults.push_back(result);
-	//		if (result < smallest)
-	//		{
-	//			smallest = result;
-	//			aMin = polygonA->mVertices[i] + polygonA->GetPos();
-	//		}
-	//		if (result > largest)
-	//		{
-	//			largest = result;
-	//			aMax = polygonA->mVertices[i] + polygonA->GetPos();
-	//		}
-	//	}
-	//	smallest = FLT_MAX;
-	//	largest = 0;
-
-	//	for (int i = 0; i < polygonB->mVertices.size(); i++)
-	//	{
-	//		float result = Dot(polygonB->mVertices[i] + polygonB->GetPos(), cN);
-	//		polyAResults.push_back(result);
-	//		if (result < smallest)
-	//		{
-	//			smallest = result;
-	//			bMin = polygonB->mVertices[i] + polygonB->GetPos();
-	//		}
-	//		if (result > largest)
-	//		{
-	//			largest = result;
-	//			bMax = polygonB->mVertices[i] + polygonB->GetPos();
-	//		}
-	//	}
-
-	//	overlaps[0] = aMax.x - bMin.x;
-	//	overlaps[1] = bMax.x - aMin.x;
-	//	overlaps[2] = aMax.y - bMin.y;
-	//	overlaps[3] = bMax.y - aMin.y;
-
-	//	for (int i = 0; i < 4; i++)
-	//	{
-	//		if (overlaps[i] < overlaps[smallestOverlapIndex])
-	//		{
-	//			smallestOverlapIndex = i;
-	//		}
-	//	}
-
-	//	if (overlaps[smallestOverlapIndex] < info.overlapAmount)
-	//	{
-	//		info.overlapAmount = overlaps[smallestOverlapIndex];
-	//		if (smallestOverlapIndex == 0) { info.contactPoint = bMin; }
-	//		if (smallestOverlapIndex == 1) { info.contactPoint = bMax; }
-	//		if (smallestOverlapIndex == 2) { info.contactPoint = bMin; }
-	//		if (smallestOverlapIndex == 3) { info.contactPoint = bMax; }
-	//	}
-	//}
-
 	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
 	return info;
 }

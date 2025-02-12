@@ -16,6 +16,8 @@ public:
 	Vec2 contactPoint;
 
 	std::vector<Vec2> nomrals;
+	std::vector<std::vector<float>> avalues;
+	std::vector<std::vector<float>> bvalues;
 
 	void Resolve();
 };
