@@ -17,4 +17,5 @@ public:
 	// DELETE AFTER DEBUGGING
 	float projectionAngle = 0.0f;
 	int normalIndex = 0;
+	int edgeIndex = 0;
 };

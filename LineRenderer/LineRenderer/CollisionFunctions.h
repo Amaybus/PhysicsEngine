@@ -15,7 +15,7 @@ CollisionInfo CheckCollision(PhysicsObject* objA, PhysicsObject* objB);
 CollisionInfo CircleToCircleCollision(PhysicsObject* circleA, PhysicsObject* circleB);
 CollisionInfo CircleToPlaneCollision(PhysicsObject* circleA, PhysicsObject* planeB);
 CollisionInfo CircleToBoxCollision(PhysicsObject* circleA, PhysicsObject* boxB);
-CollisionInfo CircleToPolygonCollision(PhysicsObject* circleA, PhysicsObject* polygonB);
+CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* polyB);
 
 CollisionInfo PlaneToCircleCollision(PhysicsObject* planeA, PhysicsObject* circleB);
 CollisionInfo PlaneToPlaneCollision(PhysicsObject* planeA, PhysicsObject* planeB);

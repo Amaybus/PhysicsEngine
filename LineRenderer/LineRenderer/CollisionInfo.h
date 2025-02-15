@@ -18,6 +18,7 @@ public:
 	std::vector<Vec2> nomrals;
 	std::vector<std::vector<float>> avalues;
 	std::vector<std::vector<float>> bvalues;
+	std::vector<Vec2> edges;
 
 	void Resolve();
 };
