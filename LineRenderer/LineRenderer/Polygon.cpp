@@ -40,14 +40,14 @@ void Polygon::Draw(LineRenderer* lines)
 	}
 	lines->FinishLineLoop();
 
-	for(int i = 0; i < mNormals.size(); i++)
-	{
-		lines->DrawLineWithArrow(mEdgeCentre[i] + mPos, mEdgeCentre[i] + mPos + mNormals[i], Colour::MAGENTA.Lighten(), 0.2);
-	}
+	//for(int i = 0; i < mNormals.size(); i++)
+	//{
+	//	lines->DrawLineWithArrow(mEdgeCentre[i] + mPos, mEdgeCentre[i] + mPos + mNormals[i], Colour::MAGENTA.Lighten(), 0.2);
+	//}
 
-	for(Vec2 e : mEdgeCentre)
-	{
-		lines->DrawCross(e + mPos, 0.1, Colour::MAGENTA);
-	}
+	//for(Vec2 e : mEdgeCentre)
+	//{
+	//	lines->DrawCross(e + mPos, 0.1, Colour::MAGENTA);
+	//}
 }
 

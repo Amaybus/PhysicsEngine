@@ -29,7 +29,7 @@ CollisionInfo BoxToPolygonCollision(PhysicsObject* boxA, PhysicsObject* polygonB
 
 CollisionInfo PolygonToCircleCollision(PhysicsObject* polygonA, PhysicsObject* CircleB);
 CollisionInfo PolygonToPlaneCollision(PhysicsObject* polygonA, PhysicsObject* planeB);
-CollisionInfo PolygonToBoxCollision(PhysicsObject* polygonA, PhysicsObject* boxB);
+CollisionInfo PolygonToBoxCollision(PhysicsObject* polyA, PhysicsObject* bB);
 CollisionInfo PolygonToPolygonCollision(PhysicsObject* polygonA, PhysicsObject* polygonB);
 
 
