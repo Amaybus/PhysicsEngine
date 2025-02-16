@@ -7,6 +7,10 @@ class Box : public PhysicsObject
 	float mWidth;
 	float mHeight;
 
+	// Rotation axis
+	Vec2 mLocalX;
+	Vec2 mLocalY;
+
 public:
 	float GetXMin() const { return mPos.x - 0.5 * mWidth; }
 	float GetXMax() const { return mPos.x + 0.5 * mWidth; }

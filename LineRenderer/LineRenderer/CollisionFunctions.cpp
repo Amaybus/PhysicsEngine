@@ -54,7 +54,7 @@ CollisionInfo CircleToCircleCollision(PhysicsObject* circA, PhysicsObject* circB
 	info.overlapAmount = -(distance - circleB->GetRadius() - circleA->GetRadius());
 	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
 	// Normalise the difference in position to get the collision normal of two circles
-	info.collisionNormal = displacementVec / distance;
+	info.collisionNormal = (circleB->GetPos() - circleA->GetPos()).Normalise();
 	info.objA = circleA;
 	info.objB = circleB;
 	info.contactPoint = (circleB->GetPos() + circleA->GetPos()) / 2;

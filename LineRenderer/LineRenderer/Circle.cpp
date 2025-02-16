@@ -3,12 +3,13 @@
 
 Circle::Circle(Vec2 pos, float radius, float mass) : PhysicsObject(pos, mass), mRadius(radius)
 {
-	mMomentOfInertia = (2 / 5) * (mMass * mRadius * mRadius);
+	mInertia = 0.5 * mMass * (mRadius * mRadius);
 }
 
 void Circle::Draw(LineRenderer* lines)
 {
+	Vec2 end = Vec2(cos(mOrientation), sin(mOrientation)) * mRadius;
 	lines->DrawCircle(mPos, mRadius, mColour);
-	lines->DrawLineSegment(mPos, Vec2(mPos.x + mRadius, mPos.y));
+	lines->DrawLineSegment(mPos, mPos +end);
 }
 

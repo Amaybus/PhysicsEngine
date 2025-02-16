@@ -33,11 +33,11 @@ protected:
 
 	// Rotation
 	// How the object is rotated in radians
-	float mOrientation;
+	float mOrientation = 0;
 	// When an object rotates from one orientation to antoher. degrees per second
-	float mAngularVelocity;
+	float mAngularVelocity = 0;
 	// Resistance against angular acc around the pivot
-	float mMomentOfInertia;
+	float mInertia = 0;
 
 
 	// a = torque / inertia
@@ -58,9 +58,10 @@ public:
 	Vec2& GetPos() { return mPos; }
 	Vec2& GetVelocity() { return mVel; }
 	Vec2& GetAcceleration() { return mAcc; }
+	float GetAngularVelocity() const { return mAngularVelocity; }
 	float GetMass() const { return mMass; }
 	float GetInverseMass() const { return 1.0f / mMass; }
-	float GetMomentOfInertia() const { return mMomentOfInertia; }
+	float GetInertia() const { return mInertia; }
 	virtual int GetType() const = 0;
 
 	virtual void SetPos(Vec2 pos) { mPos = pos; }
@@ -69,6 +70,7 @@ public:
 	void SetColour(Colour colour) { mColour = colour; }
 
 	void ApplyForce(Vec2 force);
+	void ApplyImpulse(Vec2 impulse);
 	void ApplyImpulse(Vec2 impulse, Vec2 contactPoint);
 };
 

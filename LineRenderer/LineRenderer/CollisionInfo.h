@@ -21,4 +21,5 @@ public:
 	std::vector<Vec2> edges;
 
 	void Resolve();
+	void ResolveRotation();
 };

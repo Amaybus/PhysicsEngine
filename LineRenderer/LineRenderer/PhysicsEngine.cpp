@@ -24,26 +24,26 @@ void PhysicsEngine::Initialise()
 	CollisionFuncInit();
 
 	// Create circles							   
-	mPhysicsObjects.push_back(new Circle(Vec2(-3, 2), 0.5, 1));
-	mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));
-	//mPhysicsObjects.push_back(new Circle(Vec2(4, 5), 0.3, 1));
-	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	mPhysicsObjects.push_back(new Circle(Vec2(-1, 2.5), 0.5, 1));
+	mPhysicsObjects[0]->SetVelocity(Vec2(1,0));
+	mPhysicsObjects.push_back(new Circle(Vec2(3, 2.5), 0.5, 1));
+	mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+
 
 	// Create boxes
-	//mPhysicsObjects.push_back(new Box(Vec2(3, 4.4), 2.1f, 1.2f, 2.1f * 1.2f));
-	//mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));
+	mPhysicsObjects.push_back(new Box(Vec2(3, 2.7), 2.1f, 1.2f, 2.1f * 1.2f));
+	mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
 
 	// Create polygon
-	mPhysicsObjects.push_back(new Polygon(Vec2(5, 2), 4, 1));
-	mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	//mPhysicsObjects.push_back(new Polygon(Vec2(5, 2), 4, 1));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
 	//mPhysicsObjects.push_back(new Polygon(Vec2(5, 2), 3, 1));
 	//mPhysicsObjects[3]->SetVelocity(Vec2(-1, 0));
 
-	//mPlanes.push_back(new Plane(Vec2(1, 0), -5, 5));
-	//mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10, 50));
-	//mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10, 50));
-	//mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10, 50));
-	//mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10, 50));
 }
 
 void PhysicsEngine::Update(float delta)
@@ -67,24 +67,24 @@ void PhysicsEngine::Update(float delta)
 
 
 			// ######## POLYGON DEBUGGING ######## 
-			lines->DrawLineWithArrow(info.edges[normalIndex] + info.objB->GetPos(), info.edges[normalIndex] + info.objB->GetPos()+ info.nomrals[normalIndex], Colour::MAGENTA);
-			ImGui::Begin("normals");
-			ImGui::SliderInt("Polygon Normal Index", &normalIndex, 0, info.nomrals.size()-1);
-			ImGui::SliderInt("edge", &normalIndex, 0, info.edges.size() - 1);
-			ImGui::End();
+			//lines->DrawLineWithArrow(info.edges[normalIndex] + info.objB->GetPos(), info.edges[normalIndex] + info.objB->GetPos()+ info.nomrals[normalIndex], Colour::MAGENTA);
+			//ImGui::Begin("normals");
+			//ImGui::SliderInt("Polygon Normal Index", &normalIndex, 0, info.nomrals.size()-1);
+			//ImGui::SliderInt("edge", &normalIndex, 0, info.edges.size() - 1);
+			//ImGui::End();
 
-			ImGui::Begin("Overlap Amount");
-			ImGui::DragFloat("overlap amount", &info.overlapAmount, 0, 100);
-			ImGui::End();
+			//ImGui::Begin("Overlap Amount");
+			//ImGui::DragFloat("overlap amount", &info.overlapAmount, 0, 100);
+			//ImGui::End();
 
-			for (auto r : info.avalues[normalIndex])
-			{
-				lines->DrawCircle(r * info.nomrals[normalIndex], 0.1, Colour::BLUE);
-			}
-			for (auto r : info.bvalues[normalIndex])
-			{
-				lines->DrawCircle(r * info.nomrals[normalIndex], 0.1, Colour::RED);
-			}
+			//for (auto r : info.avalues[normalIndex])
+			//{
+			//	lines->DrawCircle(r * info.nomrals[normalIndex], 0.1, Colour::BLUE);
+			//}
+			//for (auto r : info.bvalues[normalIndex])
+			//{
+			//	lines->DrawCircle(r * info.nomrals[normalIndex], 0.1, Colour::RED);
+			//}
 
 			//for (auto f : info.avalues)
 			//{
@@ -108,7 +108,7 @@ void PhysicsEngine::Update(float delta)
 			{
 				if (info.bIsOverlapping)
 				{
-					info.Resolve();
+					info.ResolveRotation();
 					info.objB->SetColour(Colour::RED);
 					info.objA->SetColour(Colour::RED);
 					lines->DrawCross(info.contactPoint, 0.2, Colour::BLUE);
