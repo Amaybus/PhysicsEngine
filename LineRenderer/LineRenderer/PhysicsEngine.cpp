@@ -26,10 +26,10 @@ void PhysicsEngine::Initialise()
 	// Create circles	
 	// RIGHT SIDE						   
 	mPhysicsObjects.push_back(new Circle(Vec2(-5, -0.1), 0.5, 1));
-	mPhysicsObjects[0]->SetVelocity(Vec2(1,0));	
+	mPhysicsObjects[0]->SetVelocity(Vec2(-1,0));	
 
 	mPhysicsObjects.push_back(new Circle(Vec2(1, -0), 0.5, 1));
-	mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));	
+	mPhysicsObjects[1]->SetVelocity(Vec2(1, 0));	
 	
 	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 5.0f), 0.5, 1));
 	//mPhysicsObjects[2]->SetVelocity(Vec2(1, 0));
@@ -145,6 +145,7 @@ void PhysicsEngine::Update(float delta)
 				if (info.bIsOverlapping)
 				{
 					info.ResolveRotation();
+					//info.Resolve();
 					info.objB->SetColour(Colour::RED);
 					info.objA->SetColour(Colour::RED);
 					lines->DrawCross(info.contactPoint, 0.2, Colour::BLUE);

@@ -25,11 +25,4 @@ void Box::Draw(LineRenderer* lines)
 
 	lines->DrawLineWithArrow(mPos, mPos + mLocalY, Colour::GREEN, 0.1);
 	lines->DrawLineWithArrow(mPos, mPos + mLocalX, Colour::RED, 0.1);
-
-
-	lines->DrawCircle(topRight, 0.1, Colour::GREY);
-	lines->DrawCircle(topLeft, 0.1, Colour::GREY);
-	lines->DrawCircle(bottomRight, 0.1, Colour::GREY);
-	lines->DrawCircle(bottomLeft, 0.1, Colour::GREY);
-
 }
