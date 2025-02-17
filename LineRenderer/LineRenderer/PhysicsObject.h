@@ -32,20 +32,16 @@ protected:
 	Vec2 mGravity = Vec2(0, -9.81f);
 
 	// Rotation
+	// Rotation axis
+	Vec2 mLocalX;
+	Vec2 mLocalY;
+
 	// How the object is rotated in radians
 	float mOrientation = 0;
 	// When an object rotates from one orientation to antoher. degrees per second
 	float mAngularVelocity = 0;
 	// Resistance against angular acc around the pivot
 	float mInertia = 0;
-
-
-	// a = torque / inertia
-	Vec2 mAngularAcceleration;
-	float mAngularMomentum;
-	// Point where the object is perfectly balanced. polygons
-	Vec2 mCentreOfMass;
-
 
 public:
 	PhysicsObject();
@@ -63,6 +59,9 @@ public:
 	float GetInverseMass() const { return 1.0f / mMass; }
 	float GetInertia() const { return mInertia; }
 	virtual int GetType() const = 0;
+
+	Vec2 GetLocalY() { return mLocalY; }
+	Vec2 GetLocalX() { return mLocalX; }
 
 	virtual void SetPos(Vec2 pos) { mPos = pos; }
 	void SetVelocity(Vec2 vel) { mVel = vel; }

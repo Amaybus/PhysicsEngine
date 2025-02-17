@@ -9,6 +9,9 @@ class Circle : public PhysicsObject
 {
 	const float mRadius;
 
+	Vec2 mLocalX;
+	Vec2 mLocalY;
+
 public:
 	Circle(Vec2 pos, float radius, float mass);
 

@@ -23,16 +23,49 @@ void PhysicsEngine::Initialise()
 {
 	CollisionFuncInit();
 
-	// Create circles							   
-	mPhysicsObjects.push_back(new Circle(Vec2(-1, 2.5), 0.5, 1));
-	mPhysicsObjects[0]->SetVelocity(Vec2(1,0));
-	mPhysicsObjects.push_back(new Circle(Vec2(3, 2.5), 0.5, 1));
-	mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	// Create circles	
+	// RIGHT SIDE						   
+	mPhysicsObjects.push_back(new Circle(Vec2(-5, -0.1), 0.5, 1));
+	mPhysicsObjects[0]->SetVelocity(Vec2(1,0));	
+
+	mPhysicsObjects.push_back(new Circle(Vec2(1, -0), 0.5, 1));
+	mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));	
+	
+	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 5.0f), 0.5, 1));
+	//mPhysicsObjects[2]->SetVelocity(Vec2(1, 0));
+
+	// LEFT SIDE
+	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 0), 0.5, 1));
+	//mPhysicsObjects[3]->SetVelocity(Vec2(-1, 0));
+	//
+	//mPhysicsObjects.push_back(new Circle(Vec2(-1, -5.7), 0.5, 1));
+	//mPhysicsObjects[4]->SetVelocity(Vec2(-1, 0));
+	//
+	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 5.0f), 0.5, 1));
+	//mPhysicsObjects[5]->SetVelocity(Vec2(-1, 0));
+
 
 
 	// Create boxes
-	mPhysicsObjects.push_back(new Box(Vec2(3, 2.7), 2.1f, 1.2f, 2.1f * 1.2f));
-	mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	// RIGHT SIDE
+	//mPhysicsObjects.push_back(new Box(Vec2(3, 0), 0.7f, 3.0f, 2.1f * 1.2f));
+	////mPhysicsObjects[3]->SetVelocity(Vec2(-1, 0));	
+	//
+	//mPhysicsObjects.push_back(new Box(Vec2(3, -5.0), 0.7f, 3.0f, 2.1f * 1.2f));
+	////mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	//
+	//mPhysicsObjects.push_back(new Box(Vec2(3, 4), 0.7f, 3.0f, 2.1f * 1.2f));
+
+
+	// LEFT SIDE
+	//mPhysicsObjects.push_back(new Box(Vec2(-6, 0), 0.7f, 3.0f, 2.1f * 1.2f));
+	////mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));	
+	//
+	//mPhysicsObjects.push_back(new Box(Vec2(-6, -5.0), 0.7f, 3.0f, 2.1f * 1.2f));
+	////mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	//
+	//mPhysicsObjects.push_back(new Box(Vec2(-6, 4), 0.7f, 3.0f, 2.1f * 1.2f));
+
 
 	// Create polygon
 	//mPhysicsObjects.push_back(new Polygon(Vec2(5, 2), 4, 1));
@@ -53,6 +86,9 @@ void PhysicsEngine::Update(float delta)
 	//ImGui::SliderInt("normal", &edgeIndex, 0, 10);
 	//ImGui::SliderInt("edge", &normalIndex, 0, 10);
 	//ImGui::End();
+
+
+
 
 	for (PhysicsObject* obj : mPhysicsObjects)
 	{

@@ -7,10 +7,6 @@ class Box : public PhysicsObject
 	float mWidth;
 	float mHeight;
 
-	// Rotation axis
-	Vec2 mLocalX;
-	Vec2 mLocalY;
-
 public:
 	float GetXMin() const { return mPos.x - 0.5 * mWidth; }
 	float GetXMax() const { return mPos.x + 0.5 * mWidth; }
@@ -19,7 +15,6 @@ public:
 
 	Box(Vec2 pos, float w, float h, float mass);
 
-	void Update(float delta) override;
 	void Draw(LineRenderer* lines) override;
 
 	float GetWidth() const  { return mWidth; }

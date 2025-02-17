@@ -1,7 +1,5 @@
 #include "PhysicsObject.h"
-
 #include "PhysicsEngine.h"
-#include <cmath>
 
 
 PhysicsObject::PhysicsObject()
@@ -14,13 +12,17 @@ PhysicsObject::PhysicsObject(Vec2 pos, float mass) : mPos(pos), mMass(mass)
 
 void PhysicsObject::Update(float delta)
 {
-	mAcc = mGravity + mForceAccumulator * GetInverseMass();
+	mAcc = /*mGravity +*/ mForceAccumulator * GetInverseMass();
 	mVel += mAcc * delta;
 	mPos += mVel * delta;
 
 	// Rotation
-	mOrientation += mAngularVelocity * delta;
+	float cs = cosf(mOrientation);
+	float sn = sinf(mOrientation);
+	mLocalX = Vec2(cs, sn).Normalise();
+	mLocalY = Vec2(-sn, cs).Normalise();
 
+	mOrientation += mAngularVelocity * delta;
 	mForceAccumulator = Vec2();
 }
 

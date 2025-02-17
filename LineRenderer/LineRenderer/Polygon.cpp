@@ -4,6 +4,12 @@
 
 Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass), mVertCount(numOfVerts)
 {
+	// divide into triangles 
+	// calc moment for triangle ( 0.5*mass*(length*length) * ( 1 - (2/3)*sin2(vertexAngle))
+	// multiply moment by 2n
+	mInertia = 1.4; 
+
+
 	float padding = 1.6;
 	Vec2 offsetVec(padding, 0);
 	for (int i = 0; i < mVertCount; i++)
@@ -24,14 +30,13 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 	}
 }
 
-
 void Polygon::Draw(LineRenderer* lines)
 {
 	lines->DrawCircle(mPos, 0.1, Colour::YELLOW);
 
 	for (Vec2 vert : mVertices)
 	{
-		lines->DrawCircle(vert + mPos, 0.1);
+		lines->DrawCircle(vert + mPos, 0.1f);
 	}
 
 	for(int i = 0; i < mVertCount; i++)
@@ -39,6 +44,9 @@ void Polygon::Draw(LineRenderer* lines)
 		lines->AddPointToLine(mVertices[i] + mPos, mColour);
 	}
 	lines->FinishLineLoop();
+
+	lines->DrawLineWithArrow(mPos, mPos + GetLocalY(), Colour::GREEN, 0.1);
+	lines->DrawLineWithArrow(mPos, mPos + GetLocalX(), Colour::RED, 0.1);
 
 	//for(int i = 0; i < mNormals.size(); i++)
 	//{

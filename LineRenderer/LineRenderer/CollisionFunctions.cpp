@@ -6,11 +6,6 @@
 #include "Circle.h"
 #include "imgui.h"
 
-#include <iostream>
-
-
-
-
 void CollisionFuncInit()
 {
 	collisionFunctions[(int)ObjectType::Circle][(int)ObjectType::Circle] = CircleToCircleCollision;
