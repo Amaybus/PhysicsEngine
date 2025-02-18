@@ -22,8 +22,15 @@ void PhysicsObject::Update(float delta)
 	mLocalX = Vec2(cs, sn).Normalise();
 	mLocalY = Vec2(-sn, cs).Normalise();
 
+	// Update Rotation
 	mOrientation += mAngularVelocity * delta;
 	mForceAccumulator = Vec2();
+}
+
+float PhysicsObject::GetInverseMass() const
+{
+	if (mMass == 0) { return 0; }
+	else return 1.0f / mMass;
 }
 
 // Applied over a duration
@@ -40,8 +47,10 @@ void PhysicsObject::ApplyImpulse(Vec2 impulse)
 
 void PhysicsObject::ApplyImpulse(Vec2 impulse, Vec2 contactPoint)
 {
+	Vec2 objSpace = contactPoint - mPos;
 	mVel += impulse * GetInverseMass();
-	mAngularVelocity += (impulse.y * contactPoint.x - impulse.x * contactPoint.y) / GetInertia();
+	mAngularVelocity += (impulse.y * objSpace.x - impulse.x * objSpace.y) / GetInertia();
 }
+
 
 

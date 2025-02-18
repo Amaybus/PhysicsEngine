@@ -68,8 +68,40 @@ CollisionInfo CircleToBoxCollision(PhysicsObject* circA, PhysicsObject* bB)
 	Vec2 circleCentre = circleA->GetPos();
 	float circleRadius = circleA->GetRadius();
 
-	Vec2 closestPoint = Vec2(Clamp(circleCentre.x, boxB->GetXMin(), boxB->GetXMax()), Clamp(circleCentre.y, boxB->GetYMin(), boxB->GetYMax()));
+	// ### TESTING ###
+	Vec2 boxPos = boxB->GetPos();
+	float boxWidth = boxB->GetWidth();
+	float boxHeight = boxB->GetHeight();
+	Vec2 localX = boxB->GetLocalX();
+	Vec2 localY = boxB->GetLocalY();
+
+	Vec2 verts[4];
+	verts[0] = boxPos + boxB->GetLocalX() * (0.5f * boxWidth) + localY * (0.5f * boxHeight); // Top right
+	verts[1] = boxPos - boxB->GetLocalX() * (0.5f * boxWidth) - localY * (0.5f * boxHeight); // Bottom left
+
+	verts[2] = boxPos - boxB->GetLocalX() * (0.5f * boxWidth) + localY * (0.5f * boxHeight); // Top left
+	verts[3] = boxPos + boxB->GetLocalX() * (0.5f * boxWidth) - localY * (0.5f * boxHeight); // Bottom right
+
+	float minX = FLT_MAX;
+	float maxX = -FLT_MAX;
+	float minY = FLT_MAX;
+	float maxY = -FLT_MAX;
+
+	for (Vec2& v : verts)
+	{
+		if (v.x > maxX) { maxX = v.x; }
+		if (v.x < minX) { minX = v.x; }
+		if (v.y > maxY) { maxY = v.y; }
+		if (v.y < minY) { minY = v.y; }
+	}
+
+	Vec2 closestPoint = Vec2(Clamp(circleCentre.x, minX, maxX), Clamp(circleCentre.y, minY, maxY));
+	// ### END TESTING ###
+
+	//Vec2 closestPoint = Vec2(Clamp(circleCentre.x, boxB->GetXMin(), boxB->GetXMax()), Clamp(circleCentre.y, boxB->GetYMin(), boxB->GetYMax()));
 	float distance = (circleCentre - closestPoint).GetMagnitude();
+
+
 
 	CollisionInfo info;
 
@@ -94,15 +126,9 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 
 	std::vector<Vec2> collectiveNormals;
 
-
 	std::vector<std::vector<float>> collectiveBProjs;
 	std::vector<std::vector<float>> collectiveAProjs;
 
-	std::vector<Vec2> edges;
-	for (Vec2& e : polygonB->mEdgeCentre)
-	{
-		edges.push_back(e);
-	}
 
 	std::vector<Vec2> normals;
 	for (Vec2& n : polygonB->mNormals)
@@ -113,24 +139,15 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 	for (int i = 0; i < polygonB->mVertices.size(); i++)
 	{
 		collectiveNormals.push_back((circleCentre - (polygonB->mVertices[i] + polygonB->GetPos())).Normalise());
-		edges.push_back(polygonB->mVertices[i]);
 	}
 
 	for(int i = 0; i < collectiveNormals.size();i++)
 	{
-		float aMax = -FLT_MAX;
 		float aMin = FLT_MAX;
 		float bMax = -FLT_MAX;
-		float bMin = FLT_MAX;
 
 		// Find min and max for cirlce
-		aMax = Dot(circleCentre + (circleRadius * collectiveNormals[i]), collectiveNormals[i]);
 		aMin = Dot(circleCentre - (circleRadius * collectiveNormals[i]), collectiveNormals[i]);
-		std::vector<float> temp;
-		temp.push_back(aMax);
-		temp.push_back(aMin);
-		collectiveAProjs.push_back(temp);
-		temp.clear();
 
 		// Find min and max for the polygon
 		std::vector<float> polyBResults;
@@ -141,32 +158,14 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 
 		for (float f : polyBResults)
 		{
-			if (f < bMin) { bMin = f; }
 			if (f > bMax) { bMax = f; }
 		}
 
-		temp.push_back(bMax);
-		temp.push_back(bMin);
-		collectiveBProjs.push_back(temp);
-		temp.clear();
 
-		// Check for overlaps 
-		int smallestOverlapIndex = 0;
-		float overlaps[2];
-		overlaps[0] = aMax - bMin;
-		overlaps[1] = bMax - aMin;
-
-		for (int i = 0; i < 2; i++)
+		float overlap = bMax - aMin;
+		if (overlap < info.overlapAmount)
 		{
-			if (overlaps[i] < overlaps[smallestOverlapIndex])
-			{
-				smallestOverlapIndex = i;
-			}
-		}
-
-		if (overlaps[smallestOverlapIndex] < info.overlapAmount)
-		{
-			info.overlapAmount = overlaps[smallestOverlapIndex];
+			info.overlapAmount = overlap;
 			info.collisionNormal = -collectiveNormals[i];
 		}
 	}
@@ -174,10 +173,7 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 	info.objA = circA;
 	info.objB = polyB;
 	info.bIsOverlapping = info.overlapAmount > 0;
-	info.avalues = collectiveAProjs;
-	info.bvalues = collectiveBProjs;
-	info.nomrals = collectiveNormals;
-	info.edges = edges;
+	info.normals = collectiveNormals;
 
 	return info;
 } 
@@ -394,10 +390,6 @@ CollisionInfo BoxToPolygonCollision(PhysicsObject* bA, PhysicsObject* polyB)
 		collectiveNormals.push_back(nB);
 	}
 
-	// ##### DEBUG ####
-	std::vector<std::vector<float>> collectiveAProjections;
-	std::vector<std::vector<float>> collectiveBProjections;
-
 	std::vector<float> polyAProjections;
 	std::vector<float> polyBProjections;
 
@@ -425,13 +417,6 @@ CollisionInfo BoxToPolygonCollision(PhysicsObject* bA, PhysicsObject* polyB)
 			if (f < aMin) { aMin = f; }
 			if (f > aMax) { aMax = f; }
 		}
-		std::vector<float> temp;
-		temp.push_back(aMin);
-		temp.push_back(aMax);
-		collectiveAProjections.push_back(temp);
-
-		temp.clear();
-
 		polyAProjections.clear();
 
 
@@ -440,12 +425,6 @@ CollisionInfo BoxToPolygonCollision(PhysicsObject* bA, PhysicsObject* polyB)
 			if (f < bMin) { bMin = f; }
 			if (f > bMax) { bMax = f; }
 		}
-
-		temp.push_back(bMin);
-		temp.push_back(bMax);
-		collectiveBProjections.push_back(temp);
-		temp.clear();
-
 		polyBProjections.clear();
 
 		// Check for overlaps 
@@ -469,10 +448,6 @@ CollisionInfo BoxToPolygonCollision(PhysicsObject* bA, PhysicsObject* polyB)
 		}
 	}
 
-	info.avalues = collectiveAProjections;
-	info.bvalues = collectiveBProjections;
-
-	info.nomrals = collectiveNormals;
 	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
 	return info;
 }
@@ -515,10 +490,6 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 		collectiveNormals.push_back(nB);
 	}
 
-	// ##### DEBUG ####
-	std::vector<std::vector<float>> collectiveAProjections;
-	std::vector<std::vector<float>> collectiveBProjections;
-
 	std::vector<float> polyAProjections;
 	std::vector<float> polyBProjections;
 
@@ -546,13 +517,6 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 			if (f < aMin) { aMin = f; }
 			if (f > aMax) { aMax = f; }
 		}
-		std::vector<float> temp;
-		temp.push_back(aMin);
-		temp.push_back(aMax);
-		collectiveAProjections.push_back(temp);
-
-		temp.clear();
-
 		polyAProjections.clear();
 
 
@@ -561,12 +525,6 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 			if (f < bMin) { bMin = f; }
 			if (f > bMax) { bMax = f; }
 		}
-
-		temp.push_back(bMin);
-		temp.push_back(bMax);
-		collectiveBProjections.push_back(temp);
-		temp.clear();
-
 		polyBProjections.clear();
 
 		// Check for overlaps 
@@ -590,10 +548,6 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 		}
 	}
 
-	info.avalues = collectiveAProjections;
-	info.bvalues = collectiveBProjections;
-
-	info.nomrals = collectiveNormals;
 	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
 	return info;
 }

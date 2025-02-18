@@ -15,7 +15,7 @@
 
 PhysicsEngine::PhysicsEngine()
 {
-	//appInfo.fixedFramerate = 5;
+	//appInfo.fixedFramerate = 1;
 	appInfo.appName = "Physics Engine";
 }
 
@@ -25,11 +25,11 @@ void PhysicsEngine::Initialise()
 
 	// Create circles	
 	// RIGHT SIDE						   
-	mPhysicsObjects.push_back(new Circle(Vec2(-5, -0.1), 0.5, 1));
+	mPhysicsObjects.push_back(new Circle(Vec2(12.0, 1), 0.5, 1));
 	mPhysicsObjects[0]->SetVelocity(Vec2(-1,0));	
 
-	mPhysicsObjects.push_back(new Circle(Vec2(1, -0), 0.5, 1));
-	mPhysicsObjects[1]->SetVelocity(Vec2(1, 0));	
+	//mPhysicsObjects.push_back(new Circle(Vec2(1, -5), 0.5, 1));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));	
 	
 	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 5.0f), 0.5, 1));
 	//mPhysicsObjects[2]->SetVelocity(Vec2(1, 0));
@@ -49,7 +49,7 @@ void PhysicsEngine::Initialise()
 	// Create boxes
 	// RIGHT SIDE
 	//mPhysicsObjects.push_back(new Box(Vec2(3, 0), 0.7f, 3.0f, 2.1f * 1.2f));
-	////mPhysicsObjects[3]->SetVelocity(Vec2(-1, 0));	
+	//mPhysicsObjects[3]->SetVelocity(Vec2(-1, 0));	
 	//
 	//mPhysicsObjects.push_back(new Box(Vec2(3, -5.0), 0.7f, 3.0f, 2.1f * 1.2f));
 	////mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
@@ -84,9 +84,16 @@ void PhysicsEngine::Update(float delta)
 	//mPhysicsObjects[0]->SetPos(cursorPos);
 	//ImGui::Begin("normal");
 	//ImGui::SliderInt("normal", &edgeIndex, 0, 10);
-	//ImGui::SliderInt("edge", &normalIndex, 0, 10);
 	//ImGui::End();
 
+	if (ImGui::Begin("normals"))
+	{
+		ImGui::Text("poly normal index");
+		ImGui::SameLine();
+		ImGui::SliderInt("## Polygon Normal Index", &normalIndex, 0, 10);
+	}
+	//ImGui::SliderInt("edge", &normalIndex, 0, info.edges.size() - 1);
+	ImGui::End();
 
 
 
@@ -103,11 +110,8 @@ void PhysicsEngine::Update(float delta)
 
 
 			// ######## POLYGON DEBUGGING ######## 
-			//lines->DrawLineWithArrow(info.edges[normalIndex] + info.objB->GetPos(), info.edges[normalIndex] + info.objB->GetPos()+ info.nomrals[normalIndex], Colour::MAGENTA);
-			//ImGui::Begin("normals");
-			//ImGui::SliderInt("Polygon Normal Index", &normalIndex, 0, info.nomrals.size()-1);
-			//ImGui::SliderInt("edge", &normalIndex, 0, info.edges.size() - 1);
-			//ImGui::End();
+			//lines->DrawLineWithArrow(info.normals[normalIndex] + info.objB->GetPos(), info.normals[normalIndex] + info.objB->GetPos()+ info.normals[normalIndex], Colour::MAGENTA);
+			//lines->DrawLineWithArrow(info.objA->GetPos(), info.objA->GetPos()+ info.contactPoint + info.collisionNormal, Colour::BLUE);
 
 			//ImGui::Begin("Overlap Amount");
 			//ImGui::DragFloat("overlap amount", &info.overlapAmount, 0, 100);

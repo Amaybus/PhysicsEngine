@@ -38,7 +38,7 @@ protected:
 
 	// How the object is rotated in radians
 	float mOrientation = 0;
-	// When an object rotates from one orientation to antoher. degrees per second
+	// When an object rotates from one orientation to another. degrees per second
 	float mAngularVelocity = 0;
 	// Resistance against angular acc around the pivot
 	float mInertia = 0;
@@ -56,7 +56,7 @@ public:
 	Vec2& GetAcceleration() { return mAcc; }
 	float GetAngularVelocity() const { return mAngularVelocity; }
 	float GetMass() const { return mMass; }
-	float GetInverseMass() const { return 1.0f / mMass; }
+	float GetInverseMass() const;
 	float GetInertia() const { return mInertia; }
 	virtual int GetType() const = 0;
 
