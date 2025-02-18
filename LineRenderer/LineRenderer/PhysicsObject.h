@@ -58,6 +58,7 @@ public:
 	float GetMass() const { return mMass; }
 	float GetInverseMass() const;
 	float GetInertia() const { return mInertia; }
+	float GetInverseInertia() const;
 	virtual int GetType() const = 0;
 
 	Vec2 GetLocalY() { return mLocalY; }

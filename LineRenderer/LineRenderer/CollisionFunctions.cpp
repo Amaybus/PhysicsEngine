@@ -174,6 +174,7 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 	info.objB = polyB;
 	info.bIsOverlapping = info.overlapAmount > 0;
 	info.normals = collectiveNormals;
+	info.contactPoint = 
 
 	return info;
 } 

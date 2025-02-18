@@ -33,6 +33,12 @@ float PhysicsObject::GetInverseMass() const
 	else return 1.0f / mMass;
 }
 
+float PhysicsObject::GetInverseInertia() const
+{
+	if (mInertia == 0) { return 0; }
+	else return 1.0f / mInertia;
+}
+
 // Applied over a duration
 void PhysicsObject::ApplyForce(Vec2 force)  
 {
@@ -49,7 +55,7 @@ void PhysicsObject::ApplyImpulse(Vec2 impulse, Vec2 contactPoint)
 {
 	Vec2 objSpace = contactPoint - mPos;
 	mVel += impulse * GetInverseMass();
-	mAngularVelocity += (impulse.y * objSpace.x - impulse.x * objSpace.y) / GetInertia();
+	mAngularVelocity += (impulse.y * objSpace.x - impulse.x * objSpace.y) * GetInverseInertia();
 }
 
 
