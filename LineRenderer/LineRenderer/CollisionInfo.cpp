@@ -40,26 +40,6 @@ void CollisionInfo::Resolve()
 
 void CollisionInfo::ResolveRotation()
 {
-	// If objA is a plane
-	//if (objA->GetMass() <= 0)
-	//{
-	//	//Depen Step
-	//	objB->GetPos() += collisionNormal * overlapAmount;
-
-	//	Vec2 perp = Vec2(collisionNormal.y, -collisionNormal.x);
-	//	float rb = Dot(contactPoint - objB->GetPos(), perp);
-
-	//	float vb = Dot(objB->GetVelocity(), collisionNormal) - rb * objB->GetAngularVelocity();
-
-	//	float massB = 1.0f / objB->GetInverseMass() + (rb * rb) / objB->GetInertia();
-
-	//	Vec2 force = 2 * massB / +massB * -vb * collisionNormal;
-	//	objB->ApplyImpulse(force, contactPoint);
-
-	//	return;
-	//}
-
-
 	float totalInverseMass = objA->GetInverseMass() + objB->GetInverseMass();
 
 	objA->GetPos() -= collisionNormal * overlapAmount * objA->GetInverseMass() / totalInverseMass;

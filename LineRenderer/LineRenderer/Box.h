@@ -1,8 +1,8 @@
 #pragma once
-
+#include "Polygon.h"
 #include "PhysicsObject.h"
 
-class Box : public PhysicsObject
+class Box : public Polygon
 {
 	float mWidth;
 	float mHeight;

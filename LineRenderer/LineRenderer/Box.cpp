@@ -1,9 +1,15 @@
 #include "Box.h"
 #include "LineRenderer.h"
 
-Box::Box(Vec2 pos, float w, float h, float mass) : PhysicsObject(pos, mass), mWidth(w), mHeight(h)
+Box::Box(Vec2 pos, float w, float h, float mass) : Polygon(pos, mass), mWidth(w), mHeight(h)
 {
 	mInertia = (1.0f/12.0f) * mMass * (mWidth * mWidth + mHeight * mHeight);
+
+	for (int i = 0; i < GetVertexCount(); i++)
+	{
+		mVertices.push_back(Vec2());
+		mNormals.push_back(Vec2());
+	}
 }
 
 
@@ -15,7 +21,6 @@ void Box::Draw(LineRenderer* lines)
 	Vec2 topLeft = mPos - mLocalX * (0.5f * mWidth) + mLocalY * (0.5f * mHeight);
 	Vec2 bottomRight = mPos + mLocalX * (0.5f * mWidth) - mLocalY * (0.5f * mHeight);
 
-
 	lines->AddPointToLine(topRight, mColour);
 	lines->AddPointToLine(bottomRight, mColour);
 	lines->AddPointToLine(bottomLeft, mColour);
@@ -25,4 +30,6 @@ void Box::Draw(LineRenderer* lines)
 
 	lines->DrawLineWithArrow(mPos, mPos + mLocalY, Colour::GREEN, 0.1);
 	lines->DrawLineWithArrow(mPos, mPos + mLocalX, Colour::RED, 0.1);
+
+
 }

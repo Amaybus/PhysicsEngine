@@ -15,7 +15,7 @@
 
 PhysicsEngine::PhysicsEngine()
 {
-	//appInfo.fixedFramerate = 1;
+	//appInfo.fixedFramerate = 5;
 	appInfo.appName = "Physics Engine";
 }
 
@@ -25,11 +25,13 @@ void PhysicsEngine::Initialise()
 
 	// Create circles	
 	// RIGHT SIDE						   
-	mPhysicsObjects.push_back(new Circle(Vec2(12.0, 1), 0.5, 1));
-	mPhysicsObjects[0]->SetVelocity(Vec2(-1,0));	
+	mPhysicsObjects.push_back(new Circle(Vec2(2, 0.8), 0.5, 2));
+	//mPhysicsObjects[0]->SetVelocity(Vec2(1,0));	
 
-	//mPhysicsObjects.push_back(new Circle(Vec2(1, -5), 0.5, 1));
-	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));	
+	mPhysicsObjects.push_back(new Circle(Vec2(3, -3), 0.5, 2));
+	mPhysicsObjects.push_back(new Circle(Vec2(7, -3), 0.5, 2));
+	mPhysicsObjects.push_back(new Circle(Vec2(5, -1), 0.5, 2));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(1, 0));	
 	
 	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 5.0f), 0.5, 1));
 	//mPhysicsObjects[2]->SetVelocity(Vec2(1, 0));
@@ -48,8 +50,8 @@ void PhysicsEngine::Initialise()
 
 	// Create boxes
 	// RIGHT SIDE
-	//mPhysicsObjects.push_back(new Box(Vec2(3, 0), 0.7f, 3.0f, 2.1f * 1.2f));
-	//mPhysicsObjects[3]->SetVelocity(Vec2(-1, 0));	
+	//mPhysicsObjects.push_back(new Box(Vec2(-2, -0.9), 0.7f, 3.0f, 1));
+	//mPhysicsObjects[4]->SetVelocity(Vec2(2, 0));	
 	//
 	//mPhysicsObjects.push_back(new Box(Vec2(3, -5.0), 0.7f, 3.0f, 2.1f * 1.2f));
 	////mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
@@ -68,38 +70,44 @@ void PhysicsEngine::Initialise()
 
 
 	// Create polygon
-	//mPhysicsObjects.push_back(new Polygon(Vec2(5, 2), 4, 1));
-	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	mPhysicsObjects.push_back(new Polygon(Vec2(4, 1), 4, 1));
+	mPhysicsObjects[4]->SetVelocity(Vec2(0, -1));
 	//mPhysicsObjects.push_back(new Polygon(Vec2(5, 2), 3, 1));
 	//mPhysicsObjects[3]->SetVelocity(Vec2(-1, 0));
 
-	mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10, 50));
-	mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10, 50));
-	mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10, 50));
-	mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10, 50));
+	//mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10, 50));
+	//mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10, 50));
+	//mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10, 50));
+	//mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10, 50));
 }
 
 void PhysicsEngine::Update(float delta)
 {
 	//mPhysicsObjects[0]->SetPos(cursorPos);
-	//ImGui::Begin("normal");
-	//ImGui::SliderInt("normal", &edgeIndex, 0, 10);
-	//ImGui::End();
-
-	if (ImGui::Begin("normals"))
-	{
-		ImGui::Text("poly normal index");
-		ImGui::SameLine();
-		ImGui::SliderInt("## Polygon Normal Index", &normalIndex, 0, 10);
-	}
-	//ImGui::SliderInt("edge", &normalIndex, 0, info.edges.size() - 1);
+	//mPhysicsObjects[0]->SetVelocity(Vec2());
+	ImGui::Begin("normal");
+	ImGui::SliderInt("normal", &normalIndex, 0, 7);
 	ImGui::End();
+
+	ImGui::Begin("normal");
+	ImGui::SliderInt("normal", &edgeIndex, 0, 3);
+	ImGui::End();
+
+	//if (ImGui::Begin("normals"))
+	//{
+	//	ImGui::Text("poly normal index");
+	//	ImGui::SameLine();
+	//	ImGui::SliderInt("## Polygon Normal Index", &normalIndex, 0, 10);
+	//}
+	////ImGui::SliderInt("edge", &normalIndex, 0, info.edges.size() - 1);
+	//ImGui::End();
 
 
 
 	for (PhysicsObject* obj : mPhysicsObjects)
 	{
 		obj->Update(delta);
+		obj->SetColour(Colour::GREEN);
 	}
 
 	for (int i = 0; i < mPhysicsObjects.size() - 1; i++)
@@ -111,6 +119,7 @@ void PhysicsEngine::Update(float delta)
 
 			// ######## POLYGON DEBUGGING ######## 
 			//lines->DrawLineWithArrow(info.normals[normalIndex] + info.objB->GetPos(), info.normals[normalIndex] + info.objB->GetPos()+ info.normals[normalIndex], Colour::MAGENTA);
+			//lines->DrawCircle(info.verts[edgeIndex], 0.3);
 			//lines->DrawLineWithArrow(info.objA->GetPos(), info.objA->GetPos()+ info.contactPoint + info.collisionNormal, Colour::BLUE);
 
 			//ImGui::Begin("Overlap Amount");
@@ -154,7 +163,6 @@ void PhysicsEngine::Update(float delta)
 					info.objA->SetColour(Colour::RED);
 					lines->DrawCross(info.contactPoint, 0.2, Colour::BLUE);
 				}
-				else info.objB->SetColour(Colour::GREEN);
 			}
 		}
 	}

@@ -30,14 +30,35 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 	}
 }
 
+Polygon::Polygon(Vec2 pos, float mass) : PhysicsObject(pos, mass), mVertCount(4)
+{
+}
+
+void Polygon::Update(float delta)
+{
+	PhysicsObject::Update(delta);
+
+	float angle = acos(Dot(mVertices[0], mLocalX) /(mVertices[0]).GetMagnitude() * mLocalX.GetMagnitude());
+
+	for (int i = 0; i < mVertCount; i++)
+	{
+		Vec2 vert = mVertices[i].RotateBy(-angle);
+
+		mVertices[i] = vert;
+	}
+}
+
 void Polygon::Draw(LineRenderer* lines)
 {
 	lines->DrawCircle(mPos, 0.1, Colour::YELLOW);
 
-	for (Vec2 vert : mVertices)
+	for (Vec2& vert : mVertices)
 	{
-		lines->DrawCircle(vert + mPos, 0.1f);
+		lines->DrawCircle(vert + mPos, 0.1f, Colour::BLUE);
 	}
+
+	// recreate the vert instead of overriding it
+	//rotate first then translate 
 
 	for(int i = 0; i < mVertCount; i++)
 	{

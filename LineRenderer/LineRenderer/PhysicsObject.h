@@ -60,6 +60,7 @@ public:
 	float GetInertia() const { return mInertia; }
 	float GetInverseInertia() const;
 	virtual int GetType() const = 0;
+	float GetOrientation() { return mOrientation; }
 
 	Vec2 GetLocalY() { return mLocalY; }
 	Vec2 GetLocalX() { return mLocalX; }

@@ -63,56 +63,55 @@ CollisionInfo CircleToPlaneCollision(PhysicsObject* circleA, PhysicsObject* plan
 CollisionInfo CircleToBoxCollision(PhysicsObject* circA, PhysicsObject* bB)
 {
 	Circle* circleA = (Circle*)circA;
-	Box* boxB = (Box*)bB;
+	Box* box = (Box*)bB;
 
-	Vec2 circleCentre = circleA->GetPos();
-	float circleRadius = circleA->GetRadius();
+	Vec2 pos = box->GetPos();
+	Vec2 localY = box->GetLocalY();
+	Vec2 localX = box->GetLocalX();
+	float width = box->GetWidth();
+	float height = box->GetHeight();
 
-	// ### TESTING ###
-	Vec2 boxPos = boxB->GetPos();
-	float boxWidth = boxB->GetWidth();
-	float boxHeight = boxB->GetHeight();
-	Vec2 localX = boxB->GetLocalX();
-	Vec2 localY = boxB->GetLocalY();
+	// Verts are converted to world space in circle to poly func
+	box->mVertices[0] = (pos + localX * (0.5f * width) + localY * (0.5f * height) - pos);
+	box->mVertices[2] = (pos - localX * (0.5f * width) - localY * (0.5f * height) - pos);
+	box->mVertices[1] = (pos - localX * (0.5f * width) + localY * (0.5f * height) - pos);
+	box->mVertices[3] = (pos + localX * (0.5f * width) - localY * (0.5f * height) - pos);
 
-	Vec2 verts[4];
-	verts[0] = boxPos + boxB->GetLocalX() * (0.5f * boxWidth) + localY * (0.5f * boxHeight); // Top right
-	verts[1] = boxPos - boxB->GetLocalX() * (0.5f * boxWidth) - localY * (0.5f * boxHeight); // Bottom left
-
-	verts[2] = boxPos - boxB->GetLocalX() * (0.5f * boxWidth) + localY * (0.5f * boxHeight); // Top left
-	verts[3] = boxPos + boxB->GetLocalX() * (0.5f * boxWidth) - localY * (0.5f * boxHeight); // Bottom right
-
-	float minX = FLT_MAX;
-	float maxX = -FLT_MAX;
-	float minY = FLT_MAX;
-	float maxY = -FLT_MAX;
-
-	for (Vec2& v : verts)
+	Vec2 next;
+	for (int i = 0; i < box->mVertices.size(); i++)
 	{
-		if (v.x > maxX) { maxX = v.x; }
-		if (v.x < minX) { minX = v.x; }
-		if (v.y > maxY) { maxY = v.y; }
-		if (v.y < minY) { minY = v.y; }
+		if (i == box->mVertices.size() - 1) { next = box->mVertices[0]; }
+		else { next = box->mVertices[i + 1]; }
+
+		//box->mNormals[i]=(Vec2(-(next - box->mVertices[i]).y, (next - box->mVertices[i]).x).Normalise());
+		box->mNormals[i] = ((next - box->mVertices[i]).GetRotatedBy270().GetNormalised());
 	}
 
-	Vec2 closestPoint = Vec2(Clamp(circleCentre.x, minX, maxX), Clamp(circleCentre.y, minY, maxY));
-	// ### END TESTING ###
+
+	Polygon* boxB = (Polygon*)bB;
+	return CircleToPolygonCollision(circA, boxB);
+
+
+	//Circle* circleA = (Circle*)circA;
+	//Box* boxB = (Box*)bB;
+
+	//Vec2 circleCentre = circleA->GetPos();
+	//float circleRadius = circleA->GetRadius();
+
 
 	//Vec2 closestPoint = Vec2(Clamp(circleCentre.x, boxB->GetXMin(), boxB->GetXMax()), Clamp(circleCentre.y, boxB->GetYMin(), boxB->GetYMax()));
-	float distance = (circleCentre - closestPoint).GetMagnitude();
+	//float distance = (circleCentre - closestPoint).GetMagnitude();
 
+	//CollisionInfo info;
 
+	//info.objA = circleA;
+	//info.objB = boxB;
+	//info.overlapAmount = -(distance - circleRadius);
+	//info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
+	//info.collisionNormal = -(circleCentre - closestPoint).Normalise();
+	//info.contactPoint = closestPoint;
 
-	CollisionInfo info;
-
-	info.objA = circleA;
-	info.objB = boxB;
-	info.overlapAmount = -(distance - circleRadius);
-	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
-	info.collisionNormal = -(circleCentre - closestPoint).Normalise();
-	info.contactPoint = closestPoint;
-
-	return info;
+	//return info;
 }
 CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* polyB)
 {
@@ -141,7 +140,7 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 		collectiveNormals.push_back((circleCentre - (polygonB->mVertices[i] + polygonB->GetPos())).Normalise());
 	}
 
-	for(int i = 0; i < collectiveNormals.size();i++)
+	for (int i = 0; i < collectiveNormals.size();i++)
 	{
 		float aMin = FLT_MAX;
 		float bMax = -FLT_MAX;
@@ -154,7 +153,7 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 		for (Vec2& v : polygonB->mVertices)
 		{
 			polyBResults.push_back(Dot(v + polygonB->GetPos(), collectiveNormals[i]));
-		}													   
+		}
 
 		for (float f : polyBResults)
 		{
@@ -174,10 +173,11 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 	info.objB = polyB;
 	info.bIsOverlapping = info.overlapAmount > 0;
 	info.normals = collectiveNormals;
-	info.contactPoint = 
+	info.contactPoint = circleA->GetPos() + info.collisionNormal * (circleA->GetRadius() - info.overlapAmount);
+	info.verts = polygonB->mVertices;
 
 	return info;
-} 
+}
 
 
 // ~~~~~~~ PLANE COLLISION  ~~~~~~~ //
@@ -341,7 +341,7 @@ CollisionInfo BoxToBoxCollision(PhysicsObject* bA, PhysicsObject* bB)
 	info.collisionNormal = overlapNormals[overlapIndex];
 	info.overlapAmount = overlapDepths[overlapIndex];
 	info.bIsOverlapping = info.overlapAmount > 0;
-	//	info.contactPoint = contactPoint;
+	info.contactPoint = Vec2();
 	info.objA = boxA;
 	info.objB = boxB;
 
@@ -450,6 +450,7 @@ CollisionInfo BoxToPolygonCollision(PhysicsObject* bA, PhysicsObject* polyB)
 	}
 
 	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
+	info.contactPoint = Vec2();
 	return info;
 }
 
@@ -549,7 +550,8 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 		}
 	}
 
-	info.bIsOverlapping = info.overlapAmount > 0 ? true : false;
+	info.bIsOverlapping = info.overlapAmount > 0;
+	info.contactPoint = Vec2();
 	return info;
 }
 
