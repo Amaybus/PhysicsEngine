@@ -83,10 +83,10 @@ void PhysicsEngine::Initialise()
 
 void PhysicsEngine::Update(float delta)
 {
-	//mPhysicsObjects[0]->SetPos(cursorPos);
+	mPhysicsObjects[0]->SetPos(cursorPos);
 	//mPhysicsObjects[0]->SetVelocity(Vec2());
-	ImGui::Begin("normal");
-	ImGui::SliderInt("normal", &normalIndex, 0, 7);
+	ImGui::Begin("Verts");
+	ImGui::SliderInt("Verts", &normalIndex, 0, 7);
 	ImGui::End();
 
 	ImGui::Begin("normal");
@@ -119,7 +119,10 @@ void PhysicsEngine::Update(float delta)
 
 			// ######## POLYGON DEBUGGING ######## 
 			//lines->DrawLineWithArrow(info.normals[normalIndex] + info.objB->GetPos(), info.normals[normalIndex] + info.objB->GetPos()+ info.normals[normalIndex], Colour::MAGENTA);
-			//lines->DrawCircle(info.verts[edgeIndex], 0.3);
+			//lines->DrawLineWithArrow(info.verts[0] + info.objB->GetPos(), info.verts[0] + info.objB->GetPos() + info.normals[0]);
+			//lines->DrawLineWithArrow(info.verts[1] + info.objB->GetPos(), info.verts[1] + info.objB->GetPos() + info.normals[1]);
+			//lines->DrawLineWithArrow(info.verts[2] + info.objB->GetPos(), info.verts[2] + info.objB->GetPos() + info.normals[2]);
+			//lines->DrawLineWithArrow(info.verts[3] + info.objB->GetPos(), info.verts[3] + info.objB->GetPos() + info.normals[3]);
 			//lines->DrawLineWithArrow(info.objA->GetPos(), info.objA->GetPos()+ info.contactPoint + info.collisionNormal, Colour::BLUE);
 
 			//ImGui::Begin("Overlap Amount");

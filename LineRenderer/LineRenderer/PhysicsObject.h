@@ -37,7 +37,7 @@ protected:
 	Vec2 mLocalY;
 
 	// How the object is rotated in radians
-	float mOrientation = 0;
+	float mOrientation =0;
 	// When an object rotates from one orientation to another. degrees per second
 	float mAngularVelocity = 0;
 	// Resistance against angular acc around the pivot

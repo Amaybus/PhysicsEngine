@@ -172,9 +172,7 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 	info.objA = circA;
 	info.objB = polyB;
 	info.bIsOverlapping = info.overlapAmount > 0;
-	info.normals = collectiveNormals;
 	info.contactPoint = circleA->GetPos() + info.collisionNormal * (circleA->GetRadius() - info.overlapAmount);
-	info.verts = polygonB->mVertices;
 
 	return info;
 }
