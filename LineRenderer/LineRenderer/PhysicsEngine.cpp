@@ -25,20 +25,19 @@ void PhysicsEngine::Initialise()
 
 	// Create circles	
 	// RIGHT SIDE						   
-	mPhysicsObjects.push_back(new Circle(Vec2(2, 0.8), 0.5, 2));
+	//mPhysicsObjects.push_back(new Circle(Vec2(2, 0.8), 0.5, 1));
 	//mPhysicsObjects[0]->SetVelocity(Vec2(1,0));	
-
-	mPhysicsObjects.push_back(new Circle(Vec2(3, -3), 0.5, 2));
-	mPhysicsObjects.push_back(new Circle(Vec2(7, -3), 0.5, 2));
-	mPhysicsObjects.push_back(new Circle(Vec2(5, -1), 0.5, 2));
-	//mPhysicsObjects[1]->SetVelocity(Vec2(1, 0));	
+	//
+	//mPhysicsObjects.push_back(new Circle(Vec2(5, 0.6), 0.5, 2));
+	//////mPhysicsObjects.push_back(new Circle(Vec2(5, -1), 0.5, 2));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));	
 	
 	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 5.0f), 0.5, 1));
 	//mPhysicsObjects[2]->SetVelocity(Vec2(1, 0));
 
 	// LEFT SIDE
 	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 0), 0.5, 1));
-	//mPhysicsObjects[3]->SetVelocity(Vec2(-1, 0));
+	//mPhysicsObjects[0]->SetVelocity(Vec2(-1, 0));
 	//
 	//mPhysicsObjects.push_back(new Circle(Vec2(-1, -5.7), 0.5, 1));
 	//mPhysicsObjects[4]->SetVelocity(Vec2(-1, 0));
@@ -51,10 +50,10 @@ void PhysicsEngine::Initialise()
 	// Create boxes
 	// RIGHT SIDE
 	//mPhysicsObjects.push_back(new Box(Vec2(-2, -0.9), 0.7f, 3.0f, 1));
-	//mPhysicsObjects[4]->SetVelocity(Vec2(2, 0));	
-	//
-	//mPhysicsObjects.push_back(new Box(Vec2(3, -5.0), 0.7f, 3.0f, 2.1f * 1.2f));
-	////mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	//mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));	
+	////
+	//mPhysicsObjects.push_back(new Box(Vec2(3, 2), 0.7f, 3.0f, 1));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
 	//
 	//mPhysicsObjects.push_back(new Box(Vec2(3, 4), 0.7f, 3.0f, 2.1f * 1.2f));
 
@@ -70,28 +69,29 @@ void PhysicsEngine::Initialise()
 
 
 	// Create polygon
-	mPhysicsObjects.push_back(new Polygon(Vec2(4, 1), 4, 1));
-	mPhysicsObjects[4]->SetVelocity(Vec2(0, -1));
-	//mPhysicsObjects.push_back(new Polygon(Vec2(5, 2), 3, 1));
-	//mPhysicsObjects[3]->SetVelocity(Vec2(-1, 0));
+	//mPhysicsObjects.push_back(new Polygon(Vec2(7, 1.3), 4, 1));
+	//mPhysicsObjects[0]->SetVelocity(Vec2(-1, 0.1));
+	
+	mPhysicsObjects.push_back(new Polygon(Vec2(0, 2), 4, 1));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
 
-	//mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10, 50));
-	//mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10, 50));
-	//mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10, 50));
-	//mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10, 50));
 }
 
 void PhysicsEngine::Update(float delta)
 {
 	mPhysicsObjects[0]->SetPos(cursorPos);
 	//mPhysicsObjects[0]->SetVelocity(Vec2());
-	ImGui::Begin("Verts");
-	ImGui::SliderInt("Verts", &normalIndex, 0, 7);
-	ImGui::End();
+	//ImGui::Begin("Verts");
+	//ImGui::SliderInt("Verts", &normalIndex, 0, 7);
+	//ImGui::End();
 
-	ImGui::Begin("normal");
-	ImGui::SliderInt("normal", &edgeIndex, 0, 3);
-	ImGui::End();
+	//ImGui::Begin("normal");
+	//ImGui::SliderInt("normal", &edgeIndex, 0, 3);
+	//ImGui::End();
 
 	//if (ImGui::Begin("normals"))
 	//{
@@ -162,9 +162,11 @@ void PhysicsEngine::Update(float delta)
 				{
 					info.ResolveRotation();
 					//info.Resolve();
-					info.objB->SetColour(Colour::RED);
+					//info.objB->SetColour(Colour::RED);
 					info.objA->SetColour(Colour::RED);
 					lines->DrawCross(info.contactPoint, 0.2, Colour::BLUE);
+					lines->DrawLineWithArrow(info.objA->GetPos(), info.objA->GetPos() + info.forceDirA + info.collisionNormal);
+					lines->DrawLineWithArrow(info.objB->GetPos(), info.objB->GetPos() + info.forceDirB + info.collisionNormal);
 				}
 			}
 		}

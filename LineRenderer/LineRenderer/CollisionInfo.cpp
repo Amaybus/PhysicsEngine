@@ -42,60 +42,29 @@ void CollisionInfo::ResolveRotation()
 {
 	float totalInverseMass = objA->GetInverseMass() + objB->GetInverseMass();
 
+	// Depen
 	objA->GetPos() -= collisionNormal * overlapAmount * objA->GetInverseMass() / totalInverseMass;
 	objB->GetPos() += collisionNormal * overlapAmount * objB->GetInverseMass() / totalInverseMass;
 
-	//// Find perpendicular angle from the vector
-	//Vec2 raPerp = Vec2(-objA->GetPos().y, objA->GetPos().x);
-	//Vec2 rbPerp = Vec2(-objB->GetPos().y, objB->GetPos().x);
-	//
-	//// Find angular linear velocity
-	//Vec2 angLinearVelA = raPerp * objA->GetAngularVelocity();
-	//Vec2 angLinearVelB = rbPerp * objB->GetAngularVelocity();
-	//
-	//// Relative Velocity
-	//Vec2 relVel = (objB->GetVelocity() + angLinearVelB) - (objA->GetVelocity() + angLinearVelA);
-	//
-	//float contactVelMag = Dot(relVel, collisionNormal);
-	//if (contactVelMag > 0)
-	//{
-	//	return;
-	//}
-	//
-	//float raPerpDotN = Dot(raPerp, collisionNormal);
-	//float rbPerpDotN = Dot(rbPerp, collisionNormal);
-	//
-	//float raDenom = (raPerpDotN * raPerpDotN) * (1.0f / objA->GetInertia());
-	//float rbDenom = (rbPerpDotN * rbPerpDotN) * (1.0f / objB->GetInertia());
-	//
-	//float impulseMag = ((-2 * contactVelMag) / totalInverseMass) + raDenom + rbDenom;
-	//
-	//Vec2 force = collisionNormal * impulseMag;
-	//
-	//objA->ApplyImpulse(-force, contactPoint);
-	//objB->ApplyImpulse(force, contactPoint);
+	// Find perpendicular angle to collision point
+	Vec2 perp = Vec2(collisionNormal.y, -collisionNormal.x);
 
+	// Level arm
+	float ra = Dot(contactPoint - objA->GetPos(), -perp);
+	float rb = Dot(contactPoint - objB->GetPos(), perp);
 
-	Vec2 perp = Vec2(collisionNormal.y, -collisionNormal.x); //Vec2 perp = collisionNormal.GetRotatedBy270();
-	float aPerp = Dot(contactPoint - objA->GetPos(), -perp);
-	float bPerp = Dot(contactPoint - objB->GetPos(), perp);
-	
-	float velA = Dot(objA->GetVelocity(), collisionNormal) - aPerp * objA->GetAngularVelocity();
-	float velB = Dot(objB->GetVelocity(), collisionNormal) - bPerp * objB->GetAngularVelocity();
-	
-	//float vaCrossvb = PseudoCross(collisionNormal, objB->GetVelocity().GetNormalised());
-	
-	if (velA > velB)
+	// Relative velocity
+	float va = Dot(objA->GetVelocity(), collisionNormal) - ra * objA->GetAngularVelocity();
+	float vb = Dot(objB->GetVelocity(), collisionNormal) - rb * objB->GetAngularVelocity();
+
+	//float vaCrossvb = PseudoCross(collisionNormal, objA->GetVelocity().GetNormalised());
+
+	if (va > vb)
 	{
-		float massA = 1.0f / (objA->GetInverseMass() + (aPerp * aPerp) / objA->GetInertia());
-		float massB = 1.0f / (objB->GetInverseMass() + (bPerp * bPerp) / objB->GetInertia());
+		float massA = 1.0f / (objA->GetInverseMass() + (ra * ra) * objA->GetInverseInertia());
+		float massB = 1.0f / (objB->GetInverseMass() + (rb * rb) * objB->GetInverseInertia());
 
-		//Vec2 force = 2 * massA * massB / (massA + massB) * (velA - velB) * collisionNormal;
-		Vec2 relVel = (objB->GetVelocity() + (perp * objB->GetAngularVelocity()) - (objA->GetVelocity() + (perp * objA->GetAngularVelocity())));
-		float impulseMag = Dot(- 2 * relVel, collisionNormal) / (massA + massB);
-		
-		Vec2 force = collisionNormal * impulseMag;
-
+		Vec2 force = 2 * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
 		objA->ApplyImpulse(-force, contactPoint);
 		objB->ApplyImpulse(force, contactPoint);
 	}

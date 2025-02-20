@@ -46,7 +46,7 @@ void Polygon::Update(float delta)
 		else { next = mVertices[i + 1]; }
 
 		mNormals[i] = (Vec2(-(next - mVertices[i]).y, (next - mVertices[i]).x).Normalise());
-		mEdgeCentre[i]=(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
+		//mEdgeCentre[i]=(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
 	}
 }
 
