@@ -53,6 +53,7 @@ CollisionInfo CircleToCircleCollision(PhysicsObject* circA, PhysicsObject* circB
 	info.objA = circleA;
 	info.objB = circleB;
 	info.contactPoint = (circleB->GetPos() + circleA->GetPos()) / 2;
+	info.contactPoint2 = (circleB->GetPos() + circleA->GetPos()) / 2;
 
 	return info;
 }
@@ -172,6 +173,7 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 	info.objB = polyB;
 	info.bIsOverlapping = info.overlapAmount > 0;
 	info.contactPoint = circleA->GetPos() + info.collisionNormal * (circleA->GetRadius() - info.overlapAmount);
+	info.contactPoint2 = circleA->GetPos() + info.collisionNormal * (circleA->GetRadius() - info.overlapAmount);
 
 	return info;
 }
@@ -194,6 +196,7 @@ CollisionInfo PlaneToCircleCollision(PhysicsObject* plA, PhysicsObject* circB)
 	info.bIsOverlapping = info.overlapAmount > 0;
 	info.collisionNormal = planeA->GetNormal();
 	info.contactPoint = circB->GetPos() + -planeA->GetNormal() * circleB->GetRadius();
+	info.contactPoint2 = circB->GetPos() + -planeA->GetNormal() * circleB->GetRadius();
 
 	return info;
 }
@@ -278,7 +281,6 @@ CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB)
 	//info.contactPoint = closestPoint;
 	//return info;
 }
-// UPDATE FOR ROTATION
 CollisionInfo PlaneToPolygonCollision(PhysicsObject* plA, PhysicsObject* polyB)
 {
 	Plane* planeA = (Plane*)plA;
@@ -306,6 +308,7 @@ CollisionInfo PlaneToPolygonCollision(PhysicsObject* plA, PhysicsObject* polyB)
 	info.objB = polygonB;
 	info.collisionNormal = planeA->GetNormal();
 	info.contactPoint = polygonB->GetPos() + polygonB->mVertices[distanceIndex];
+	info.contactPoint2 = polygonB->GetPos() + polygonB->mVertices[distanceIndex];
 
 	return info;
 }

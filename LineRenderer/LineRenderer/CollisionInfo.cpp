@@ -65,6 +65,12 @@ void CollisionInfo::ResolveRotation()
 		float massB = 1.0f / (objB->GetInverseMass() + (rb * rb) * objB->GetInverseInertia());
 
 		Vec2 force = 2 * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
+
+		if(objA->GetInverseMass() == 0)
+		{
+			force = (Dot(-2 * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
+		}
+
 		objA->ApplyImpulse(-force, contactPoint);
 		objB->ApplyImpulse(force, contactPoint2);
 	}

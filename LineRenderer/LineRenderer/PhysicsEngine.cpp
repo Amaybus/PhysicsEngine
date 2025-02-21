@@ -25,7 +25,7 @@ void PhysicsEngine::Initialise()
 
 	// Create circles	
 	// RIGHT SIDE						   
-	//mPhysicsObjects.push_back(new Circle(Vec2(2, 0.8), 0.5, 1));
+	//mPhysicsObjects.push_back(new Circle(Vec2(5, 0.8), 0.5, 1));
 	//mPhysicsObjects[0]->SetVelocity(Vec2(1,0));	
 	//
 	//mPhysicsObjects.push_back(new Circle(Vec2(5, 0.6), 0.5, 2));
@@ -49,10 +49,10 @@ void PhysicsEngine::Initialise()
 
 	// Create boxes
 	// RIGHT SIDE
-	mPhysicsObjects.push_back(new Box(Vec2(-2, -0.9), 0.7f, 3.0f, 1));
-	mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));	
-	mPhysicsObjects.push_back(new Box(Vec2(3, 2), 0.7f, 3.0f, 1));
-	mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	//mPhysicsObjects.push_back(new Box(Vec2(5, -0.9), 0.7f, 3.0f, 1));
+	//mPhysicsObjects[0]->SetVelocity(Vec2(0, -1));	
+	//mPhysicsObjects.push_back(new Box(Vec2(3, 2), 0.7f, 3.0f, 1));
+	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
 	//
 	//mPhysicsObjects.push_back(new Box(Vec2(3, 4), 0.7f, 3.0f, 2.1f * 1.2f));
 
@@ -67,17 +67,17 @@ void PhysicsEngine::Initialise()
 	//mPhysicsObjects.push_back(new Box(Vec2(-6, 4), 0.7f, 3.0f, 2.1f * 1.2f));
 
 
-	//mPhysicsObjects.push_back(new Polygon(Vec2(5, 1), 7, 1));
-	//mPhysicsObjects[0]->SetVelocity(Vec2(-1, 0));
+	mPhysicsObjects.push_back(new Polygon(Vec2(5, 1), 3, 1));
+	mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));
 	//mPhysicsObjects.push_back(new Polygon(Vec2(0, 1), 4, 1));
 	//mPhysicsObjects[1]->SetVelocity(Vec2(1, 0));
 	// Create polygon
 	//
 
-	//mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10, 50));
-	//mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10, 50));
-	//mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10, 50));
-	//mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10, 50));
+	mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10, 50));
 }
 
 void PhysicsEngine::Update(float delta)
