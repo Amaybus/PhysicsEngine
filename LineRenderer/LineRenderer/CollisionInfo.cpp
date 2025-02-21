@@ -18,7 +18,7 @@ void CollisionInfo::Resolve()
 		float impulseMag = Dot(-2 * objB->GetVelocity(), collisionNormal) / totalInverseMass;
 		Vec2 force = collisionNormal * impulseMag;
 
-		objB->ApplyImpulse(force, contactPoint);
+		objB->ApplyImpulse(force);
 		return;
 	}
 
@@ -51,11 +51,11 @@ void CollisionInfo::ResolveRotation()
 
 	// Level arm
 	float ra = Dot(contactPoint - objA->GetPos(), -perp);
-	float rb = Dot(contactPoint - objB->GetPos(), perp);
+	float rb = Dot(contactPoint2 - objB->GetPos(), perp);
 
 	// Relative velocity
 	float va = Dot(objA->GetVelocity(), collisionNormal) - ra * objA->GetAngularVelocity();
-	float vb = Dot(objB->GetVelocity(), collisionNormal) - rb * objB->GetAngularVelocity();
+	float vb = Dot(objB->GetVelocity(), collisionNormal) + rb * objB->GetAngularVelocity();
 
 	//float vaCrossvb = PseudoCross(collisionNormal, objA->GetVelocity().GetNormalised());
 
@@ -66,6 +66,6 @@ void CollisionInfo::ResolveRotation()
 
 		Vec2 force = 2 * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
 		objA->ApplyImpulse(-force, contactPoint);
-		objB->ApplyImpulse(force, contactPoint);
+		objB->ApplyImpulse(force, contactPoint2);
 	}
 }

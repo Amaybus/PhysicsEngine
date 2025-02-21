@@ -14,8 +14,10 @@ public:
 	bool bIsOverlapping;
 	Vec2 collisionNormal;
 	Vec2 contactPoint;
+	Vec2 contactPoint2;
 	Vec2 forceDirA;
 	Vec2 forceDirB;
+
 
 	void Resolve();
 	void ResolveRotation();

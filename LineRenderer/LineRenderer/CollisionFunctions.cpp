@@ -139,7 +139,7 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 		collectiveNormals.push_back((circleCentre - (polygonB->mVertices[i] + polygonB->GetPos())).Normalise());
 	}
 
-	for (int i = 0; i < collectiveNormals.size();i++)
+	for (int i = 0; i < collectiveNormals.size(); i++)
 	{
 		float aMin = FLT_MAX;
 		float bMax = -FLT_MAX;
@@ -205,52 +205,78 @@ CollisionInfo PlaneToPlaneCollision(PhysicsObject* planeA, PhysicsObject* planeB
 	info.objB = planeB;
 	return info;
 }
-// CONVERT TO PLANE TO POLY 
-CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB) 
+CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB)
 {
 	Plane* planeA = (Plane*)plA;
 	Box* boxB = (Box*)bB;
 
-	float pointDistance[4];
+	Vec2 pos = boxB->GetPos();
+	Vec2 localY = boxB->GetLocalY();
+	Vec2 localX = boxB->GetLocalX();
+	float width = boxB->GetWidth();
+	float height = boxB->GetHeight();
 
-	Vec2 topLeft = Vec2(boxB->GetXMax(), boxB->GetYMax());
-	Vec2 topRight = Vec2(boxB->GetXMin(), boxB->GetYMax());
-	Vec2 bottomLeft = Vec2(boxB->GetXMin(), boxB->GetYMin());
-	Vec2 bottonRight = Vec2(boxB->GetXMin(), boxB->GetYMax());
+	// Verts are converted to world space in circle to poly func
+	boxB->mVertices[0] = (pos + localX * (0.5f * width) + localY * (0.5f * height) - pos);
+	boxB->mVertices[2] = (pos - localX * (0.5f * width) - localY * (0.5f * height) - pos);
+	boxB->mVertices[1] = (pos - localX * (0.5f * width) + localY * (0.5f * height) - pos);
+	boxB->mVertices[3] = (pos + localX * (0.5f * width) - localY * (0.5f * height) - pos);
 
-	pointDistance[0] = Dot(topLeft, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	pointDistance[1] = Dot(topRight, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	pointDistance[2] = Dot(bottomLeft, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-	pointDistance[3] = Dot(bottonRight, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
-
-	int distanceIndex = 0;
-	for (int i = 0; i < 4; i++)
+	Vec2 next;
+	for (int i = 0; i < boxB->mVertices.size(); i++)
 	{
-		if (pointDistance[i] < pointDistance[distanceIndex])
-		{
-			distanceIndex = i;
-		}
+		if (i == boxB->mVertices.size() - 1) { next = boxB->mVertices[0]; }
+		else { next = boxB->mVertices[i + 1]; }
+
+		boxB->mNormals[i] = ((next - boxB->mVertices[i]).GetRotatedBy270().GetNormalised());
 	}
 
-	Vec2 closestPoint;
-	if (distanceIndex == 0) { closestPoint = topLeft; }
-	if (distanceIndex == 1) { closestPoint = topRight; }
-	if (distanceIndex == 2) { closestPoint = bottomLeft; }
-	if (distanceIndex == 3) { closestPoint = bottonRight; }
 
-	// Fix this, doing calc twice ??why??
-	float distance = Dot(closestPoint, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+	Polygon* boxA = (Polygon*)bB;
+	return PlaneToPolygonCollision(planeA, boxB);
 
-	CollisionInfo info;
-	info.objA = planeA;
-	info.objB = boxB;
-	info.overlapAmount = -distance;
-	info.bIsOverlapping = info.overlapAmount >= 0;
-	info.collisionNormal = planeA->GetNormal();
 
-	// #### Might need more work, check back when rotation is added ####
-	info.contactPoint = closestPoint;
-	return info;
+	// NON ROTATION CALC
+	//float pointDistance[4];
+
+	//Vec2 topLeft = Vec2(boxB->GetXMax(), boxB->GetYMax());
+	//Vec2 topRight = Vec2(boxB->GetXMin(), boxB->GetYMax());
+	//Vec2 bottomLeft = Vec2(boxB->GetXMin(), boxB->GetYMin());
+	//Vec2 bottonRight = Vec2(boxB->GetXMin(), boxB->GetYMax());
+
+	//pointDistance[0] = Dot(topLeft, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+	//pointDistance[1] = Dot(topRight, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+	//pointDistance[2] = Dot(bottomLeft, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+	//pointDistance[3] = Dot(bottonRight, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+
+	//int distanceIndex = 0;
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	if (pointDistance[i] < pointDistance[distanceIndex])
+	//	{
+	//		distanceIndex = i;
+	//	}
+	//}
+
+	//Vec2 closestPoint;
+	//if (distanceIndex == 0) { closestPoint = topLeft; }
+	//if (distanceIndex == 1) { closestPoint = topRight; }
+	//if (distanceIndex == 2) { closestPoint = bottomLeft; }
+	//if (distanceIndex == 3) { closestPoint = bottonRight; }
+
+	//// Fix this, doing calc twice ??why??
+	//float distance = Dot(closestPoint, planeA->GetNormal()) - planeA->GetDistanceFromOrgin();
+
+	//CollisionInfo info;
+	//info.objA = planeA;
+	//info.objB = boxB;
+	//info.overlapAmount = -distance;
+	//info.bIsOverlapping = info.overlapAmount >= 0;
+	//info.collisionNormal = planeA->GetNormal();
+
+	//// #### Might need more work, check back when rotation is added ####
+	//info.contactPoint = closestPoint;
+	//return info;
 }
 // UPDATE FOR ROTATION
 CollisionInfo PlaneToPolygonCollision(PhysicsObject* plA, PhysicsObject* polyB)
@@ -294,58 +320,91 @@ CollisionInfo BoxToPlaneCollision(PhysicsObject* boxA, PhysicsObject* planeB)
 {
 	return PlaneToBoxCollision(planeB, boxA);
 }
-// UPDATE TO POLY TO POLY
 CollisionInfo BoxToBoxCollision(PhysicsObject* bA, PhysicsObject* bB)
 {
 	Box* boxA = (Box*)bA;
 	Box* boxB = (Box*)bB;
 
-	float overlapDepths[4];
-	Vec2 overlapNormals[4];
+	Vec2 pos = boxA->GetPos();
+	Vec2 localY = boxA->GetLocalY();
+	Vec2 localX = boxA->GetLocalX();
+	float width = boxA->GetWidth();
+	float height = boxA->GetHeight();
 
-	overlapDepths[0] = boxB->GetXMax() - boxA->GetXMin();
-	overlapNormals[0] = Vec2(-1, 0);
+	// Verts are converted to world space in circle to poly func
+	boxA->mVertices[0] = (pos + localX * (0.5f * width) + localY * (0.5f * height) - pos);
+	boxA->mVertices[2] = (pos - localX * (0.5f * width) - localY * (0.5f * height) - pos);
+	boxA->mVertices[1] = (pos - localX * (0.5f * width) + localY * (0.5f * height) - pos);
+	boxA->mVertices[3] = (pos + localX * (0.5f * width) - localY * (0.5f * height) - pos);
 
-	overlapDepths[1] = boxA->GetXMax() - boxB->GetXMin();
-	overlapNormals[1] = Vec2(1, 0);
-
-	overlapDepths[2] = boxB->GetYMax() - boxA->GetYMin();
-	overlapNormals[2] = Vec2(0, -1);
-
-	overlapDepths[3] = boxA->GetYMax() - boxB->GetYMin();
-	overlapNormals[3] = Vec2(0, 1);
-
-	int overlapIndex = 0;
-	for (int i = 0; i < 4; i++)
+	Vec2 next;
+	for (int i = 0; i < boxA->mVertices.size(); i++)
 	{
-		if (overlapDepths[i] < overlapDepths[overlapIndex])
-		{
-			overlapIndex = i;
-		}
+		if (i == boxA->mVertices.size() - 1) { next = boxA->mVertices[0]; }
+		else { next = boxA->mVertices[i + 1]; }
+
+		boxA->mNormals[i] = ((next - boxA->mVertices[i]).GetRotatedBy270().GetNormalised());
 	}
 
-	// ###### CONTACT POINT NOT CORRECT #####
-	//Vec2 topRight = Vec2(boxB->GetXMax(), boxB->GetYMax());
-	//Vec2 topLeft = Vec2(boxB->GetXMin(), boxB->GetYMax());
-	//Vec2 bottomLeft = Vec2(boxB->GetXMin(), boxB->GetYMin());
-	//Vec2 bottomRight = Vec2(boxB->GetXMax(), boxB->GetYMin());
+	pos = boxB->GetPos();
+	localY = boxB->GetLocalY();
+	localX = boxB->GetLocalX();
+	width = boxB->GetWidth();
+	height = boxB->GetHeight();
 
-	//Vec2 contactPoint;
-	//if (overlapIndex == 0) { contactPoint = bottomLeft; }
-	//if (overlapIndex == 1) { contactPoint = topRight; }
-	//if (overlapIndex == 2) { contactPoint = bottonRight; }
-	//if (overlapIndex == 3) { contactPoint = topLeft; }
+	// Verts are converted to world space in circle to poly func
+	boxB->mVertices[0] = (pos + localX * (0.5f * width) + localY * (0.5f * height) - pos);
+	boxB->mVertices[2] = (pos - localX * (0.5f * width) - localY * (0.5f * height) - pos);
+	boxB->mVertices[1] = (pos - localX * (0.5f * width) + localY * (0.5f * height) - pos);
+	boxB->mVertices[3] = (pos + localX * (0.5f * width) - localY * (0.5f * height) - pos);
 
-	CollisionInfo info;
+	for (int i = 0; i < boxB->mVertices.size(); i++)
+	{
+		if (i == boxB->mVertices.size() - 1) { next = boxB->mVertices[0]; }
+		else { next = boxB->mVertices[i + 1]; }
 
-	info.collisionNormal = overlapNormals[overlapIndex];
-	info.overlapAmount = overlapDepths[overlapIndex];
-	info.bIsOverlapping = info.overlapAmount > 0;
-	info.contactPoint = Vec2();
-	info.objA = boxA;
-	info.objB = boxB;
+		boxB->mNormals[i] = ((next - boxB->mVertices[i]).GetRotatedBy270().GetNormalised());
+	}
 
-	return info;
+
+	Polygon* polyA = (Polygon*)bA;
+	Polygon* polyB = (Polygon*)bB;
+	return PolygonToPolygonCollision(polyA, polyB);
+
+	// NON ROTATION 
+	//float overlapDepths[4];
+	//Vec2 overlapNormals[4];
+
+	//overlapDepths[0] = boxB->GetXMax() - boxA->GetXMin();
+	//overlapNormals[0] = Vec2(-1, 0);
+
+	//overlapDepths[1] = boxA->GetXMax() - boxB->GetXMin();
+	//overlapNormals[1] = Vec2(1, 0);
+
+	//overlapDepths[2] = boxB->GetYMax() - boxA->GetYMin();
+	//overlapNormals[2] = Vec2(0, -1);
+
+	//overlapDepths[3] = boxA->GetYMax() - boxB->GetYMin();
+	//overlapNormals[3] = Vec2(0, 1);
+
+	//int overlapIndex = 0;
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	if (overlapDepths[i] < overlapDepths[overlapIndex])
+	//	{
+	//		overlapIndex = i;
+	//	}
+	//}
+
+	//CollisionInfo info;
+
+	//info.collisionNormal = overlapNormals[overlapIndex];
+	//info.overlapAmount = overlapDepths[overlapIndex];
+	//info.bIsOverlapping = info.overlapAmount > 0;
+	//info.objA = boxA;
+	//info.objB = boxB;
+
+	//return info;
 }
 CollisionInfo BoxToPolygonCollision(PhysicsObject* bA, PhysicsObject* polyB)
 {
@@ -507,11 +566,9 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 	info.objA = polyA;
 	info.objB = polyB;
 	info.overlapAmount = FLT_MAX;
-	info.contactPoint = Vec2();
 
 	// Add all normals of each polygon to a list
 	std::vector<Vec2> collectiveNormals;
-
 	for (Vec2& nA : polygonA->mNormals)
 	{
 		collectiveNormals.push_back(nA);
@@ -525,9 +582,16 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 	std::vector<float> polyAProjections;
 	std::vector<float> polyBProjections;
 
+	Vec2 displacement = polyA->GetPos() - polyB->GetPos();
+
+	float aPoint;
+	float bPoint;
+
 	// Dot each vert in each shape against the collective normals
 	for (int i = 0; i < collectiveNormals.size(); i++)
 	{
+		if (Dot(displacement.Normalise(), collectiveNormals[i]) > 0) continue;
+
 		for (Vec2 v : polygonA->mVertices)
 		{
 			polyAProjections.push_back(Dot(v + polygonA->GetPos(), collectiveNormals[i]));
@@ -561,7 +625,7 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 
 		// Check for overlaps 
 		int smallestOverlapIndex = 0;
-		float overlaps[2];
+		float overlaps[3];
 		overlaps[0] = aMax - bMin;
 		overlaps[1] = bMax - aMin;
 
@@ -576,15 +640,16 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 		if (overlaps[smallestOverlapIndex] < info.overlapAmount)
 		{
 			info.overlapAmount = overlaps[smallestOverlapIndex];
-			info.collisionNormal = -collectiveNormals[i];
+			info.collisionNormal = collectiveNormals[i];
 		}
 	}
 
 	info.bIsOverlapping = info.overlapAmount > 0;
-	Vec2 displacement = polyA->GetPos() - polyB->GetPos();
-	float mag = displacement.GetMagnitude();
-	info.contactPoint = info.objA->GetPos() + (-displacement*0.5) * (mag *0.5 - info.overlapAmount);
+	info.contactPoint2 = polygonA->GetPos() + info.collisionNormal * (1.6 - info.overlapAmount);
+	info.contactPoint = polygonB->GetPos() + -info.collisionNormal * (1.6 -info.overlapAmount);
 	return info;
 }
+
+
 
 

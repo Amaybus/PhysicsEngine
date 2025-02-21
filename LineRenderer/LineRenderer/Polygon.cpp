@@ -24,8 +24,8 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 		if (i == mVertices.size() - 1) { next = mVertices[0]; }
 		else { next = mVertices[i + 1]; }
 
-		mNormals.push_back(Vec2(-(next - mVertices[i]).y, (next - mVertices[i]).x).Normalise());
-		//mNormals.push_back((next - mVertices[i]).GetRotatedBy270().GetNormalised());
+		//mNormals.push_back(Vec2(-(next - mVertices[i]).y, (next - mVertices[i]).x).Normalise());
+		mNormals.push_back((next - mVertices[i]).GetRotatedBy270().GetNormalised());
 		mEdgeCentre.push_back(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
 	}
 }
@@ -62,14 +62,17 @@ void Polygon::Draw(LineRenderer* lines)
 		mVertices[i] = vert;
 	}
 
-
 	for (Vec2& vert : mVertices)
 	{
 		lines->DrawCircle(vert + mPos, 0.1f, Colour::BLUE);
 	}
 
-	// recreate the vert instead of overriding it
-	//rotate first then translate 
+	//int i = 0;
+	//for(Vec2& n : mNormals)
+	//{
+	//	lines->DrawLineWithArrow(mEdgeCentre[i] + mPos, mEdgeCentre[i]+mPos  + n, 0.2f);
+	//	i++;
+	//}
 
 	for(int i = 0; i < mVertCount; i++)
 	{
