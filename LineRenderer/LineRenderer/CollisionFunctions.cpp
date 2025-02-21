@@ -52,8 +52,8 @@ CollisionInfo CircleToCircleCollision(PhysicsObject* circA, PhysicsObject* circB
 	info.collisionNormal = (circleB->GetPos() - circleA->GetPos()).Normalise();
 	info.objA = circleA;
 	info.objB = circleB;
-	info.contactPoint = (circleB->GetPos() + circleA->GetPos()) / 2;
-	info.contactPoint2 = (circleB->GetPos() + circleA->GetPos()) / 2;
+	info.aContactPoints.push_back((circleB->GetPos() + circleA->GetPos()) / 2);
+	info.bContactPoints.push_back((circleB->GetPos() + circleA->GetPos()) / 2);
 
 	return info;
 }
@@ -172,8 +172,8 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 	info.objA = circA;
 	info.objB = polyB;
 	info.bIsOverlapping = info.overlapAmount > 0;
-	info.contactPoint = circleA->GetPos() + info.collisionNormal * (circleA->GetRadius() - info.overlapAmount);
-	info.contactPoint2 = circleA->GetPos() + info.collisionNormal * (circleA->GetRadius() - info.overlapAmount);
+	info.aContactPoints.push_back(circleA->GetPos() + info.collisionNormal * (circleA->GetRadius() - info.overlapAmount));
+	info.bContactPoints.push_back(circleA->GetPos() + info.collisionNormal * (circleA->GetRadius() - info.overlapAmount));
 
 	return info;
 }
@@ -195,8 +195,8 @@ CollisionInfo PlaneToCircleCollision(PhysicsObject* plA, PhysicsObject* circB)
 	info.overlapAmount = -overlap;
 	info.bIsOverlapping = info.overlapAmount > 0;
 	info.collisionNormal = planeA->GetNormal();
-	info.contactPoint = circB->GetPos() + -planeA->GetNormal() * circleB->GetRadius();
-	info.contactPoint2 = circB->GetPos() + -planeA->GetNormal() * circleB->GetRadius();
+	info.bContactPoints.push_back(circB->GetPos() + -planeA->GetNormal() * circleB->GetRadius());
+	info.aContactPoints.push_back(circB->GetPos() + -planeA->GetNormal() * circleB->GetRadius());
 
 	return info;
 }
@@ -283,6 +283,7 @@ CollisionInfo PlaneToBoxCollision(PhysicsObject* plA, PhysicsObject* bB)
 }
 CollisionInfo PlaneToPolygonCollision(PhysicsObject* plA, PhysicsObject* polyB)
 {
+	CollisionInfo info;
 	Plane* planeA = (Plane*)plA;
 	Polygon* polygonB = (Polygon*)polyB;
 	std::vector<float> vertDistances;
@@ -299,16 +300,20 @@ CollisionInfo PlaneToPolygonCollision(PhysicsObject* plA, PhysicsObject* polyB)
 		{
 			distanceIndex = i;
 		}
+		float threshold = 0.001f;
+		if (vertDistances[i] - vertDistances[distanceIndex] <= threshold && i != distanceIndex)
+		{
+			info.bContactPoints.push_back(polygonB->GetPos() + polygonB->mVertices[i]);
+		}
 	}
 
-	CollisionInfo info;
 	info.overlapAmount = -vertDistances[distanceIndex];
 	info.bIsOverlapping = info.overlapAmount >= 0;
 	info.objA = planeA;
 	info.objB = polygonB;
 	info.collisionNormal = planeA->GetNormal();
-	info.contactPoint = polygonB->GetPos() + polygonB->mVertices[distanceIndex];
-	info.contactPoint2 = polygonB->GetPos() + polygonB->mVertices[distanceIndex];
+	info.bContactPoints.push_back(polygonB->GetPos() + polygonB->mVertices[distanceIndex]);
+	info.aContactPoints.push_back(polygonB->GetPos() + polygonB->mVertices[distanceIndex]);
 
 	return info;
 }
@@ -372,7 +377,12 @@ CollisionInfo BoxToBoxCollision(PhysicsObject* bA, PhysicsObject* bB)
 
 	Polygon* polyA = (Polygon*)bA;
 	Polygon* polyB = (Polygon*)bB;
-	return PolygonToPolygonCollision(polyA, polyB);
+
+	CollisionInfo info = PolygonToPolygonCollision(polyA, polyB);
+	Vec2 displacement = info.objA->GetPos()- info.objB->GetPos();
+	info.aContactPoints.push_back(info.objA->GetPos() - displacement);
+	info.bContactPoints.push_back(info.objB->GetPos() + displacement);
+	return info;
 
 	// NON ROTATION 
 	//float overlapDepths[4];
@@ -587,9 +597,6 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 
 	Vec2 displacement = polyA->GetPos() - polyB->GetPos();
 
-	float aPoint;
-	float bPoint;
-
 	// Dot each vert in each shape against the collective normals
 	for (int i = 0; i < collectiveNormals.size(); i++)
 	{
@@ -628,7 +635,7 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 
 		// Check for overlaps 
 		int smallestOverlapIndex = 0;
-		float overlaps[3];
+		float overlaps[2];
 		overlaps[0] = aMax - bMin;
 		overlaps[1] = bMax - aMin;
 
@@ -648,8 +655,14 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 	}
 
 	info.bIsOverlapping = info.overlapAmount > 0;
-	info.contactPoint2 = polygonA->GetPos() + info.collisionNormal * (1.6 - info.overlapAmount);
-	info.contactPoint = polygonB->GetPos() + -info.collisionNormal * (1.6 -info.overlapAmount);
+
+	if(Dot(info.objA->GetPos(), info.objB->GetPos()) < 1)
+	{
+		info.collisionNormal = (info.objB->GetPos() - info.objA->GetPos()).Normalise();
+	}
+	info.bContactPoints.push_back(polygonA->GetPos() + info.collisionNormal * (1.6 - info.overlapAmount));
+	info.aContactPoints.push_back(polygonB->GetPos() + -info.collisionNormal * (1.6 - info.overlapAmount));
+
 	return info;
 }
 

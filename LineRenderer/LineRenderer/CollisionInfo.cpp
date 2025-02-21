@@ -50,14 +50,12 @@ void CollisionInfo::ResolveRotation()
 	Vec2 perp = Vec2(collisionNormal.y, -collisionNormal.x);
 
 	// Level arm
-	float ra = Dot(contactPoint - objA->GetPos(), -perp);
-	float rb = Dot(contactPoint2 - objB->GetPos(), perp);
+	float ra = Dot(aContactPoints[0] - objA->GetPos(), -perp);
+	float rb = Dot(bContactPoints[0] - objB->GetPos(), perp);
 
 	// Relative velocity
 	float va = Dot(objA->GetVelocity(), collisionNormal) - ra * objA->GetAngularVelocity();
 	float vb = Dot(objB->GetVelocity(), collisionNormal) + rb * objB->GetAngularVelocity();
-
-	//float vaCrossvb = PseudoCross(collisionNormal, objA->GetVelocity().GetNormalised());
 
 	if (va > vb)
 	{
@@ -66,12 +64,21 @@ void CollisionInfo::ResolveRotation()
 
 		Vec2 force = 2 * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
 
+		// For collision with planes
 		if(objA->GetInverseMass() == 0)
 		{
 			force = (Dot(-2 * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
 		}
 
-		objA->ApplyImpulse(-force, contactPoint);
-		objB->ApplyImpulse(force, contactPoint2);
+		// Apply equal amount of force over each contact point
+		for(Vec2& cp : aContactPoints)
+		{
+			objA->ApplyImpulse(-force / aContactPoints.size(), cp);
+		}
+
+		for (Vec2& cp : bContactPoints)
+		{
+			objB->ApplyImpulse(force / bContactPoints.size(), cp);
+		}
 	}
 }

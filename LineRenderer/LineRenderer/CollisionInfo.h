@@ -13,10 +13,11 @@ public:
 	float overlapAmount;
 	bool bIsOverlapping;
 	Vec2 collisionNormal;
-	Vec2 contactPoint;
-	Vec2 contactPoint2;
-	Vec2 forceDirA;
-	Vec2 forceDirB;
+	std::vector<Vec2> aContactPoints;
+	std::vector<Vec2> bContactPoints;
+
+	std::vector<Vec2> aNorm;
+	std::vector<Vec2> bNorm;
 
 
 	void Resolve();
