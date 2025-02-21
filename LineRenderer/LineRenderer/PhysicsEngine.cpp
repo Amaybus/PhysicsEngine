@@ -29,7 +29,7 @@ void PhysicsEngine::Initialise()
 	//mPhysicsObjects[0]->SetVelocity(Vec2(1,0));	
 	//
 	//mPhysicsObjects.push_back(new Circle(Vec2(5, 00), 0.5, 1));
-	/////mPhysicsObjects.push_back(new Circle(Vec2(5, -1), 0.5, 2));
+	////mPhysicsObjects.push_back(new Circle(Vec2(5, -1), 0.5, 2));
 	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));	
 	
 	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 5.0f), 0.5, 1));
@@ -50,9 +50,9 @@ void PhysicsEngine::Initialise()
 	// Create boxes
 	// RIGHT SIDE
 	//mPhysicsObjects.push_back(new Box(Vec2(0, -0.9), 0.7f, 3.0f, 1));
-	//mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));	
+	//mPhysicsObjects[2]->SetVelocity(Vec2(1, 1));	
 	//mPhysicsObjects.push_back(new Box(Vec2(9, 2), 0.7f, 3.0f, 1));
-	//mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	//mPhysicsObjects[3]->SetVelocity(Vec2(1.3, 0.5));
 	//
 	//mPhysicsObjects.push_back(new Box(Vec2(3, 4), 0.7f, 3.0f, 2.1f * 1.2f));
 
@@ -67,10 +67,10 @@ void PhysicsEngine::Initialise()
 	//mPhysicsObjects.push_back(new Box(Vec2(-6, 4), 0.7f, 3.0f, 2.1f * 1.2f));
 
 
-	mPhysicsObjects.push_back(new Polygon(Vec2(-5, 1.3), 7, 1));
-	mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));
-	mPhysicsObjects.push_back(new Polygon(Vec2(3, 1), 4, 1));
-	mPhysicsObjects[1]->SetVelocity(Vec2(-1, 0));
+	//mPhysicsObjects.push_back(new Polygon(Vec2(-5, 1.3), 7, 1));
+	//mPhysicsObjects[0]->SetVelocity(Vec2(1, 0));
+	mPhysicsObjects.push_back(new Polygon(Vec2(3, 9), 4, 1));
+	mPhysicsObjects[0]->SetVelocity(Vec2(0, 1));
 	// Create polygon
 	//
 
@@ -118,7 +118,7 @@ void PhysicsEngine::Update(float delta)
 
 			// ######## POLYGON DEBUGGING ######## 
 			//lines->DrawLineWithArrow(info.normals[normalIndex] + info.objA->GetPos(), info.normals[normalIndex] + info.objA->GetPos()+ info.normals[normalIndex], Colour::MAGENTA);
-			lines->DrawLineWithArrow(Vec2(),Vec2() + info.collisionNormal);
+			//lines->DrawLineWithArrow(Vec2(),Vec2() + info.collisionNormal);
 			//lines->DrawLineWithArrow(info.verts[1] + info.objB->GetPos(), info.verts[1] + info.objB->GetPos() + info.normals[1]);
 			//lines->DrawLineWithArrow(info.verts[2] + info.objB->GetPos(), info.verts[2] + info.objB->GetPos() + info.normals[2]);
 			//lines->DrawLineWithArrow(info.verts[3] + info.objB->GetPos(), info.verts[3] + info.objB->GetPos() + info.normals[3]);
@@ -165,7 +165,7 @@ void PhysicsEngine::Update(float delta)
 					info.objA->SetColour(Colour::RED);
 					for(Vec2& v : info.aContactPoints)
 					{
-						//lines->DrawCross(v, 0.1, Colour::MAGENTA);
+						lines->DrawCross(v, 0.1, Colour::MAGENTA);
 					}
 					for(Vec2& v : info.bContactPoints)
 					{

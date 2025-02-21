@@ -73,7 +73,7 @@ void CollisionInfo::ResolveRotation()
 		// Apply equal amount of force over each contact point
 		for(Vec2& cp : aContactPoints)
 		{
-			objA->ApplyImpulse(-force / aContactPoints.size(), cp);
+			objA->ApplyImpulse( - force / aContactPoints.size(), cp);
 		}
 
 		for (Vec2& cp : bContactPoints)

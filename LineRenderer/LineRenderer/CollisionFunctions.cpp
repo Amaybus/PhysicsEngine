@@ -313,7 +313,7 @@ CollisionInfo PlaneToPolygonCollision(PhysicsObject* plA, PhysicsObject* polyB)
 	info.objB = polygonB;
 	info.collisionNormal = planeA->GetNormal();
 	info.bContactPoints.push_back(polygonB->GetPos() + polygonB->mVertices[distanceIndex]);
-	info.aContactPoints.push_back(polygonB->GetPos() + polygonB->mVertices[distanceIndex]);
+	info.aContactPoints.push_back(Vec2());
 
 	return info;
 }
@@ -635,7 +635,7 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 
 		// Check for overlaps 
 		int smallestOverlapIndex = 0;
-		float overlaps[2];
+		float overlaps[3];
 		overlaps[0] = aMax - bMin;
 		overlaps[1] = bMax - aMin;
 
@@ -661,7 +661,7 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 		info.collisionNormal = (info.objB->GetPos() - info.objA->GetPos()).Normalise();
 	}
 	info.bContactPoints.push_back(polygonA->GetPos() + info.collisionNormal * (1.6 - info.overlapAmount));
-	info.aContactPoints.push_back(polygonB->GetPos() + -info.collisionNormal * (1.6 - info.overlapAmount));
+	info.aContactPoints.push_back(polygonA->GetPos() + info.collisionNormal * (1.6 - info.overlapAmount));
 
 	return info;
 }
