@@ -38,7 +38,6 @@ void Polygon::Update(float delta)
 {
 	PhysicsObject::Update(delta);
 
-
 	Vec2 next;
 	for (int i = 0; i < mVertices.size(); i++)
 	{
@@ -54,7 +53,8 @@ void Polygon::Draw(LineRenderer* lines)
 {
 	lines->DrawCircle(mPos, 0.1, Colour::YELLOW);
 
-	float angle = acos(Dot(mVertices[0], mLocalX) / (mVertices[0]).GetMagnitude() * mLocalX.GetMagnitude());
+	//float angle = acos(Dot(mVertices[0], mLocalX) / (mVertices[0]).GetMagnitude() * mLocalX.GetMagnitude());
+	float angle = asin(PseudoCross(mVertices[0], mLocalX) / (mVertices[0]).GetMagnitude() * mLocalX.GetMagnitude());
 	for (int i = 0; i < mVertCount; i++)
 	{
 		Vec2 vert = mVertices[i].RotateBy(-angle);

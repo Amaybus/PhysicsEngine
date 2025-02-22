@@ -67,7 +67,7 @@ void CollisionInfo::ResolveRotation()
 		// For collision with planes
 		if(objA->GetInverseMass() == 0)
 		{
-			force = (Dot(-2 * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
+			force = (Dot(-1.94 * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
 		}
 
 		// Apply equal amount of force over each contact point
