@@ -15,6 +15,8 @@ Box::Box(Vec2 pos, float w, float h, float mass) : Polygon(pos, mass), mWidth(w)
 
 void Box::Draw(LineRenderer* lines)
 {
+	Polygon::Draw(lines);
+
 	Vec2 topRight = mPos + mLocalX * (0.5f * mWidth) + mLocalY * (0.5f * mHeight);
 	Vec2 bottomLeft = mPos - mLocalX * (0.5f * mWidth) - mLocalY * (0.5f * mHeight);
 
@@ -27,9 +29,4 @@ void Box::Draw(LineRenderer* lines)
 	lines->AddPointToLine(topLeft, mColour);
 
 	lines->FinishLineLoop();
-
-	lines->DrawLineWithArrow(mPos, mPos + mLocalY, Colour::GREEN, 0.1);
-	lines->DrawLineWithArrow(mPos, mPos + mLocalX, Colour::RED, 0.1);
-
-
 }

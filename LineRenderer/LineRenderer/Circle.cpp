@@ -8,9 +8,7 @@ Circle::Circle(Vec2 pos, float radius, float mass) : PhysicsObject(pos, mass), m
 
 void Circle::Draw(LineRenderer* lines)
 {
+	PhysicsObject::Draw(lines);
 	lines->DrawCircle(mPos, mRadius, mColour);
-
-	lines->DrawLineWithArrow(mPos, mPos + GetLocalY(), Colour::GREEN, 0.1);
-	lines->DrawLineWithArrow(mPos, mPos + GetLocalX(), Colour::RED, 0.1);
 }
 

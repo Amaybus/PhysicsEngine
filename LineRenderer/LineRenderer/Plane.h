@@ -7,18 +7,16 @@ class Plane : public PhysicsObject
 {
 	const Vec2 mNormal;
 	const float mDistanceToOrigin;
-	const float mLength;
+	const float mLength = 50;
 	Vec2 mCentre;
 
 public:
-	Plane(Vec2 unitNormal, float distanceToOrigin, float length);
-	~Plane();
-
+	Plane(Vec2 unitNormal, float distanceToOrigin);
 	void Draw(LineRenderer* lines);
 
 	Vec2 GetNormal() const { return mNormal; }
 	Vec2 GetCentre() const { return mCentre; }
-	float GetDistanceFromOrgin() const { return mDistanceToOrigin; }
+	float GetDistanceFromOrigin() const { return mDistanceToOrigin; }
 	int GetType() const override { return 1; }
 };
 

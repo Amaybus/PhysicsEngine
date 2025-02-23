@@ -1,5 +1,6 @@
 #include "PhysicsObject.h"
 #include "PhysicsEngine.h"
+#include "LineRenderer.h"
 
 
 PhysicsObject::PhysicsObject()
@@ -25,6 +26,12 @@ void PhysicsObject::Update(float delta)
 	// Update Rotation
 	mOrientation += mAngularVelocity * delta;
 	mForceAccumulator = Vec2();
+}
+
+void PhysicsObject::Draw(LineRenderer* lines)
+{
+	lines->DrawLineWithArrow(mPos, mPos + mLocalY, Colour::GREEN, 0.1);
+	lines->DrawLineWithArrow(mPos, mPos + mLocalX, Colour::RED, 0.1);
 }
 
 float PhysicsObject::GetInverseMass() const

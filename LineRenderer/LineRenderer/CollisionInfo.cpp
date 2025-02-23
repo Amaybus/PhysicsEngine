@@ -7,22 +7,15 @@ void CollisionInfo::Resolve()
 {
 	if (!bIsOverlapping) return;
 
+	float totalInverseMass = objA->GetInverseMass() + objB->GetInverseMass();
+
 	// If objA is a plane
-	if (objA->GetMass() <= 0)
+	if (objA->GetInverseMass() == 0)
 	{
-		float totalInverseMass = objB->GetInverseMass();
+		totalInverseMass = objB->GetInverseMass();
 		//Depen Step
 		objB->GetPos() += collisionNormal * overlapAmount;
-
-		//Apply Force
-		float impulseMag = Dot(-2 * objB->GetVelocity(), collisionNormal) / totalInverseMass;
-		Vec2 force = collisionNormal * impulseMag;
-
-		objB->ApplyImpulse(force);
-		return;
 	}
-
-	float totalInverseMass = objA->GetInverseMass() + objB->GetInverseMass();
 
 	// Depen step
 	objA->GetPos() -= collisionNormal * overlapAmount * objA->GetInverseMass() / totalInverseMass;
@@ -31,6 +24,7 @@ void CollisionInfo::Resolve()
 	// Apply Force
 	Vec2 relVe = objB->GetVelocity() - objA->GetVelocity();
 	float impulseMag = Dot(-2 * relVe, collisionNormal) / totalInverseMass;
+
 	if (impulseMag < 0) return;
 	Vec2 force = collisionNormal * impulseMag;
 
@@ -38,7 +32,7 @@ void CollisionInfo::Resolve()
 	objB->ApplyImpulse(force);
 }
 
-void CollisionInfo::ResolveRotation()
+void CollisionInfo::ResolveWithRotation()
 {
 	float totalInverseMass = objA->GetInverseMass() + objB->GetInverseMass();
 
@@ -62,12 +56,12 @@ void CollisionInfo::ResolveRotation()
 		float massA = 1.0f / (objA->GetInverseMass() + (ra * ra) * objA->GetInverseInertia());
 		float massB = 1.0f / (objB->GetInverseMass() + (rb * rb) * objB->GetInverseInertia());
 
-		Vec2 force = 2 * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
+		Vec2 force = 1.9 * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
 
 		// For collision with planes
 		if(objA->GetInverseMass() == 0)
 		{
-			force = (Dot(-1.94 * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
+			force = (Dot(-2 * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
 		}
 
 		// Apply equal amount of force over each contact point

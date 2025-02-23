@@ -2,13 +2,9 @@
 #include "LineRenderer.h"
 
 
-Plane::Plane(Vec2 unitNormal, float distanceToOrigin, float length) : mNormal(unitNormal.GetNormalised()), mDistanceToOrigin(distanceToOrigin), mLength(length)
+Plane::Plane(Vec2 unitNormal, float distanceToOrigin) : mNormal(unitNormal.GetNormalised()), mDistanceToOrigin(distanceToOrigin)
 {
 	mCentre = mNormal * mDistanceToOrigin;
-}
-
-Plane::~Plane()
-{
 }
 
 void Plane::Draw(LineRenderer* lines)

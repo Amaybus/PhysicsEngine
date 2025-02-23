@@ -5,9 +5,9 @@
 
 int main()
 {
-	ApplicationHarness program(new PhysicsEngine());	//Create a new instance of your application type to pass into the harness here.
+		ApplicationHarness program(new PhysicsEngine());	//Create a new instance of your application type to pass into the harness here.
 
-	program.Run();
+		program.Run();
 
-	return 0;
+		return 0;
 }

@@ -16,10 +16,6 @@ public:
 	std::vector<Vec2> aContactPoints;
 	std::vector<Vec2> bContactPoints;
 
-	std::vector<Vec2> aNorm;
-	std::vector<Vec2> bNorm;
-
-
 	void Resolve();
-	void ResolveRotation();
+	void ResolveWithRotation();
 };

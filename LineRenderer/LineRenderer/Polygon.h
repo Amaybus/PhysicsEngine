@@ -1,6 +1,7 @@
 #pragma once
 #include "PhysicsObject.h"
 #include <vector>
+#include <memory>
 
 class Polygon : public PhysicsObject
 {
@@ -12,12 +13,17 @@ public:
 	std::vector<Vec2> mEdgeCentre;
 
 	Polygon(Vec2 pos, int numOfVerts, float mass);
+
 	// Box constructor
 	Polygon(Vec2 pos, float mass);
 
+	~Polygon();
+
+	std::vector<Vec2> GetVertices() { return mVertices; }
+	std::vector<Vec2> GetNormals();
+	std::vector<Vec2> GetEdgeCentres();
 	int GetVertexCount() const { return mVertCount; }
 	int GetType() const override { return 3; }
-	void Update(float delta) override;
 	void Draw(LineRenderer* lines) override;
 };
 

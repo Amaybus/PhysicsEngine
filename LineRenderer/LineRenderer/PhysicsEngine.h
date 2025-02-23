@@ -6,16 +6,13 @@
 
 class PhysicsEngine : public Application
 {
+	// List of all phyiscs objects in the scene
 	std::vector<PhysicsObject*> mPhysicsObjects;
 
 public:
 	PhysicsEngine();
+	~PhysicsEngine() override;
 
 	void Initialise() override;
 	void Update(float delta) override;
-
-	// DELETE AFTER DEBUGGING
-	float projectionAngle = 0.0f;
-	int normalIndex = 0;
-	int edgeIndex = 0;
 };
