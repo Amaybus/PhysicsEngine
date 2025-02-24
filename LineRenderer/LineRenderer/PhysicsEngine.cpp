@@ -12,7 +12,6 @@
 #include "Polygon.h"
 
 
-
 PhysicsEngine::PhysicsEngine()
 {
 	appInfo.appName = "Physics Engine";

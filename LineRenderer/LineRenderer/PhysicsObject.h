@@ -44,15 +44,14 @@ protected:
 	float mInertia = 0;
 
 public:
-	PhysicsObject();
 	PhysicsObject(Vec2 pos, float mass);
 	virtual ~PhysicsObject() {}
 
-	virtual void Update(float delta);
+	void Update(float delta);
 	virtual void Draw(LineRenderer* lines);
 
 	Vec2& GetPos() { return mPos; }
-	virtual void SetPos(Vec2 pos) { mPos = pos; }
+	void SetPos(Vec2 pos) { mPos = pos; }
 
 	Vec2& GetVelocity() { return mVel; }
 	void SetVelocity(Vec2 vel) { mVel = vel; }

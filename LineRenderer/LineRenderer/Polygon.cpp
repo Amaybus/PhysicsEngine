@@ -24,7 +24,7 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 		else { next = mVertices[i + 1]; }
 
 		mNormals.push_back((next - mVertices[i]).GetRotatedBy270().GetNormalised());
-		mEdgeCentre.push_back(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
+		mEdgeCentres.push_back(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
 	}
 }
 
@@ -39,9 +39,9 @@ Polygon::~Polygon()
 		mVertices.erase(mVertices.begin() + i);
 	}
 
-	for (int i = 0; i < mEdgeCentre.size(); i++)
+	for (int i = 0; i < mEdgeCentres.size(); i++)
 	{
-		mEdgeCentre.erase(mEdgeCentre.begin() + i);
+		mEdgeCentres.erase(mEdgeCentres.begin() + i);
 	}
 
 	for (int i = 0; i < mNormals.size(); i++)
@@ -72,10 +72,10 @@ std::vector<Vec2> Polygon::GetEdgeCentres()
 		if (i == mVertices.size() - 1) { next = mVertices[0]; }
 		else { next = mVertices[i + 1]; }
 
-		mEdgeCentre[i]=(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
+		mEdgeCentres[i]=(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
 	}
 
-	return mEdgeCentre;
+	return mEdgeCentres;
 }
 
 void Polygon::Draw(LineRenderer* lines)

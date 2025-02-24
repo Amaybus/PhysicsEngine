@@ -10,7 +10,7 @@ class Polygon : public PhysicsObject
 public:
 	std::vector<Vec2> mVertices;
 	std::vector<Vec2> mNormals;
-	std::vector<Vec2> mEdgeCentre;
+	std::vector<Vec2> mEdgeCentres;
 
 	Polygon(Vec2 pos, int numOfVerts, float mass);
 
