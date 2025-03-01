@@ -56,12 +56,12 @@ void CollisionInfo::ResolveWithRotation()
 		float massA = 1.0f / (objA->GetInverseMass() + (ra * ra) * objA->GetInverseInertia());
 		float massB = 1.0f / (objB->GetInverseMass() + (rb * rb) * objB->GetInverseInertia());
 
-		Vec2 force = 1.9 * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
+		Vec2 force = 1.5 * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
 
 		// For collision with planes
 		if(objA->GetInverseMass() == 0)
 		{
-			force = (Dot(-2 * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
+			force = (Dot(-1.5 * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
 		}
 
 		// Apply equal amount of force over each contact point

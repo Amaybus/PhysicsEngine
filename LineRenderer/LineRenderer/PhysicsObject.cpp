@@ -2,6 +2,10 @@
 #include "PhysicsEngine.h"
 #include "LineRenderer.h"
 
+PhysicsObject::PhysicsObject()
+{
+}
+
 PhysicsObject::PhysicsObject(Vec2 pos, float mass) : mPos(pos), mMass(mass)
 {
 }
@@ -19,6 +23,7 @@ void PhysicsObject::Update(float delta)
 	mLocalY = Vec2(-sn, cs).Normalise();
 
 	// Update Rotation
+	mAngularVelocity *= GetInverseMass();
 	mOrientation += mAngularVelocity * delta;
 	mForceAccumulator = Vec2();
 }

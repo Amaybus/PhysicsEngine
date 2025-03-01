@@ -44,6 +44,7 @@ protected:
 	float mInertia = 0;
 
 public:
+	PhysicsObject();
 	PhysicsObject(Vec2 pos, float mass);
 	virtual ~PhysicsObject() {}
 

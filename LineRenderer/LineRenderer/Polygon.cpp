@@ -80,6 +80,7 @@ std::vector<Vec2> Polygon::GetEdgeCentres()
 
 void Polygon::Draw(LineRenderer* lines)
 {
+	PhysicsObject::Draw(lines);
 	lines->DrawCircle(mPos, 0.1, Colour::YELLOW);
 
 	float angle = asin(PseudoCross(mVertices[0], mLocalX) / (mVertices[0]).GetMagnitude() * mLocalX.GetMagnitude());
