@@ -40,7 +40,6 @@ void PhysicsObject::Update(float delta)
 	}
 	mPos += mVel * delta;
 
-
 	// Update Rotation
 	mAngularVelocity -= mAngularVelocity * mAngularDrag * delta;
 	if(abs(mAngularVelocity) < 0.01)

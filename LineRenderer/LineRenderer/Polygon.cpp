@@ -9,7 +9,7 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 	// multiply moment by 2n
 	mInertia = 1.4; 
 
-	float padding = 1.6;
+	float padding = 1;
 	Vec2 offsetVec(padding, 0);
 	for (int i = 0; i < mVertCount; i++)
 	{

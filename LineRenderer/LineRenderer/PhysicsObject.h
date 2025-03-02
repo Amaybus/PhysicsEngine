@@ -28,7 +28,7 @@ protected:
 	Vec2 mAcc{ 0,0 };
 	const float mMass = 0;
 	Colour mColour;
-	float mElasticity = 0.7;
+	float mElasticity = 0.7f;
 
 	// STATIC OBJECT
 	bool bIsKinematic = true;
@@ -91,5 +91,10 @@ public:
 	void ApplyForce(Vec2 force);
 	void ApplyImpulse(Vec2 impulse);
 	void ApplyImpulse(Vec2 impulse, Vec2 contactPoint);
+
+	// OnBeginOverlap
+	// OnEndOverlap
+	// OnTriggerEnter
+	// OnTriggerExit
 };
 

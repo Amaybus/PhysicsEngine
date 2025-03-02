@@ -5,6 +5,7 @@
 Plane::Plane(Vec2 unitNormal, float distanceToOrigin) : mNormal(unitNormal.GetNormalised()), mDistanceToOrigin(distanceToOrigin)
 {
 	mCentre = mNormal * mDistanceToOrigin;
+	SetIsKinematic(false);
 }
 
 void Plane::Draw(LineRenderer* lines)
