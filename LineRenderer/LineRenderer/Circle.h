@@ -11,6 +11,7 @@ class Circle : public PhysicsObject
 
 public:
 	Circle(Vec2 pos, float radius, float mass);
+	Circle(Vec2 pos, float radius, float mass, float elasticity);
 
 	void Draw(LineRenderer* lines) override;
 

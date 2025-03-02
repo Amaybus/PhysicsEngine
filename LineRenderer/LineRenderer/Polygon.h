@@ -13,6 +13,7 @@ public:
 	std::vector<Vec2> mEdgeCentres;
 
 	Polygon(Vec2 pos, int numOfVerts, float mass);
+	Polygon(Vec2 pos, int numOfVerts, float mass, float elasticity);
 
 	// Box constructor
 	Polygon(Vec2 pos, float mass);

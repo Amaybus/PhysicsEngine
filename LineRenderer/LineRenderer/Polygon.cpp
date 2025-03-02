@@ -28,6 +28,10 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 	}
 }
 
+Polygon::Polygon(Vec2 pos, int numOfVerts, float mass, float elasticity) : PhysicsObject(pos, mass, elasticity), mVertCount(numOfVerts)
+{
+}
+
 Polygon::Polygon(Vec2 pos, float mass) : PhysicsObject(pos, mass), mVertCount(4)
 {
 }

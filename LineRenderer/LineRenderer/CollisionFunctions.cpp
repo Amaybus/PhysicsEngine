@@ -107,7 +107,7 @@ CollisionInfo CircleToPolygonCollision(PhysicsObject* circA, PhysicsObject* poly
 
 	for (int i = 0; i < collectiveNormals.size(); i++)
 	{
-		// Find min for cirlce
+		// Find min for circle
 		float aMin = Dot(circleCentre - (circleRadius * collectiveNormals[i]), collectiveNormals[i]);;
 		float bMax = -FLT_MAX;
 
@@ -410,10 +410,11 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 		int i = 0;
 	}
 
-	if(Dot(info.objA->GetPos(), info.objB->GetPos()) < 1)
-	{
-		info.collisionNormal = (info.objB->GetPos() - info.objA->GetPos()).Normalise();
-	}
+	//if(Dot(info.objA->GetPos(), info.objB->GetPos()) < 1)
+	//{
+	//	info.collisionNormal = (info.objB->GetPos() - info.objA->GetPos()).Normalise();
+	//}
+
 	float offset = abs(polygonA->GetVertexCount() - polygonB->GetVertexCount()) * 0.1;
 	info.bContactPoints.push_back(polygonB->GetPos() - info.collisionNormal * ((1.6 - offset) - info.overlapAmount));
 	info.aContactPoints.push_back(polygonA->GetPos() + info.collisionNormal * (1.6 - info.overlapAmount));

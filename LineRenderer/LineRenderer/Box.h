@@ -14,6 +14,7 @@ public:
 	float GetYMax() const { return mPos.y + 0.5 * mHeight; }
 
 	Box(Vec2 pos, float w, float h, float mass);
+	Box(Vec2 pos, float w, float h, float mass, float elasticity);
 
 	void Draw(LineRenderer* lines) override;
 

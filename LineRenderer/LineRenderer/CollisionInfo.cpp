@@ -51,23 +51,32 @@ void CollisionInfo::ResolveWithRotation()
 	float va = Dot(objA->GetVelocity(), collisionNormal) - ra * objA->GetAngularVelocity();
 	float vb = Dot(objB->GetVelocity(), collisionNormal) + rb * objB->GetAngularVelocity();
 
+	float elasticity = (objA->GetElasticity() + objB->GetElasticity()) * 0.5;
+
 	if (va > vb)
 	{
 		float massA = 1.0f / (objA->GetInverseMass() + (ra * ra) * objA->GetInverseInertia());
 		float massB = 1.0f / (objB->GetInverseMass() + (rb * rb) * objB->GetInverseInertia());
 
-		Vec2 force = 1.5 * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
+		Vec2 force = (1+elasticity) * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
 
-		// For collision with planes
+		// For collision with planes or static obj
 		if(objA->GetInverseMass() == 0)
 		{
-			force = (Dot(-1.5 * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
+			force = (Dot(-(1+elasticity) * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
+		}
+
+		// For collision with static objects 
+		if (objB->GetInverseMass() == 0)
+		{
+			// Inverse the force
+			force = -(Dot(-(1 + elasticity) * objA->GetVelocity(), collisionNormal) / objA->GetInverseMass()) * collisionNormal;
 		}
 
 		// Apply equal amount of force over each contact point
 		for(Vec2& cp : aContactPoints)
 		{
-			objA->ApplyImpulse( - force / aContactPoints.size(), cp);
+			objA->ApplyImpulse(-force / aContactPoints.size(), cp);
 		}
 
 		for (Vec2& cp : bContactPoints)
