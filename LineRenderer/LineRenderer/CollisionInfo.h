@@ -13,6 +13,7 @@ public:
 	float overlapAmount;
 	bool bIsOverlapping;
 	Vec2 collisionNormal;
+	bool bIsTrigger = false;
 	std::vector<Vec2> aContactPoints;
 	std::vector<Vec2> bContactPoints;
 

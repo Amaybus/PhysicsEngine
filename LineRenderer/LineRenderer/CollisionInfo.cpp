@@ -1,7 +1,5 @@
 #include "CollisionInfo.h"
-#include <iostream>
 
-#include "dirent.h"
 
 void CollisionInfo::Resolve()
 {
@@ -34,6 +32,22 @@ void CollisionInfo::Resolve()
 
 void CollisionInfo::ResolveWithRotation()
 {
+	if (objA->IsTrigger())
+	{
+		objA->OnBeginOverlap(objB);
+		return;
+	}
+
+	if (objB->IsTrigger())
+	{
+		objB->OnBeginOverlap(objA);
+		return;
+	}
+
+	// Call collision for each object
+	objA->OnCollisionEnter(objB);
+	objB->OnCollisionEnter(objA);
+
 	float totalInverseMass = objA->GetInverseMass() + objB->GetInverseMass();
 
 	// Depen
@@ -51,6 +65,7 @@ void CollisionInfo::ResolveWithRotation()
 	float va = Dot(objA->GetVelocity(), collisionNormal) - ra * objA->GetAngularVelocity();
 	float vb = Dot(objB->GetVelocity(), collisionNormal) + rb * objB->GetAngularVelocity();
 
+	// Find elasticity
 	float elasticity = (objA->GetElasticity() + objB->GetElasticity()) * 0.5;
 
 	if (va > vb)
@@ -60,10 +75,10 @@ void CollisionInfo::ResolveWithRotation()
 
 		Vec2 force = (1+elasticity) * massA * massB / (massA + massB) * (va - vb) * collisionNormal;
 
-		// For collision with planes or static obj
+		// For collision with planes or static objects
 		if(objA->GetInverseMass() == 0)
 		{
-			force = (Dot(-(1+elasticity) * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
+			force = (Dot(-(1 + elasticity) * objB->GetVelocity(), collisionNormal) / objB->GetInverseMass()) * collisionNormal;
 		}
 
 		// For collision with static objects 

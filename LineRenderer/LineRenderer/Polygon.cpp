@@ -9,8 +9,8 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 	// multiply moment by 2n
 	mInertia = 1.4; 
 
-	float padding = 1;
-	Vec2 offsetVec(padding, 0);
+	mPadding = 1;
+	Vec2 offsetVec(mPadding, 0);
 	for (int i = 0; i < mVertCount; i++)
 	{
 		mVertices.push_back(offsetVec);
@@ -85,12 +85,11 @@ std::vector<Vec2> Polygon::GetEdgeCentres()
 void Polygon::Draw(LineRenderer* lines)
 {
 	PhysicsObject::Draw(lines);
-	lines->DrawCircle(mPos, 0.1, Colour::YELLOW);
 
 	float angle = asin(PseudoCross(mVertices[0], mLocalX) / (mVertices[0]).GetMagnitude() * mLocalX.GetMagnitude());
 	for (int i = 0; i < mVertCount; i++)
 	{
-		Vec2 vert = mVertices[i].RotateBy(-angle);
+		Vec2 vert = mVertices[i].RotateBy(angle);
 
 		mVertices[i] = vert;
 	}

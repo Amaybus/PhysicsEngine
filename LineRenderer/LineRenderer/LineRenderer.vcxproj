@@ -164,6 +164,7 @@
     <ClCompile Include="Colour.cpp" />
     <ClCompile Include="DotClicker.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="GLFWCallbacks.cpp" />
     <ClCompile Include="LineRenderer.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="CollisionInfo.h" />
     <ClInclude Include="Colour.h" />
     <ClInclude Include="DotClicker.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="glad.h" />
     <ClInclude Include="GLFWCallbacks.h" />
     <ClInclude Include="Graphics.h" />

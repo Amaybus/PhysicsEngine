@@ -80,6 +80,9 @@
     <ClCompile Include="Polygon.cpp">
       <Filter>Game\PhysicsEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLFWCallbacks.h">
@@ -183,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="Polygon.h">
       <Filter>Game\PhysicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@
 #include "Plane.h"
 #include "Polygon.h"
 #include "Circle.h"
-#include "imgui.h"
+
 
 void CollisionFuncInit()
 {
@@ -25,7 +25,6 @@ void CollisionFuncInit()
 	collisionFunctions[(int)ObjectType::Polygon][(int)ObjectType::Box] = PolygonToBoxCollision;
 	collisionFunctions[(int)ObjectType::Polygon][(int)ObjectType::Polygon] = PolygonToPolygonCollision;
 }
-
 CollisionInfo CheckCollision(PhysicsObject* objA, PhysicsObject* objB)
 {
 	int objTypeA = (int)objA->GetType();
@@ -320,7 +319,7 @@ CollisionInfo PolygonToPlaneCollision(PhysicsObject* polygonA, PhysicsObject* pl
 {
 	return PlaneToPolygonCollision(planeB, polygonA);
 }
-CollisionInfo PolygonToBoxCollision(PhysicsObject* polyA, PhysicsObject* bB) // Can reuse polygon to polygon here
+CollisionInfo PolygonToBoxCollision(PhysicsObject* polyA, PhysicsObject* bB) 
 {
 	return BoxToPolygonCollision(bB, polyA);
 }
@@ -413,9 +412,10 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 	{
 		int i = 0;
 	}
-	float offset = abs(polygonA->GetVertexCount() - polygonB->GetVertexCount()) * 0.1;
-	info.bContactPoints.push_back(polygonB->GetPos() - info.collisionNormal * ((1.6 - offset) - info.overlapAmount));
-	info.aContactPoints.push_back(polygonA->GetPos() + info.collisionNormal * (1.6 - info.overlapAmount));
+	//Alternatively do the Tom method (it means multi vert contacts are accounted for)
+
+	info.aContactPoints.push_back(info.objA->GetPos() - displacement);
+	info.bContactPoints.push_back(info.objB->GetPos() + displacement);
 
 	return info;
 }

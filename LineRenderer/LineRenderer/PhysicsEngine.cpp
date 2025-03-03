@@ -1,10 +1,7 @@
 #include "PhysicsEngine.h"
 
-#include <iostream>
-
 #include "CollisionFunctions.h"
 #include "CollisionInfo.h"
-#include "imgui.h"
 #include "LineRenderer.h"
 #include "Circle.h"
 #include "Box.h"
@@ -15,11 +12,12 @@
 PhysicsEngine::PhysicsEngine()
 {
 	appInfo.appName = "Physics Engine";
+	appInfo.grid.show = false;
 }
 
 PhysicsEngine::~PhysicsEngine()
 {
-	for(PhysicsObject* po : mPhysicsObjects)
+	for (PhysicsObject* po : mPhysicsObjects)
 	{
 		delete po;
 	}
@@ -29,22 +27,31 @@ void PhysicsEngine::Initialise()
 {
 	CollisionFuncInit();
 
-	//mPhysicsObjects.push_back(new Polygon(Vec2(0, 0), 6,1));
-	////mPhysicsObjects[0]->SetOrientation(45);
-	//mPhysicsObjects.push_back(new Polygon(Vec2(2.5, 0), 6,1));
-	////mPhysicsObjects[1]->SetOrientation(45);
-	//mPhysicsObjects.push_back(new Polygon(Vec2(4.5, 0), 6,1));
-	////mPhysicsObjects[2]->SetOrientation(45);
-	//mPhysicsObjects.push_back(new Polygon(Vec2(-2.5, 0), 6,1));
-	////mPhysicsObjects[3]->SetOrientation(45);
-	//mPhysicsObjects[3]->SetVelocity(Vec2(1,0));
+	//mPhysicsObjects.push_back(new Plane(Vec2(-1, 1), -4));
+	mPhysicsObjects.push_back(new Box(Vec2(1, -5), 7.0f, 0.5f, 1));
+	mPhysicsObjects[0]->SetIsKinematic(false);
+	mPhysicsObjects[0]->SetOrientation(0);
+	
+	mPhysicsObjects.push_back(new Box(Vec2(-5, 0), 5.0f, 0.5f, 1));
+	mPhysicsObjects[1]->SetIsKinematic(false);
+	mPhysicsObjects[1]->SetOrientation(0);
+
+
+
+	//mPhysicsObjects.push_back(new Polygon(Vec2(0, 0), 5,1));
+	////mPhysicsObjects[1]->SetOrientation(-45);
+	//
+	//mPhysicsObjects.push_back(new Polygon(Vec2(0, 2.5), 6,1));
+	//mPhysicsObjects.push_back(new Polygon(Vec2(0, 4.5), 6,1));
+	//mPhysicsObjects.push_back(new Polygon(Vec2(0, -2.5), 6,1));
 
 
 	// Create circles	
-	//mPhysicsObjects.push_back(new Circle(Vec2(0, 4), 0.5, 1));
-	//mPhysicsObjects[0]->SetVelocity(Vec2(0,1));
+	//mPhysicsObjects.push_back(new Circle(Vec2(-6, -4), 0.5, 1));
+	//mPhysicsObjects[4]->SetVelocity(Vec2(1, 0));
+	//mPhysicsObjects[0]->SetAsTrigger(true);
 	//
-	//mPhysicsObjects.push_back(new Circle(Vec2(1, 3), 0.5,1));
+	//mPhysicsObjects.push_back(new Circle(Vec2(1, 3), 0.5, 1));
 	//mPhysicsObjects[1]->SetVelocity(Vec2(0, 1));
 	//
 	//mPhysicsObjects.push_back(new Circle(Vec2(-1, 5.0f), 0.5, 1));
@@ -79,14 +86,11 @@ void PhysicsEngine::Initialise()
 	//mPhysicsObjects[7]->SetVelocity(Vec2(0,0));
 	//
 	////// Create planes
-	mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -5));
-	mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -5));
-	mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -5));
-	mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -5));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10));
+	//mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10));
+	//mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10));
+	//mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10));
 
-	//mPhysicsObjects.push_back(new Box(Vec2(0, -0.9), 1000.0f, 0.5f, 1));
-	//mPhysicsObjects[2]->SetIsKinematic(false);
-	//mPhysicsObjects[6]->SetOrientation(45);
 }
 
 void PhysicsEngine::Update(float delta)
@@ -94,8 +98,7 @@ void PhysicsEngine::Update(float delta)
 	for (PhysicsObject* obj : mPhysicsObjects)
 	{
 		obj->Update(delta);
-		obj->SetColour(Colour::GREEN);
-		//obj->ApplyForce(mGravity);
+		obj->ApplyForce(mGravity);
 	}
 
 	// Check for collisions
@@ -105,14 +108,31 @@ void PhysicsEngine::Update(float delta)
 		{
 			CollisionInfo info = CheckCollision(mPhysicsObjects[i], mPhysicsObjects[j]);
 
-			if (info.objA != nullptr && info.objB != nullptr)
+			if (info.objA == nullptr || info.objB == nullptr) { continue; }
+			if (info.objA->IsTrigger() || info.objB->IsTrigger()) { info.bIsTrigger = true; }
+
+			if (info.bIsOverlapping)
+			{	
+				info.ResolveWithRotation();
+				continue;
+			}
+
+			// Exit trigger
+			if (info.bIsTrigger)
 			{
-				if (info.bIsOverlapping)
-				{
-					info.ResolveWithRotation();
-					info.objB->SetColour(Colour::RED);
-					info.objA->SetColour(Colour::RED);
-				}
+				if (info.objA->IsTrigger()) { info.objA->OnEndOverlap(info.objB); }
+
+				if (info.objB->IsTrigger()) { info.objB->OnEndOverlap(info.objA); }
+
+				continue;
+			}
+
+			// Exit collision
+			if (!info.bIsTrigger)
+			{
+				info.objA->OnCollisionExit(info.objB);
+				info.objB->OnCollisionExit(info.objA);
+				continue;
 			}
 		}
 	}
@@ -122,4 +142,6 @@ void PhysicsEngine::Update(float delta)
 		obj->Draw(lines);
 	}
 }
+
+
 

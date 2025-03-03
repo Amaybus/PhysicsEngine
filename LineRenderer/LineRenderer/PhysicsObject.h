@@ -3,6 +3,7 @@
 #include "Vec2.h"
 #include "Colour.h"
 #include "Maths.h"
+#include <vector>
 
 class LineRenderer;
 
@@ -27,16 +28,14 @@ protected:
 	// How the velocity changes over time
 	Vec2 mAcc{ 0,0 };
 	const float mMass = 0;
-	Colour mColour;
+	Colour mColour = Colour::GREEN;
 	float mElasticity = 0.7f;
 
-	// STATIC OBJECT
+	// Can the object move 
 	bool bIsKinematic = true;
 
 	Vec2 mForceAccumulator;
-	//Vec2 mGravity = Vec2(0, -9.81f);
 
-	// Rotation
 	// Rotation axis
 	Vec2 mLocalX;
 	Vec2 mLocalY;
@@ -51,6 +50,12 @@ protected:
 	// Force
 	float mAngularDrag = 0.3f;
 	float mLinearDrag = 0.7f;
+
+	bool bIsTrigger = false;
+	bool bCanCollide = true;
+
+	std::vector <PhysicsObject*> mOverlappingObjects;
+	std::vector <PhysicsObject*> mCollidingObjects;
 
 public:
 	PhysicsObject();
@@ -70,13 +75,13 @@ public:
 	Vec2& GetAcceleration() { return mAcc; }
 	void SetAcceleration(Vec2 acc) { mAcc = acc; }
 
-	void SetIsKinematic(bool value) { bIsKinematic = value; }
+	void SetIsKinematic(bool value);
 	bool GetKinematic() const { return bIsKinematic; }
 
-	float GetAngularVelocity() const { return mAngularVelocity; }
-	float GetElasticity() const { return mElasticity; }
 	float GetMass() const { return mMass; }
 	float GetInverseMass() const;
+	float GetAngularVelocity() const { return mAngularVelocity; }
+	float GetElasticity() const { return mElasticity; }
 	float GetInertia() const { return mInertia; }
 	float GetInverseInertia() const;
 	virtual int GetType() const = 0;
@@ -92,9 +97,16 @@ public:
 	void ApplyImpulse(Vec2 impulse);
 	void ApplyImpulse(Vec2 impulse, Vec2 contactPoint);
 
-	// OnBeginOverlap
-	// OnEndOverlap
-	// OnTriggerEnter
-	// OnTriggerExit
+	void OnBeginOverlap(PhysicsObject* other);
+	void OnEndOverlap(PhysicsObject* other);
+
+	void OnCollisionEnter(PhysicsObject* other);
+	void OnCollisionExit(PhysicsObject* other);
+
+	void SetCollision(bool value) { bCanCollide = value; }
+	bool CanCollide() const { return bCanCollide; }
+
+	void SetAsTrigger(bool value);
+	bool IsTrigger() const { return bIsTrigger; }
 };
 
