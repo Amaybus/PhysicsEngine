@@ -260,7 +260,5 @@ void Game::OnLeftRelease()
 		mPhysicsObjects.erase(mPhysicsObjects.begin() + mPhysicsObjects.size()-1 - mMaxProjectiles);
 		mCurrentProjectiles--;
 	}
-
-
 }
 
