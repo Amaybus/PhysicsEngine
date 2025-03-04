@@ -56,6 +56,8 @@ protected:
 	std::vector <PhysicsObject*> mOverlappingObjects;
 	std::vector <PhysicsObject*> mCollidingObjects;
 
+	bool bIgnoreCollisionOfSameType = false;
+
 public:
 	PhysicsObject();
 	PhysicsObject(Vec2 pos, float mass);
@@ -109,5 +111,8 @@ public:
 
 	void SetAsTrigger(bool value);
 	bool IsTrigger() const { return bIsTrigger; }
+
+	void SetIgnoreCollisionOfSameType(bool value) { bIgnoreCollisionOfSameType = value; }
+	bool GetIgnoreCollisionOfSameType() const { return bIgnoreCollisionOfSameType; }
 };
 

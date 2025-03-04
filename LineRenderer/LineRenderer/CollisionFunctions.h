@@ -7,7 +7,7 @@
 
 
 
-inline std::function<CollisionInfo(PhysicsObject*, PhysicsObject*)> collisionFunctions[(int)ObjectType::Count][(int)ObjectType::Count];
+static std::function<CollisionInfo(PhysicsObject*, PhysicsObject*)> collisionFunctions[(int)ObjectType::Count][(int)ObjectType::Count];
 void CollisionFuncInit();
 
 CollisionInfo CheckCollision(PhysicsObject* objA, PhysicsObject* objB);
