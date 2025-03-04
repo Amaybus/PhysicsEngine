@@ -2,9 +2,12 @@
 
 #include "Box.h"
 #include "Circle.h"
-#include "CollisionFunctions.h"
-#include "LineRenderer.h"
 #include "Plane.h"
+#include "Polygon.h"
+#include "PhysicsObject.h"
+#include "CollisionFunctions.h"
+//#include "dirent.h"
+#include "LineRenderer.h"
 
 Game::Game()
 {
@@ -19,26 +22,6 @@ Game::~Game()
 	{
 		delete po;
 	}
-
-	//for (PhysicsObject* po : mStaticObjects)
-	//{
-	//	delete po;
-	//}
-
-	//for (PhysicsObject* po : mMarkers)
-	//{
-	//	delete po;
-	//}
-
-	//for (PhysicsObject* po : mOverlappedMarkers)
-	//{
-	//	delete po;
-	//}
-
-	//for (PhysicsObject* po : mProjectiles)
-	//{
-	//	delete po;
-	//}
 }
 
 void Game::Initialise()
@@ -268,8 +251,16 @@ void Game::OnLeftRelease()
 
 	if(mCurrentProjectiles > mMaxProjectiles)
 	{
+		// Stop objects colliding with the projectile we are going to delete
+		for(PhysicsObject* obj : mPhysicsObjects)
+		{
+			obj->OnCollisionExit(mPhysicsObjects[mPhysicsObjects.size() - 1 - mMaxProjectiles]);
+		}
+		// Delete projectile
 		mPhysicsObjects.erase(mPhysicsObjects.begin() + mPhysicsObjects.size()-1 - mMaxProjectiles);
 		mCurrentProjectiles--;
 	}
+
+
 }
 

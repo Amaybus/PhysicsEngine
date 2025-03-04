@@ -142,14 +142,6 @@ void PhysicsObject::OnCollisionEnter(PhysicsObject* other)
 void PhysicsObject::OnCollisionExit(PhysicsObject* other)
 {
 	//// Remove element that is no longer colliding
-	//for(int i = 0; i < mCollidingObjects.size(); i++)
-	//{
-	//	if(mCollidingObjects[i] == nullptr)
-	//	{
-	//		mCollidingObjects.erase(mCollidingObjects[i]);
-	//	}
-	//}
-
 	std::vector<PhysicsObject*>::iterator it = std::find(mCollidingObjects.begin(), mCollidingObjects.end(), other);
 	if (it != mCollidingObjects.end())
 	{

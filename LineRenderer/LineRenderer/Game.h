@@ -1,7 +1,8 @@
 #pragma once
 #include "Application.h"
-#include "PhysicsObject.h"
-#include "Polygon.h"
+#include <vector>
+
+class PhysicsObject; 
 
 class Game : public Application
 {
