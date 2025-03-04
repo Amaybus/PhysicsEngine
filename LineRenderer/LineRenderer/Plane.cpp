@@ -15,6 +15,6 @@ void Plane::Draw(LineRenderer* lines)
 	Vec2 end = mCentre + (parallel * mLength);
 
 	lines->DrawLineSegment(start, end, Colour::MAGENTA);
-	lines->DrawCircle(mCentre, 0.1, Colour::BLUE);
-	lines->DrawLineWithArrow(mCentre, mCentre + mNormal, Colour::BLUE.Lighten(), 0.3f);
+	// Shows the direction of the normal
+	//lines->DrawLineWithArrow(mCentre, mCentre + mNormal, Colour::BLUE.Lighten(), 0.3f);
 }

@@ -36,14 +36,22 @@ void PhysicsEngine::Initialise()
 	mPhysicsObjects[1]->SetIsKinematic(false);
 	mPhysicsObjects[1]->SetOrientation(0);
 
+	mPhysicsObjects.push_back(new Box(Vec2(5, 5), 5.0f, 0.5f, 1));
+	mPhysicsObjects[2]->SetIsKinematic(false);
+	mPhysicsObjects[2]->SetOrientation(0);
 
 
-	//mPhysicsObjects.push_back(new Polygon(Vec2(0, 0), 5,1));
-	////mPhysicsObjects[1]->SetOrientation(-45);
+
+	mPhysicsObjects.push_back(new Polygon(Vec2(4, 0), 5,1));
+	mPhysicsObjects[3]->SetElasticity(1);
+	///mPhysicsObjects[1]->SetOrientation(-45);
 	//
-	//mPhysicsObjects.push_back(new Polygon(Vec2(0, 2.5), 6,1));
-	//mPhysicsObjects.push_back(new Polygon(Vec2(0, 4.5), 6,1));
-	//mPhysicsObjects.push_back(new Polygon(Vec2(0, -2.5), 6,1));
+	mPhysicsObjects.push_back(new Polygon(Vec2(1, 2.5), 6,1));
+	mPhysicsObjects[4]->SetElasticity(1);
+	mPhysicsObjects.push_back(new Polygon(Vec2(-4, 4.5), 6,1));
+	mPhysicsObjects[4]->SetElasticity(1);
+	mPhysicsObjects.push_back(new Polygon(Vec2(0, -2.5), 6,1));
+	mPhysicsObjects[5]->SetElasticity(1);
 
 
 	// Create circles	
@@ -87,9 +95,9 @@ void PhysicsEngine::Initialise()
 	//
 	////// Create planes
 	mPhysicsObjects.push_back(new Plane(Vec2(0, 1), -10));
-	//mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10));
-	//mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10));
-	//mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10));
+	mPhysicsObjects.push_back(new Plane(Vec2(0, -1), -10));
+	mPhysicsObjects.push_back(new Plane(Vec2(1, 0), -10));
+	mPhysicsObjects.push_back(new Plane(Vec2(-1, 0), -10));
 
 }
 

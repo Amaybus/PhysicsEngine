@@ -217,21 +217,12 @@ CollisionInfo PlaneToPolygonCollision(PhysicsObject* plA, PhysicsObject* polyB)
 
 	info.overlapAmount = -vertDistances[distanceIndex];
 	info.bIsOverlapping = info.overlapAmount >= 0;
-	if(info.bIsOverlapping)
-	{
-		float a = 0;
-	}
+
 	info.objA = planeA;
 	info.objB = polygonB;
 	info.collisionNormal = planeA->GetNormal();
 	info.bContactPoints.push_back(polygonB->GetPos() + polygonB->mVertices[distanceIndex]);
 	info.aContactPoints.push_back(Vec2());
-
-
-	if(info.bIsOverlapping)
-	{
-		int i = 0;
-	}
 
 	return info;
 }
@@ -278,7 +269,6 @@ CollisionInfo BoxToBoxCollision(PhysicsObject* bA, PhysicsObject* bB)
 	boxB->mVertices[1] = (pos - localX * (0.5f * width) + localY * (0.5f * height) - pos);
 	boxB->mVertices[3] = (pos + localX * (0.5f * width) - localY * (0.5f * height) - pos);
 
-
 	Polygon* polyA = (Polygon*)bA;
 	Polygon* polyB = (Polygon*)bB;
 
@@ -304,9 +294,26 @@ CollisionInfo BoxToPolygonCollision(PhysicsObject* bA, PhysicsObject* polyB)
 	box->mVertices[1] = (pos - localX * (0.5f * width) + localY * (0.5f * height) - pos);
 	box->mVertices[3] = (pos + localX * (0.5f * width) - localY * (0.5f * height) - pos);
 
-
 	Polygon* boxA = (Polygon*)bA;
-	return PolygonToPolygonCollision(boxA, polyB);
+
+	CollisionInfo info = PolygonToPolygonCollision(boxA, polyB);
+
+	Polygon* poly = (Polygon*)polyB;
+	float smallest = FLT_MAX;
+	int index = 0;
+	for(int i = 0; i < poly->mVertices.size(); i++)
+	{
+		float result = Dot(poly->mVertices[i], info.collisionNormal);
+		if(result < smallest)
+		{
+			smallest = result;
+			index = i;
+		}
+	}
+	info.aContactPoints[0] = poly->GetPos() + poly->mVertices[index];
+	info.bContactPoints[0] = poly->GetPos() + poly->mVertices[index];
+
+	return info;
 }
 
 
@@ -408,11 +415,6 @@ CollisionInfo PolygonToPolygonCollision(PhysicsObject* polyA, PhysicsObject* pol
 	}
 
 	info.bIsOverlapping = info.overlapAmount > 0;
-	if(info.bIsOverlapping)
-	{
-		int i = 0;
-	}
-	//Alternatively do the Tom method (it means multi vert contacts are accounted for)
 
 	info.aContactPoints.push_back(info.objA->GetPos() - displacement);
 	info.bContactPoints.push_back(info.objB->GetPos() + displacement);

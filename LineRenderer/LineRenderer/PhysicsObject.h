@@ -29,12 +29,10 @@ protected:
 	Vec2 mAcc{ 0,0 };
 	const float mMass = 0;
 	Colour mColour = Colour::GREEN;
-	float mElasticity = 0.7f;
+	float mElasticity = 0.5f;
 
 	// Can the object move 
 	bool bIsKinematic = true;
-
-	Vec2 mForceAccumulator;
 
 	// Rotation axis
 	Vec2 mLocalX;
@@ -48,6 +46,7 @@ protected:
 	float mInertia = 0;
 
 	// Force
+	Vec2 mForceAccumulator;
 	float mAngularDrag = 0.3f;
 	float mLinearDrag = 0.7f;
 
@@ -85,10 +84,12 @@ public:
 	float GetInertia() const { return mInertia; }
 	float GetInverseInertia() const;
 	virtual int GetType() const = 0;
+
 	float GetOrientation() const { return mOrientation; }
 	void SetOrientation(float orientation) { mOrientation = DegToRad(orientation); }
 
 	void SetColour(Colour colour) { mColour = colour; }
+	void SetElasticity(float elasticity);
 
 	Vec2 GetLocalY() const{ return mLocalY; }
 	Vec2 GetLocalX() const{ return mLocalX; }

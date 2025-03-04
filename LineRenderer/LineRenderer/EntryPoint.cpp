@@ -6,9 +6,11 @@
 
 int main()
 {
-		ApplicationHarness program(new Game);	//Create a new instance of your application type to pass into the harness here.
 
-		program.Run();
+	ApplicationHarness program(new Game);	//Create a new instance of your application type to pass into the harness here.
 
-		return 0;
+	program.Run();
+
+	return 0;
+
 }

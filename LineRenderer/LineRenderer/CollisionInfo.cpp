@@ -49,6 +49,7 @@ void CollisionInfo::ResolveWithRotation()
 	objB->OnCollisionEnter(objA);
 
 	float totalInverseMass = objA->GetInverseMass() + objB->GetInverseMass();
+	if (totalInverseMass == 0) { return; }
 
 	// Depen
 	objA->GetPos() -= collisionNormal * overlapAmount * objA->GetInverseMass() / totalInverseMass;

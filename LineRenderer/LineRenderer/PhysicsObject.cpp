@@ -37,10 +37,6 @@ void PhysicsObject::Update(float delta)
 	// Kinematic Objects
 	mAcc = mForceAccumulator * GetInverseMass();
 	mVel += mAcc * mLinearDrag * delta;
-	if(mVel.GetMagnitude() < 0.1)
-	{
-		mVel = Vec2();
-	}
 	mPos += mVel * delta;
 
 	// Update Rotation
@@ -56,8 +52,9 @@ void PhysicsObject::Update(float delta)
 
 void PhysicsObject::Draw(LineRenderer* lines)
 {
-	lines->DrawLineWithArrow(mPos, mPos + mLocalY, Colour::GREEN, 0.1);
-	lines->DrawLineWithArrow(mPos, mPos + mLocalX, Colour::RED, 0.1);
+	// ## DEBUG LINES FOR ORIENTATION ##
+	//lines->DrawLineWithArrow(mPos, mPos + mLocalY, Colour::GREEN, 0.1);
+	//lines->DrawLineWithArrow(mPos, mPos + mLocalX, Colour::RED, 0.1);
 }
 
 void PhysicsObject::SetIsKinematic(bool value)
@@ -78,6 +75,12 @@ float PhysicsObject::GetInverseInertia() const
 {
 	if (mInertia == 0 || bIsKinematic == false) { return 0; }
 	else return 1.0f / mInertia;
+}
+
+void PhysicsObject::SetElasticity(float elasticity)
+{
+	Clamp(elasticity, 0.0f, 1.0f);
+	mElasticity = elasticity;
 }
 
 // Applied over a duration

@@ -30,6 +30,25 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 
 Polygon::Polygon(Vec2 pos, int numOfVerts, float mass, float elasticity) : PhysicsObject(pos, mass, elasticity), mVertCount(numOfVerts)
 {
+	mInertia = 1.4;
+
+	mPadding = 1;
+	Vec2 offsetVec(mPadding, 0);
+	for (int i = 0; i < mVertCount; i++)
+	{
+		mVertices.push_back(offsetVec);
+		offsetVec.RotateBy(-2 * PI / mVertCount);
+	}
+
+	Vec2 next;
+	for (int i = 0; i < mVertices.size(); i++)
+	{
+		if (i == mVertices.size() - 1) { next = mVertices[0]; }
+		else { next = mVertices[i + 1]; }
+
+		mNormals.push_back((next - mVertices[i]).GetRotatedBy270().GetNormalised());
+		mEdgeCentres.push_back(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
+	}
 }
 
 Polygon::Polygon(Vec2 pos, float mass) : PhysicsObject(pos, mass), mVertCount(4)
@@ -94,10 +113,10 @@ void Polygon::Draw(LineRenderer* lines)
 		mVertices[i] = vert;
 	}
 
-	for (Vec2& vert : mVertices)
-	{
-		lines->DrawCircle(vert + mPos, 0.1f, Colour::BLUE);
-	}
+	//for (Vec2& vert : mVertices)
+	//{
+	//	lines->DrawCircle(vert + mPos, 0.1f, Colour::BLUE);
+	//}
 
 	for(int i = 0; i < mVertCount; i++)
 	{
