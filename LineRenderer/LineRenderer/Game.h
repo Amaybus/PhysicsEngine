@@ -9,9 +9,10 @@ class Game : public Application
 	std::vector<PhysicsObject*> mStaticObjects;
 	std::vector<PhysicsObject*> mMarkers;
 	std::vector<PhysicsObject*> mOverlappedMarkers;
-	PhysicsObject* mProjectiles[3];
+	std::vector<PhysicsObject*> mProjectiles;
 	int mProjectileIndex;
 	int mMaxProjectiles = 3;
+	int mCurrentProjectiles = 0;
 
 	PhysicsObject* mPlayer;
 	Vec2 mPlayerPos = Vec2();

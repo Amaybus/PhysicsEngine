@@ -15,21 +15,30 @@ Game::Game()
 
 Game::~Game()
 {
-	for (PhysicsObject* proj : mProjectiles)
-	{
-		std::vector<PhysicsObject*>::iterator it = std::find(mPhysicsObjects.begin(), mPhysicsObjects.end(), proj);
-		if (it != mPhysicsObjects.end())
-		{
-			mPhysicsObjects.erase(it);
-		}
-		delete proj;
-	}
-
 	for (PhysicsObject* po : mPhysicsObjects)
 	{
 		delete po;
 	}
 
+	//for (PhysicsObject* po : mStaticObjects)
+	//{
+	//	delete po;
+	//}
+
+	//for (PhysicsObject* po : mMarkers)
+	//{
+	//	delete po;
+	//}
+
+	//for (PhysicsObject* po : mOverlappedMarkers)
+	//{
+	//	delete po;
+	//}
+
+	//for (PhysicsObject* po : mProjectiles)
+	//{
+	//	delete po;
+	//}
 }
 
 void Game::Initialise()
@@ -39,20 +48,12 @@ void Game::Initialise()
 	mPlayer->SetOrientation(-30);
 	mPlayer->SetIsKinematic(false);
 	mPhysicsObjects.push_back(mPlayer);
-
+	
 	// Build the level
 	CollisionFuncInit();
 	SetStaticObjects();
 	SpawnRandomKinematicObjects();
 	SetTargets();
-
-	// Create space in array for projectiles to spawn
-	for (int i = 0; i < mMaxProjectiles; i++)
-	{
-		mPhysicsObjects.push_back(new Circle(Vec2(), 0, 0));
-		mProjectiles[i] = new Circle(Vec2(), 0, 0);
-	}
-	mProjectileIndex = mPhysicsObjects.size() - 1;
 }
 
 void Game::Update(float delta)
@@ -240,7 +241,6 @@ void Game::CheckForCollisions()
 			mProjectileIndex--;
 		}
 	}
-
 }
 
 void Game::Draw(LineRenderer* lines)
@@ -262,15 +262,14 @@ void Game::OnLeftRelease()
 	bDrawProjectionLine = false;
 	mProjectionVelocity = (Vec2() - mCursorPosEnd) * 2;
 
-	mPhysicsObjects[mProjectileIndex] = new Polygon(Vec2(0, 2), std::rand() % 8 + 3, 1);
-	mPhysicsObjects[mProjectileIndex]->ApplyImpulse(mProjectionVelocity);
-	mProjectiles[mPhysicsObjects.size() - 1 - mProjectileIndex] = mPhysicsObjects[mProjectileIndex];
+	mPhysicsObjects.push_back(new Polygon(Vec2(0, 2), std::rand() % 8 + 3, 1));
+	mPhysicsObjects[mPhysicsObjects.size()-1]->ApplyImpulse(mProjectionVelocity);
+	mCurrentProjectiles++;
 
-	mProjectileIndex--;
-
-	if (mProjectileIndex < mPhysicsObjects.size() - 3)
+	if(mCurrentProjectiles > mMaxProjectiles)
 	{
-		mProjectileIndex = mPhysicsObjects.size() - 1;
+		mPhysicsObjects.erase(mPhysicsObjects.begin() + mPhysicsObjects.size()-1 - mMaxProjectiles);
+		mCurrentProjectiles--;
 	}
 }
 
