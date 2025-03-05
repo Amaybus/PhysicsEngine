@@ -12,6 +12,8 @@ class PhysicsEngine : public Application
 
 public:
 	PhysicsEngine();
+	PhysicsEngine(const PhysicsEngine& other) = delete;
+	PhysicsEngine& operator=(const PhysicsEngine& other) = delete;
 	~PhysicsEngine() override;
 
 	void Initialise() override;

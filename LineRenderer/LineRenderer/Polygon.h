@@ -15,7 +15,8 @@ public:
 
 	Polygon(Vec2 pos, int numOfVerts, float mass);
 	Polygon(Vec2 pos, int numOfVerts, float mass, float elasticity);
-
+	Polygon(const Polygon& other) = delete;
+	Polygon& operator=(const Polygon& other) = delete;
 	// Box constructor
 	Polygon(Vec2 pos, float mass);
 

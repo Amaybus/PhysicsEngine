@@ -27,6 +27,8 @@ class Game : public Application
 
 public:
 	Game();
+	Game(const Game& other) = delete; //The 'game' class is uncopyable
+	Game& operator=(const Game& other) = delete; //and unassignable, which is kind of the same thing
 	~Game() override;
 
 	void Initialise() override;

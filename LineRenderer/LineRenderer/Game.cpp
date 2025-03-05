@@ -6,7 +6,6 @@
 #include "Polygon.h"
 #include "PhysicsObject.h"
 #include "CollisionFunctions.h"
-//#include "dirent.h"
 #include "LineRenderer.h"
 
 Game::Game()
@@ -22,6 +21,7 @@ Game::~Game()
 	{
 		delete po;
 	}
+
 }
 
 void Game::Initialise()
@@ -31,7 +31,7 @@ void Game::Initialise()
 	mPlayer->SetOrientation(-30);
 	mPlayer->SetIsKinematic(false);
 	mPhysicsObjects.push_back(mPlayer);
-	
+
 	// Build the level
 	CollisionFuncInit();
 	SetStaticObjects();
@@ -80,7 +80,7 @@ void Game::SetStaticObjects()
 	box = new Box(Vec2(2.3, 15), 6, 0.5, 1);
 	box->SetOrientation(45);
 	mStaticObjects.push_back(box);
-	
+
 	mStaticObjects.push_back(new Box(Vec2(-7, 8), 8, 0.5, 1));
 	mStaticObjects.push_back(new Box(Vec2(-11.25, 5.75), 0.5, 5, 1));
 	mStaticObjects.push_back(new Box(Vec2(-15, 3), 8, 0.5, 1));
@@ -94,7 +94,7 @@ void Game::SetStaticObjects()
 	box = new Box(Vec2(-2.3, 15), 6, 0.5, 1);
 	box->SetOrientation(-45);
 	mStaticObjects.push_back(box);
-	
+
 	// PLANES
 	mStaticObjects.push_back(new Plane(Vec2(0, 1), 0));
 	mStaticObjects.push_back(new Plane(Vec2(0, -1), -21));
@@ -147,7 +147,7 @@ void Game::CheckForCollisions()
 		for (int j = i + 1; j < mPhysicsObjects.size(); j++)
 		{
 			// Skip over static objects checking against each other
-			if(mPhysicsObjects[i]->GetIgnoreCollisionOfSameType() && mPhysicsObjects[j]->GetIgnoreCollisionOfSameType()) { continue;}
+			if (mPhysicsObjects[i]->GetIgnoreCollisionOfSameType() && mPhysicsObjects[j]->GetIgnoreCollisionOfSameType()) { continue; }
 
 			CollisionInfo info = CheckCollision(mPhysicsObjects[i], mPhysicsObjects[j]);
 			if (info.objA == nullptr || info.objB == nullptr) { continue; }
@@ -202,7 +202,6 @@ void Game::CheckForCollisions()
 			{
 				info.objB->OnEndOverlap(info.objA);
 			}
-
 		}
 	}
 
@@ -243,21 +242,34 @@ void Game::OnLeftRelease()
 {
 	mCursorPosEnd = cursorPos;
 	bDrawProjectionLine = false;
-	mProjectionVelocity = (Vec2() - mCursorPosEnd) * 2;
+	mProjectionVelocity = mCursorPosEnd * -2;
 
+	// Create new polygon, add to physics object list and projectile list
 	mPhysicsObjects.push_back(new Polygon(Vec2(0, 2), std::rand() % 8 + 3, 1));
 	mPhysicsObjects[mPhysicsObjects.size()-1]->ApplyImpulse(mProjectionVelocity);
+	mProjectiles.push_back(mPhysicsObjects[mPhysicsObjects.size() - 1]);
+
 	mCurrentProjectiles++;
 
 	if(mCurrentProjectiles > mMaxProjectiles)
 	{
-		// Stop objects colliding with the projectile we are going to delete
+		// Stop objects colliding with the projectile that we are going to delete
 		for(PhysicsObject* obj : mPhysicsObjects)
 		{
 			obj->OnCollisionExit(mPhysicsObjects[mPhysicsObjects.size() - 1 - mMaxProjectiles]);
 		}
 		// Delete projectile
-		mPhysicsObjects.erase(mPhysicsObjects.begin() + mPhysicsObjects.size()-1 - mMaxProjectiles);
+		PhysicsObject* thingToDelete = mProjectiles[0];
+		for (int i = mPhysicsObjects.size() - 1; i >= 0; i--)
+		{
+			if (mPhysicsObjects[i] == thingToDelete)
+			{
+				mPhysicsObjects.erase(mPhysicsObjects.begin() + i);
+				break;
+			}
+		}
+		mProjectiles.erase(mProjectiles.begin());
+		delete thingToDelete;
 		mCurrentProjectiles--;
 	}
 }
