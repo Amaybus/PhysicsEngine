@@ -67,7 +67,7 @@ void CollisionInfo::ResolveWithRotation()
 	float vb = Dot(objB->GetVelocity(), collisionNormal) + rb * objB->GetAngularVelocity();
 
 	// Find elasticity
-	float elasticity = (objA->GetElasticity() + objB->GetElasticity()) * 0.5;
+	float elasticity = (objA->GetElasticity() + objB->GetElasticity()) * 0.5f;
 
 	if (va > vb)
 	{
@@ -92,12 +92,12 @@ void CollisionInfo::ResolveWithRotation()
 		// Apply equal amount of force over each contact point
 		for(Vec2& cp : aContactPoints)
 		{
-			objA->ApplyImpulse(-force / aContactPoints.size(), cp);
+			objA->ApplyImpulse(-force / (float)aContactPoints.size(), cp);
 		}
 
 		for (Vec2& cp : bContactPoints)
 		{
-			objB->ApplyImpulse(force / bContactPoints.size(), cp);
+			objB->ApplyImpulse(force / (float)bContactPoints.size(), cp);
 		}
 	}
 }

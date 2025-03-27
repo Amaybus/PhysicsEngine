@@ -7,11 +7,11 @@
 class CollisionInfo
 {
 public:
-	PhysicsObject* objA;
-	PhysicsObject* objB;
+	PhysicsObject* objA = nullptr;
+	PhysicsObject* objB = nullptr;
 
-	float overlapAmount;
-	bool bIsOverlapping;
+	float overlapAmount = 0;
+	bool bIsOverlapping = false;
 	Vec2 collisionNormal;
 	bool bIsTrigger = false;
 	std::vector<Vec2> aContactPoints;

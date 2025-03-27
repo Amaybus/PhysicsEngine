@@ -1,6 +1,7 @@
 #pragma once
 #include "Maths.h"
 #include "AppInfo.h"
+
 enum class Key;
 class LineRenderer;
 
@@ -10,8 +11,8 @@ public:
 	virtual void Initialise() {}
 	virtual void Update(float delta) = 0;
 	virtual ~Application() = default;
-	bool leftMouseDown;
-	bool rightMouseDown;
+	bool leftMouseDown = false;
+	bool rightMouseDown = false;
 	Vec2 cursorPos;
 	LineRenderer* lines = nullptr;
 

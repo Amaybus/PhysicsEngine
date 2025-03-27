@@ -8,10 +8,10 @@ class Box : public Polygon
 	float mHeight;
 
 public:
-	float GetXMin() const { return mPos.x - 0.5 * mWidth; }
-	float GetXMax() const { return mPos.x + 0.5 * mWidth; }
-	float GetYMin() const { return mPos.y - 0.5 * mHeight; }
-	float GetYMax() const { return mPos.y + 0.5 * mHeight; }
+	float GetXMin() const { return mPos.x - 0.5f * mWidth; }
+	float GetXMax() const { return mPos.x + 0.5f * mWidth; }
+	float GetYMin() const { return mPos.y - 0.5f * mHeight; }
+	float GetYMax() const { return mPos.y + 0.5f * mHeight; }
 
 	Box(Vec2 pos, float w, float h, float mass);
 	Box(Vec2 pos, float w, float h, float mass, float elasticity);

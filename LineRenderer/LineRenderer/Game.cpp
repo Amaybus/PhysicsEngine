@@ -13,6 +13,8 @@ Game::Game()
 	appInfo.appName = "Some Game Title";
 	appInfo.grid.show = false;
 	cameraHeight = 35.0f;
+	mProjectileIndex = 0;
+	mPlayer = nullptr;
 }
 
 Game::~Game()
@@ -27,7 +29,7 @@ Game::~Game()
 void Game::Initialise()
 {
 	// Create player
-	mPlayer = new Polygon(Vec2(0, 0.6), 3, 1);
+	mPlayer = new Polygon(Vec2(0, 0.6f), 3, 1);
 	mPlayer->SetOrientation(-30);
 	mPlayer->SetIsKinematic(false);
 	mPhysicsObjects.push_back(mPlayer);
@@ -41,10 +43,10 @@ void Game::Initialise()
 
 void Game::Update(float delta)
 {
-	lines->DrawText("Markers collected:", Vec2(-8, -2), 0.5, Colour::WHITE);
-	lines->DrawText(std::to_string(mTotalMarkersCollected), Vec2(1.5, -2), 0.51, Colour::YELLOW);
-	lines->DrawText("out of", Vec2(2.7, -2), 0.5, Colour::WHITE);
-	lines->DrawText(std::to_string(mMarkers.size() + mTotalMarkersCollected), Vec2(6.3, -2), 0.5, Colour::YELLOW);
+	lines->DrawText("Markers collected:", Vec2(-8, -2), 0.5f, Colour::WHITE);
+	lines->DrawText(std::to_string(mTotalMarkersCollected), Vec2(1.5f, -2), 0.51f, Colour::YELLOW);
+	lines->DrawText("out of", Vec2(2.7f, -2), 0.5, Colour::WHITE);
+	lines->DrawText(std::to_string(mMarkers.size() + mTotalMarkersCollected), Vec2(6.3f, -2), 0.5f, Colour::YELLOW);
 
 	for (PhysicsObject* obj : mPhysicsObjects)
 	{
@@ -68,30 +70,30 @@ void Game::Update(float delta)
 void Game::SetStaticObjects()
 {
 	// Level Hard Surfaces
-	mStaticObjects.push_back(new Box(Vec2(7, 8), 8, 0.5, 1));
-	mStaticObjects.push_back(new Box(Vec2(11.25, 5.75), 0.5, 5, 1));
-	mStaticObjects.push_back(new Box(Vec2(15, 3), 8, 0.5, 1));
-	mStaticObjects.push_back(new Box(Vec2(17, 8), 4, 0.5, 1));
-	mStaticObjects.push_back(new Box(Vec2(10, 14.5), 6, 0.5, 1));
-	Box* box = new Box(Vec2(21.65, 10.65), 7, 0.5, 1);
+	mStaticObjects.push_back(new Box(Vec2(7, 8), 8, 0.5f, 1));
+	mStaticObjects.push_back(new Box(Vec2(11.25f, 5.75f), 0.5f, 5, 1));
+	mStaticObjects.push_back(new Box(Vec2(15, 3), 8, 0.5f, 1));
+	mStaticObjects.push_back(new Box(Vec2(17, 8), 4, 0.5f, 1));
+	mStaticObjects.push_back(new Box(Vec2(10, 14.5f), 6, 0.5f, 1));
+	Box* box = new Box(Vec2(21.65f, 10.65f), 7, 0.5f, 1);
 	box->SetOrientation(45);
 	mStaticObjects.push_back(box);
-	mStaticObjects.push_back(new Box(Vec2(6, 4), 4, 0.5, 1));
-	box = new Box(Vec2(2.3, 15), 6, 0.5, 1);
+	mStaticObjects.push_back(new Box(Vec2(6, 4), 4, 0.5f, 1));
+	box = new Box(Vec2(2.3f, 15.0f), 6, 0.5f, 1);
 	box->SetOrientation(45);
 	mStaticObjects.push_back(box);
 
-	mStaticObjects.push_back(new Box(Vec2(-7, 8), 8, 0.5, 1));
-	mStaticObjects.push_back(new Box(Vec2(-11.25, 5.75), 0.5, 5, 1));
-	mStaticObjects.push_back(new Box(Vec2(-15, 3), 8, 0.5, 1));
-	mStaticObjects.push_back(new Box(Vec2(-17, 8), 4, 0.5, 1));
-	box = new Box(Vec2(-9, 14.5), 6, 0.5, 1);
+	mStaticObjects.push_back(new Box(Vec2(-7, 8), 8, 0.5f, 1));
+	mStaticObjects.push_back(new Box(Vec2(-11.25f, 5.75f), 0.5f, 5, 1));
+	mStaticObjects.push_back(new Box(Vec2(-15, 3), 8, 0.5f, 1));
+	mStaticObjects.push_back(new Box(Vec2(-17, 8), 4, 0.5f, 1));
+	box = new Box(Vec2(-9, 14.5f), 6, 0.5f, 1);
 	mStaticObjects.push_back(box);
-	box = new Box(Vec2(-21.65, 10.65), 7, 0.5, 1);
+	box = new Box(Vec2(-21.65f, 10.65f), 7, 0.5f, 1);
 	box->SetOrientation(-45);
 	mStaticObjects.push_back(box);
-	mStaticObjects.push_back(new Box(Vec2(-6, 4), 4, 0.5, 1));
-	box = new Box(Vec2(-2.3, 15), 6, 0.5, 1);
+	mStaticObjects.push_back(new Box(Vec2(-6, 4), 4, 0.5f, 1));
+	box = new Box(Vec2(-2.3f, 15), 6, 0.5f, 1);
 	box->SetOrientation(-45);
 	mStaticObjects.push_back(box);
 
@@ -112,25 +114,25 @@ void Game::SetStaticObjects()
 
 void Game::SpawnRandomKinematicObjects()
 {
-	mPhysicsObjects.push_back(new Circle(Vec2(15, 19.5), 1, 3, 1));
-	mPhysicsObjects.push_back(new Circle(Vec2(-15, 19.5), 1, 3, 1));
-	mPhysicsObjects.push_back(new Circle(Vec2(-8, 19.5), 1, 3, 1));
+	mPhysicsObjects.push_back(new Circle(Vec2(15, 19.5f), 1, 3, 1));
+	mPhysicsObjects.push_back(new Circle(Vec2(-15, 19.5f), 1, 3, 1));
+	mPhysicsObjects.push_back(new Circle(Vec2(-8, 19.5f), 1, 3, 1));
 }
 
 void Game::SetTargets()
 {
-	mMarkers.push_back(new Circle(Vec2(6, 4.5), 0.25, 1));
-	mMarkers.push_back(new Circle(Vec2(6, 8.5), 0.25, 1));
-	mMarkers.push_back(new Circle(Vec2(18, 3.5), 0.25, 1));
-	mMarkers.push_back(new Circle(Vec2(17, 8.5), 0.25, 1));
-	mMarkers.push_back(new Circle(Vec2(10, 15), 0.25, 1));
+	mMarkers.push_back(new Circle(Vec2(6, 4.5f), 0.25f, 1));
+	mMarkers.push_back(new Circle(Vec2(6, 8.5f), 0.25f, 1));
+	mMarkers.push_back(new Circle(Vec2(18, 3.5f), 0.25f, 1));
+	mMarkers.push_back(new Circle(Vec2(17, 8.5f), 0.25f, 1));
+	mMarkers.push_back(new Circle(Vec2(10, 15), 0.25f, 1));
 
-	mMarkers.push_back(new Circle(Vec2(-6, 4.5), 0.25, 1));
-	mMarkers.push_back(new Circle(Vec2(-6, 8.5), 0.25, 1));
-	mMarkers.push_back(new Circle(Vec2(-18, 3.5), 0.25, 1));
-	mMarkers.push_back(new Circle(Vec2(-17, 8.5), 0.25, 1));
-	mMarkers.push_back(new Circle(Vec2(-10, 15), 0.25, 1));
-	mMarkers.push_back(new Circle(Vec2(0, 13.5), 0.25, 1));
+	mMarkers.push_back(new Circle(Vec2(-6, 4.5f), 0.25f, 1));
+	mMarkers.push_back(new Circle(Vec2(-6, 8.5f), 0.25f, 1));
+	mMarkers.push_back(new Circle(Vec2(-18, 3.5f), 0.25f, 1));
+	mMarkers.push_back(new Circle(Vec2(-17, 8.5f), 0.25f, 1));
+	mMarkers.push_back(new Circle(Vec2(-10, 15), 0.25f, 1));
+	mMarkers.push_back(new Circle(Vec2(0, 13.5f), 0.25f, 1));
 
 	for (PhysicsObject* to : mMarkers)
 	{
@@ -260,7 +262,7 @@ void Game::OnLeftRelease()
 		}
 		// Delete projectile
 		PhysicsObject* thingToDelete = mProjectiles[0];
-		for (int i = mPhysicsObjects.size() - 1; i >= 0; i--)
+		for (size_t i = mPhysicsObjects.size() - 1; i >= 0; i--)
 		{
 			if (mPhysicsObjects[i] == thingToDelete)
 			{

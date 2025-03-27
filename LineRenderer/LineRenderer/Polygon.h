@@ -5,8 +5,8 @@
 
 class Polygon : public PhysicsObject
 {
-	const int mVertCount;
-	float mPadding;
+	const int mVertCount = 0;
+	float mPadding = 0;
 
 public:
 	std::vector<Vec2> mVertices;
@@ -18,9 +18,10 @@ public:
 	Polygon(const Polygon& other) = delete;
 	Polygon& operator=(const Polygon& other) = delete;
 	// Box constructor
+	Polygon(Vec2 pos, float mass, float elasticity);
 	Polygon(Vec2 pos, float mass);
 
-	~Polygon();
+	~Polygon() = default;
 
 	std::vector<Vec2> GetVertices() { return mVertices; }
 	std::vector<Vec2> GetNormals();

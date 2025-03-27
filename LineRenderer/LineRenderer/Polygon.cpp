@@ -7,7 +7,7 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 	// divide into triangles 
 	// calc moment for triangle ( 0.5*mass*(length*length) * ( 1 - (2/3)*sin2(vertexAngle))
 	// multiply moment by 2n
-	mInertia = 1.4; 
+	mInertia = 1.4f; 
 
 	mPadding = 1;
 	Vec2 offsetVec(mPadding, 0);
@@ -24,13 +24,13 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass) : PhysicsObject(pos, mass
 		else { next = mVertices[i + 1]; }
 
 		mNormals.push_back((next - mVertices[i]).GetRotatedBy270().GetNormalised());
-		mEdgeCentres.push_back(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
+		mEdgeCentres.push_back(Vec2((mVertices[i].x + next.x) * 0.5f, (mVertices[i].y + next.y) * 0.5f));
 	}
 }
 
 Polygon::Polygon(Vec2 pos, int numOfVerts, float mass, float elasticity) : PhysicsObject(pos, mass, elasticity), mVertCount(numOfVerts)
 {
-	mInertia = 1.4;
+	mInertia = 1.4f;
 
 	mPadding = 1;
 	Vec2 offsetVec(mPadding, 0);
@@ -47,30 +47,16 @@ Polygon::Polygon(Vec2 pos, int numOfVerts, float mass, float elasticity) : Physi
 		else { next = mVertices[i + 1]; }
 
 		mNormals.push_back((next - mVertices[i]).GetRotatedBy270().GetNormalised());
-		mEdgeCentres.push_back(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
+		mEdgeCentres.push_back(Vec2((mVertices[i].x + next.x) * 0.5f, (mVertices[i].y + next.y) * 0.5f));
 	}
 }
 
-Polygon::Polygon(Vec2 pos, float mass) : PhysicsObject(pos, mass), mVertCount(4)
+Polygon::Polygon(Vec2 pos, float mass, float elasticity) : PhysicsObject(pos, mass, elasticity), mVertCount(4)
 {
 }
 
-Polygon::~Polygon()
+Polygon::Polygon(Vec2 pos, float mass) :PhysicsObject(pos, mass), mVertCount(4)
 {
-	for(int i = 0; i < mVertices.size();i++)
-	{
-		mVertices.erase(mVertices.begin() + i);
-	}
-
-	for (int i = 0; i < mEdgeCentres.size(); i++)
-	{
-		mEdgeCentres.erase(mEdgeCentres.begin() + i);
-	}
-
-	for (int i = 0; i < mNormals.size(); i++)
-	{
-		mNormals.erase(mNormals.begin() + i);
-	}
 }
 
 std::vector<Vec2> Polygon::GetNormals()
@@ -95,7 +81,7 @@ std::vector<Vec2> Polygon::GetEdgeCentres()
 		if (i == mVertices.size() - 1) { next = mVertices[0]; }
 		else { next = mVertices[i + 1]; }
 
-		mEdgeCentres[i]=(Vec2((mVertices[i].x + next.x) * 0.5, (mVertices[i].y + next.y) * 0.5));
+		mEdgeCentres[i]=(Vec2((mVertices[i].x + next.x) * 0.5f, (mVertices[i].y + next.y) * 0.5f));
 	}
 
 	return mEdgeCentres;
@@ -105,7 +91,7 @@ void Polygon::Draw(LineRenderer* lines)
 {
 	PhysicsObject::Draw(lines);
 
-	float angle = asin(PseudoCross(mVertices[0], mLocalX) / (mVertices[0]).GetMagnitude() * mLocalX.GetMagnitude());
+	float angle = (float)asin(PseudoCross(mVertices[0], mLocalX) / (mVertices[0]).GetMagnitude() * mLocalX.GetMagnitude());
 	for (int i = 0; i < mVertCount; i++)
 	{
 		Vec2 vert = mVertices[i].RotateBy(angle);
