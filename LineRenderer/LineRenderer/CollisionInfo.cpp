@@ -58,13 +58,14 @@ void CollisionInfo::ResolveWithRotation()
 	// Find perpendicular angle to collision point
 	Vec2 perp = Vec2(collisionNormal.y, -collisionNormal.x);
 
-	// Level arm
+	// Lever arm
 	float ra = Dot(aContactPoints[0] - objA->GetPos(), -perp);
 	float rb = Dot(bContactPoints[0] - objB->GetPos(), perp);
 
 	// Relative velocity
 	float va = Dot(objA->GetVelocity(), collisionNormal) - ra * objA->GetAngularVelocity();
 	float vb = Dot(objB->GetVelocity(), collisionNormal) + rb * objB->GetAngularVelocity();
+	//get velocityt at opoint fucntion 
 
 	// Find elasticity
 	float elasticity = (objA->GetElasticity() + objB->GetElasticity()) * 0.5f;
