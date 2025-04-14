@@ -27,16 +27,16 @@ void PhysicsEngine::Initialise()
 {
 	CollisionFuncInit();
 
-	//mPhysicsObjects.push_back(new Plane(Vec2(-1, 1), -4));
+	mPhysicsObjects.push_back(new Plane(Vec2(-1, 1), -4));
 	//mPhysicsObjects.push_back(new Box(Vec2(1, -5), 7.0f, 0.5f, 1));
 	//mPhysicsObjects[0]->SetIsKinematic(false);
 	//mPhysicsObjects[0]->SetOrientation(0);
 	//
-	//mPhysicsObjects.push_back(new Box(Vec2(-5, 0), 5.0f, 0.5f, 1));
+	mPhysicsObjects.push_back(new Box(Vec2(-5, 0), 5.0f, 0.5f, 1));
 	//mPhysicsObjects[1]->SetIsKinematic(false);
 	//mPhysicsObjects[1]->SetOrientation(0);
 	//
-	//mPhysicsObjects.push_back(new Box(Vec2(5, 5), 5.0f, 0.5f, 1));
+	mPhysicsObjects.push_back(new Box(Vec2(5, 5), 5.0f, 0.5f, 1));
 	//mPhysicsObjects[2]->SetIsKinematic(false);
 	//mPhysicsObjects[2]->SetOrientation(0);
 	//
