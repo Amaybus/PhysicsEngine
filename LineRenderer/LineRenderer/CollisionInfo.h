@@ -19,4 +19,5 @@ public:
 
 	void Resolve();
 	void ResolveWithRotation();
+	Vec2 GetVelocityAtPoint(PhysicsObject* object, Vec2 contactPoint);
 };
